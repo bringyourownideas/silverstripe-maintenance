@@ -19,7 +19,7 @@ and run dev/build.
 
 ## Usage
 
-In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the items.
+In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the items. *You are required to have admin access to view this information.*
 
 ## Future ideas/development
 
