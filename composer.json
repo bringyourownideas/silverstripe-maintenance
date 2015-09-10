@@ -12,8 +12,10 @@
 		}
 	],
 	"require" : {
-		"silverstripe/framework": "3.*",
-		"spekulatius/silverstripe-composer-security-checker": "*",
-		"spekulatius/silverstripe-composer-update-checker": "*"
+		"silverstripe/framework": "3.*"
+	},
+	"suggest": {
+		"spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
+		"spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
 	}
 }
