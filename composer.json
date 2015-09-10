@@ -1,0 +1,19 @@
+{
+	"name" : "spekulatius/silverstripe-maintenance",
+	"description" : "Security issues and available updates of composer packages as a model admin",
+	"type" : "silverstripe-module",
+	"license" : "BSD-3-Clause",
+	"keywords" : ["silverstripe","environment", "composer", "updates", "vulnerabilities", "security"],
+	"authors" : [
+		{
+			"name" : "Peter Thaleikis",
+			"email" : "info@thaleikis.de",
+			"homepage" : "https://github.com/spekulatius"
+		}
+	],
+	"require" : {
+		"silverstripe/framework": "3.*",
+		"spekulatius/silverstripe-composer-security-checker": "*",
+		"spekulatius/silverstripe-composer-update-checker": "*"
+	}
+}
