@@ -20,3 +20,8 @@ and run dev/build.
 ## Usage
 
 In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the items.
+
+## Future ideas/development
+
+* notifications of security issues/updates
+* integration into CD tools and/or deploynaut
