@@ -12,7 +12,7 @@ This modules provides you with a task containing information about available upd
 Run the following command to install this package:
 
    ```
-   composer require spekulatius/maintenance
+   composer require FriendsOfSilverStripe/silverstripe-maintenance
    ```
 
 and run dev/build.
