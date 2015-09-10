@@ -25,8 +25,8 @@ and run dev/build. *If you don't want to install both packages remove this from 
 
 First you need to run the tasks to update the information. To do this run the following tasks:
 
-www.mysite.com/dev/tasks/SecurityCheckerTask
-www.mysite.com/dev/tasks/CheckComposerUpdatesTask
+* www.mysite.com/dev/tasks/SecurityCheckerTask
+* www.mysite.com/dev/tasks/CheckComposerUpdatesTask
 
 In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the available information. *You are required to have admin access to view this information.*
 
