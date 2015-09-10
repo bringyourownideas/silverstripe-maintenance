@@ -14,19 +14,38 @@ class MaintenanceAdmin extends ModelAdmin {
 	private static $menu_title = 'Maintenance';
 
 	/**
-	 * @var array
-	 */
-	private static $managed_models = array(
-		'ComposerSecurityVulnerability',
-		'ComposerUpdate',
-	);
-
-	/**
 	 * hide the importer option
 	 *
 	 * @var boolean
 	 */
 	public $showImportForm = false;
+
+	/**
+	 * list of data object which should be managed - if they exist
+	 *
+	 * @var array
+	 */
+	protected $managedModels = array(
+		'ComposerSecurityVulnerability',
+		'ComposerUpdate',
+	);
+
+	/**
+	 * Check which classes should be managed using this model admin - some may not exist
+	 *
+	 * @return array
+	 */
+	public function getManagedModels() {
+		$models = array();
+
+		foreach ($this->managedModels as $dataObject) {
+			if (class_exists($dataObject)) {
+				$models[$dataObject] = array('title' => singleton($dataObject)->singular_name());
+			}
+		}
+
+		return $models;
+	}
 
 	/**
 	 * adjust the gridfield: remove all options to change content
