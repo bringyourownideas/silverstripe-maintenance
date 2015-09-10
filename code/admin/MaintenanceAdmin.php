@@ -41,6 +41,7 @@ class MaintenanceAdmin extends ModelAdmin {
 		// remove all the edit options
 		$field = $form->Fields()->fieldByName('ComposerSecurityVulnerability');
 		if ($field) $field->setConfig(new GridFieldConfig_Base());
+		if ($field) $field->getConfig()->addComponent(new GridFieldExternalLink());
 		$field = $form->Fields()->fieldByName('ComposerUpdate');
 		if ($field) $field->setConfig(new GridFieldConfig_Base());
 
