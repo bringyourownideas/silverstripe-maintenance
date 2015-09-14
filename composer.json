@@ -1,5 +1,5 @@
 {
-	"name" : "FriendsOfSilverStripe/silverstripe-maintenance",
+	"name" : "friendsofsilverstripe/silverstripe-maintenance",
 	"description" : "Security issues and available updates of composer packages as a model admin",
 	"type" : "silverstripe-module",
 	"license" : "BSD-3-Clause",
