@@ -1,6 +1,6 @@
 # SilverStripe maintenance
 
-This modules provides you with a task containing information about available updates as well as known security issues for all installed dependencies. All information will be displayed in a model admin.
+This module provides you with a task containing information about available updates as well as known security issues for all installed dependencies. All information will be displayed in a model admin.
 
 ## Source of the information
 
