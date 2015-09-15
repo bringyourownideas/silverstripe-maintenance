@@ -14,7 +14,7 @@ You need to install at least one of the following packages to take advantage of 
 Run the following command to install this package *including* both suggestions:
 
    ```
-   composer require FriendsOfSilverStripe/silverstripe-maintenance
+   composer require friendsofsilverstripe/silverstripe-maintenance
    composer require spekulatius/silverstripe-composer-security-checker
    composer require spekulatius/silverstripe-composer-update-checker
    ```
