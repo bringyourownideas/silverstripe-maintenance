@@ -70,7 +70,7 @@ class MaintenanceAdmin extends ModelAdmin {
 		if ($field) $field->setConfig(new GridFieldConfig_Base());
 
 		// allow scheduled runs of the composer security vulnerability check if this is a admin and queuedjobs installed
-		if ($field)	$this->addSimpleScheduleForm($form, 'ComposerUpdate');
+		if ($field) $this->addSimpleScheduleForm($form, 'ComposerUpdate');
 
 		return $form;
 	}
