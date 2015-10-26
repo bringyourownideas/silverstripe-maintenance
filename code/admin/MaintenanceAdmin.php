@@ -81,7 +81,7 @@ class MaintenanceAdmin extends ModelAdmin {
 	 * @param Form $form
 	 * @param string $type
 	 */
-	protected function addSimpleScheduleForm(Form $form, string $type) {
+	protected function addSimpleScheduleForm(Form $form, $type) {
 		if (Permission::check('ADMIN') && class_exists('AbstractQueuedJob')) {
 			// add a message
 			$form->Fields()->push(
