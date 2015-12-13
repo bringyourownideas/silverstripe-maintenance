@@ -1,5 +1,11 @@
 # SilverStripe maintenance
 
+[![Build Status](https://api.travis-ci.org/friendsofsilverstripe/silverstripe-mainenance.svg?branch=master)](https://travis-ci.org/friendsofsilverstripe/silverstripe-mainenance)
+[![Latest Stable Version](https://poser.pugx.org/friendsofsilverstripe/silverstripe-mainenance/version.svg)](http://www.silverstripe.org/stable-download/)
+[![Latest Unstable Version](https://poser.pugx.org/friendsofsilverstripe/silverstripe-mainenance/v/unstable.svg)](https://packagist.org/packages/friendsofsilverstripe/silverstripe-mainenance)
+[![Total Downloads](https://poser.pugx.org/friendsofsilverstripe/silverstripe-mainenance/downloads.svg)](https://packagist.org/packages/friendsofsilverstripe/silverstripe-mainenance)
+[![License](https://poser.pugx.org/friendsofsilverstripe/silverstripe-mainenance/license.svg)](https://github.com/friendsofsilverstripe/silverstripe-mainenance#license)
+
 The SilverStripe maintenance module is aiming to reduce your maintenance related work. Currently the module provides you information about available update as well as known security issues.
 
 ## Features
