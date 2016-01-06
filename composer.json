@@ -1,22 +1,29 @@
 {
-	"name" : "friendsofsilverstripe/silverstripe-maintenance",
-	"description" : "Security issues and available updates of composer packages as a model admin",
-	"type" : "silverstripe-module",
-	"license" : "BSD-3-Clause",
-	"keywords" : ["silverstripe","environment", "composer", "updates", "vulnerabilities", "security"],
-	"authors" : [
-		{
-			"name" : "Peter Thaleikis",
-			"email" : "info@thaleikis.de",
-			"homepage" : "https://github.com/spekulatius"
-		}
-	],
-	"require" : {
-		"silverstripe/framework": "3.*",
-		"silverstripe-australia/gridfieldextensions": "dev-master#4c1399ac5c983466fb72c2d9dc58042a07d4b91b"
-	},
-	"suggest": {
-		"spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
-		"spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
-	}
+    "name": "friendsofsilverstripe/silverstripe-maintenance",
+    "description": "Security issues and available updates of composer packages as a model admin",
+    "type": "silverstripe-module",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "silverstripe",
+        "environment",
+        "composer",
+        "updates",
+        "vulnerabilities",
+        "security"
+    ],
+    "authors": [
+        {
+            "name": "Peter Thaleikis",
+            "email": "info@thaleikis.de",
+            "homepage": "https://github.com/spekulatius"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "3.*",
+        "silverstripe-australia/gridfieldextensions": "dev-master#4c1399ac5c983466fb72c2d9dc58042a07d4b91b"
+    },
+    "suggest": {
+        "spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
+        "spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
+    }
 }
