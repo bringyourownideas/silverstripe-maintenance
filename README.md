@@ -1,4 +1,4 @@
-# SilverStripe maintenance
+# SilverStripe Maintenance
 
 [![Build Status](https://api.travis-ci.org/FriendsOfSilverStripe/silverstripe-maintenance.svg?branch=master)](https://travis-ci.org/FriendsOfSilverStripe/silverstripe-maintenance)
 [![Latest Stable Version](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/version.svg)](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/releases)
