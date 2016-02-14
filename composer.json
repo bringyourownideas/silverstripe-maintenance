@@ -24,5 +24,9 @@
     "suggest": {
         "spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
         "spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
-    }
+    },
+    "support": {
+        "issues": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/issues"
+    },
+    "homepage": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance"
 }
