@@ -42,7 +42,6 @@ Run the following commands to install the package including both suggestions and
 
 ```
 composer require FriendsOfSilverStripe/silverstripe-maintenance
-composer require silverstripe/queuedjobs
 composer require spekulatius/silverstripe-composer-security-checker
 composer require spekulatius/silverstripe-composer-update-checker
 ```
