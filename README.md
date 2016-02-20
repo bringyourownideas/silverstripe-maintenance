@@ -11,8 +11,9 @@ The SilverStripe maintenance module is aiming to reduce your maintenance related
 
 ## Features
 
-* Provides information about available updates for composer packages
-* Information about known security issues of all installed packages, even dependencies of dependencies.
+* Provides information about
+ * available updates for composer packages and
+ * known security issues of all installed packages, even dependencies of dependencies.
 * All information will be saved to the database as well as displayed in a model admin.
 * Scheduling of updates of the information
 
