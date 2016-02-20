@@ -1,6 +1,6 @@
 <?php
 /**
- * This is a simple object to holder different sets of settings for a scheduled run.
+ * This is a simple object to hold different sets of settings for a scheduled run.
  *
  * The number of settings and details will be extended later on.
  */
@@ -15,6 +15,7 @@ class ScheduledRun extends DataObject
 
     /**
      * Triggered by ScheduledExecutionJob this will add another job for the actual work.
+     *
      * This "forking" of another process simply happens to make sure the scheduled process doesn't
      * get delayed further and further because of the actual execution time.
      */
