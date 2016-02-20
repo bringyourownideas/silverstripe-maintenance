@@ -12,6 +12,7 @@ The SilverStripe maintenance module is aiming to reduce your maintenance related
 ## Features
 
 * Provides information about
+ * complete list of installed composer packages, including global packages and dependencies,
  * available updates for composer packages and
  * known security issues of all installed packages, even dependencies of dependencies.
 * All information will be saved to the database as well as displayed in a model admin.
@@ -25,6 +26,7 @@ The main functionality comes from these two modules:
 
 * [SilverStripe Composer Security Checker](https://github.com/spekulatius/silverstripe-composer-security-checker)
 * [SilverStripe Composer Update Checker](https://github.com/spekulatius/silverstripe-composer-update-checker)
+* [SilverStripe Composer Versions](https://github.com/spekulatius/silverstripe-composer-versions)
 
 ## Requirements and installation
 
@@ -45,6 +47,7 @@ Run the following commands to install the package including both suggestions and
 composer require friendsofsilverstripe/silverstripe-maintenance dev-master
 composer require spekulatius/silverstripe-composer-security-checker dev-master
 composer require spekulatius/silverstripe-composer-update-checker dev-master
+composer require spekulatius/silverstripe-composer-versions dev-master
 ```
 
 and run dev/build. *If you don't want to install all packages adjust the command above.*
