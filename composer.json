@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "3.*",
+        "silverstripe/framework": "^3.0",
         "silverstripe-australia/gridfieldextensions": "dev-master#4c1399ac5c983466fb72c2d9dc58042a07d4b91b"
     },
     "suggest": {
