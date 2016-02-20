@@ -42,7 +42,7 @@ The main functionality comes from these two modules:
 Run the following commands to install the package including both suggestions and queuedjobs:
 
 ```
-composer require FriendsOfSilverStripe/silverstripe-maintenance dev-master
+composer require friendsofsilverstripe/silverstripe-maintenance dev-master
 composer require spekulatius/silverstripe-composer-security-checker dev-master
 composer require spekulatius/silverstripe-composer-update-checker dev-master
 ```
