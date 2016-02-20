@@ -40,12 +40,12 @@ The main functionality comes from these two modules:
 
 Run the following commands to install the package including both suggestions and queuedjobs:
 
-   ```
-   composer require FriendsOfSilverStripe/silverstripe-maintenance
-   composer require silverstripe/queuedjobs
-   composer require spekulatius/silverstripe-composer-security-checker
-   composer require spekulatius/silverstripe-composer-update-checker
-   ```
+```
+composer require FriendsOfSilverStripe/silverstripe-maintenance
+composer require silverstripe/queuedjobs
+composer require spekulatius/silverstripe-composer-security-checker
+composer require spekulatius/silverstripe-composer-update-checker
+```
 
 and run dev/build. *If you don't want to install all packages adjust the command above.*
 
