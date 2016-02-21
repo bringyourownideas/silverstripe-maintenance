@@ -34,14 +34,11 @@ The main functionality comes from these modules:
 
 * You require the composer.json and composer.lock files to be available and readible in the environment you plan to use this module. All information is based on these files.
 * Install at least one of the modules mentioned under "Source of the information". As a development dependency should be fine in most cases.
-
-### Recommendation
-
-* The queuedjob module is highly recommendated as this allows you to schedule your checks. This saves you time and work at the end.
+* The queuedjob module is a dependency as the checks are scheduled using queuedjobs. This saves you time and work at the end.
 
 ### Installation
 
-Run the following commands to install the package including all suggestions:
+Run the following commands to install the package including all suggestions and populate the information initially:
 
 ```
 # install the packages
