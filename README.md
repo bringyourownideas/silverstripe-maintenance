@@ -22,7 +22,7 @@ The SilverStripe maintenance module is aiming to reduce your maintenance related
 
 The information is based on your composer files. So you need to have them available in the environment you plan to use this module. The modules below process the content of the composer files and check in suitable sources for information regarding your set up.
 
-The main functionality comes from these two modules:
+The main functionality comes from these modules:
 
 * [SilverStripe Composer Security Checker](https://github.com/spekulatius/silverstripe-composer-security-checker)
 * [SilverStripe Composer Update Checker](https://github.com/spekulatius/silverstripe-composer-update-checker)
@@ -33,7 +33,7 @@ The main functionality comes from these two modules:
 ### Requirements
 
 * You require the composer.json and composer.lock files to be available and readible in the environment you plan to use this module. All information is based on these files.
-* Install at least one of the two modules mentioned under "Source of the information"
+* Install at least one of the modules mentioned under "Source of the information". As a development dependency should be fine in most cases.
 
 ### Recommendation
 
@@ -41,29 +41,33 @@ The main functionality comes from these two modules:
 
 ### Installation
 
-Run the following commands to install the package including both suggestions and queuedjobs:
+Run the following commands to install the package including all suggestions:
 
 ```
+# install the packages
 composer require friendsofsilverstripe/silverstripe-maintenance dev-master
 composer require spekulatius/silverstripe-composer-security-checker dev-master
 composer require spekulatius/silverstripe-composer-update-checker dev-master
 composer require spekulatius/silverstripe-composer-versions dev-master
+
+# schedule the population of the data
+php ./framework/cli-script.php dev/build
+
+# run the queuedjobs
+php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
+php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
+php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
 ```
 
 and run dev/build. *If you don't want to install all packages adjust the command above.*
 
 ## Usage
 
-First you need to run the tasks to update the information. To do this run the following tasks:
-
-* www.mysite.com/dev/tasks/CheckComposerSecurityTask
-* www.mysite.com/dev/tasks/CheckComposerUpdatesTask
-
 In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the available information. *You are required to have admin access to view this information.*
 
 ### Scheduling of updates
 
-You can schedule updates using the queuedjobs module. Click on either 'Composer Security Vulnerability' or 'Composer Update' and scroll to the bottom of the page. There you find a simple form which allows you to define an interval for your automatic updates.
+You can schedule updates using the queuedjobs module. Click on either 'Composer Security Vulnerability' or 'Composer Update' and scroll to the bottom of the page. There you find a simple form which allows you to define an interval for your automatic updates. Furthermore the update will automatically scheduled on dev/build.
 
 ## Future ideas/development
 
