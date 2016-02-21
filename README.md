@@ -56,7 +56,7 @@ php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
 php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
 ```
 
-and run dev/build. *If you don't want to install all packages adjust the command above.*
+*If you don't want to install all packages adjust the command above.*
 
 ## Usage
 
