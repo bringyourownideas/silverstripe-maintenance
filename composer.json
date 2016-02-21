@@ -1,8 +1,9 @@
 {
     "name": "friendsofsilverstripe/silverstripe-maintenance",
-    "description": "Security issues and available updates of composer packages as a model admin",
+    "description": "Toolset to help with the day by day maintenance work.",
     "type": "silverstripe-module",
     "license": "BSD-3-Clause",
+    "homepage": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance",
     "keywords": [
         "silverstripe",
         "environment",
@@ -23,10 +24,10 @@
     },
     "suggest": {
         "spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
-        "spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
+        "spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies",
+        "spekulatius/silverstripe-composer-versions": "Collects information about actually installed dependencies"
     },
     "support": {
         "issues": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/issues"
-    },
-    "homepage": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance"
+    }
 }

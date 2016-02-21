@@ -29,6 +29,7 @@ class MaintenanceAdmin extends ModelAdmin
     protected $managedModels = array(
         'ComposerSecurityVulnerability',
         'ComposerUpdate',
+        'ComposerPackageVersion',
     );
 
     /**
@@ -72,6 +73,12 @@ class MaintenanceAdmin extends ModelAdmin
         // allow scheduled runs of the composer security vulnerability check if this is a admin and queuedjobs installed
         if ($field) {
             $this->addSimpleScheduleForm($form, 'ComposerSecurityVulnerability');
+        }
+
+        // add the available composer updates, if this package is installed
+        $field = $form->Fields()->fieldByName('ComposerPackageVersion');
+        if ($field) {
+            $field->setConfig(new GridFieldConfig_Base());
         }
 
         // add the available composer updates, if this package is installed
