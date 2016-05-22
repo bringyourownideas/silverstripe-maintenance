@@ -7,7 +7,8 @@
 [![Total Downloads](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/downloads.svg)](https://packagist.org/packages/FriendsOfSilverStripe/silverstripe-maintenance)
 [![License](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/license.svg)](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/license.md)
 
-The [SilverStripe Maintenance module](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance) is aiming to reduce your maintenance related work. Currently the module provides you information about available update as well as known security issues.
+The [SilverStripe Maintenance module](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance "Assists with the maintainence of your SilverStripe application") is aiming to reduce your maintenance related work. Currently the module provides you information about available update as well as known security issues.
+
 
 ## Features
 
@@ -18,15 +19,17 @@ The [SilverStripe Maintenance module](https://github.com/FriendsOfSilverStripe/s
 * All information will be saved to the database as well as displayed in a model admin.
 * Scheduling of updates of the information
 
+
 ## Source of the information
 
 The information is based on your composer files. So you need to have them available in the environment you plan to use this module. The modules below process the content of the composer files and check in suitable sources for information regarding your set up.
 
 The main functionality comes from these modules:
 
-* [SilverStripe Composer Security Checker](https://github.com/spekulatius/silverstripe-composer-security-checker)
-* [SilverStripe Composer Update Checker](https://github.com/spekulatius/silverstripe-composer-update-checker)
-* [SilverStripe Composer Versions](https://github.com/spekulatius/silverstripe-composer-versions)
+* [SilverStripe Composer Security Checker](https://github.com/spekulatius/silverstripe-composer-security-checker "Check your SilverStripe application for security issues")
+* [SilverStripe Composer Update Checker](https://github.com/spekulatius/silverstripe-composer-update-checker "Check your SilverStripe application for available updates of dependencies.")
+* [SilverStripe Composer Versions](https://github.com/spekulatius/silverstripe-composer-versions "Provides your installed composer versions within your SilverStripe app, for review or other use cases.")
+
 
 ## Requirements and installation
 
@@ -36,16 +39,17 @@ The main functionality comes from these modules:
 * Install at least one of the modules mentioned under "Source of the information". As a development dependency should be fine in most cases.
 * The queuedjob module is a dependency as the checks are scheduled using queuedjobs. This saves you time and work at the end.
 
+
 ### Installation
 
 Run the following commands to install the package including all suggestions and populate the information initially:
 
 ```
 # install the packages
-composer require friendsofsilverstripe/silverstripe-maintenance dev-master
-composer require spekulatius/silverstripe-composer-security-checker dev-master
-composer require spekulatius/silverstripe-composer-update-checker dev-master
-composer require spekulatius/silverstripe-composer-versions dev-master
+composer require friendsofsilverstripe/silverstripe-maintenance
+composer require spekulatius/silverstripe-composer-security-checker
+composer require spekulatius/silverstripe-composer-update-checker
+composer require spekulatius/silverstripe-composer-versions
 
 # schedule the population of the data
 php ./framework/cli-script.php dev/build
@@ -58,15 +62,15 @@ php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
 
 *If you don't want to install all packages adjust the command above.*
 
+
 ## Usage
 
 In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the available information. *You are required to have admin access to view this information.*
+
 
 ### Scheduling of updates
 
 You can schedule updates using the queuedjobs module. Click on either 'Composer Security Vulnerability' or 'Composer Update' and scroll to the bottom of the page. There you find a simple form which allows you to define an interval for your automatic updates. Furthermore the update will automatically scheduled on dev/build.
 
-## Future ideas/development
 
-* notifications of security issues/updates
-* integration into CD tools and/or deploynaut
+## MISC: [Future ideas/development, issues](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/issues), [Contributing](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/CONTRIBUTING.md), [License](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/license.md)
