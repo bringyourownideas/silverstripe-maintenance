@@ -1,9 +1,9 @@
 {
-    "name": "friendsofsilverstripe/silverstripe-maintenance",
+    "name": "bringyourownideas/silverstripe-maintenance",
     "description": "Toolset to help with the day by day maintenance work.",
     "type": "silverstripe-module",
     "license": "BSD-3-Clause",
-    "homepage": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance",
+    "homepage": "https://github.com/bringyourownideas/silverstripe-maintenance",
     "keywords": [
         "silverstripe",
         "environment",
@@ -15,7 +15,7 @@
     "authors": [
         {
             "name": "Peter Thaleikis",
-            "homepage": "https://github.com/spekulatius"
+            "homepage": "https://thaleikis.de"
         }
     ],
     "require": {
@@ -23,11 +23,14 @@
         "silverstripe-australia/gridfieldextensions": "^1.3"
     },
     "suggest": {
-        "spekulatius/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
-        "spekulatius/silverstripe-composer-update-checker": "Checks for available updates of dependencies",
-        "spekulatius/silverstripe-composer-versions": "Collects information about actually installed dependencies"
+        "bringyourownideas/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
+        "bringyourownideas/silverstripe-composer-update-checker": "Checks for available updates of dependencies",
+        "bringyourownideas/silverstripe-composer-versions": "Collects information about actually installed dependencies"
     },
     "support": {
-        "issues": "https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/issues"
+        "issues": "https://github.com/bringyourownideas/silverstripe-maintenance/issues"
+    },
+    "replace": {
+        "friendsofsilverstripe/silverstripe-maintenance": "self.version"
     }
 }
