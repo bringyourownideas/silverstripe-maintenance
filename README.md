@@ -1,6 +1,6 @@
-# SilverStripe Maintenance<br />[![Build Status](https://api.travis-ci.org/FriendsOfSilverStripe/silverstripe-maintenance.svg?branch=master)](https://travis-ci.org/FriendsOfSilverStripe/silverstripe-maintenance) [![Latest Stable Version](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/version.svg)](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/releases) [![Latest Unstable Version](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/v/unstable.svg)](https://packagist.org/packages/FriendsOfSilverStripe/silverstripe-maintenance) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/FriendsOfSilverStripe/silverstripe-maintenance/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/FriendsOfSilverStripe/silverstripe-maintenance/?branch=master) [![Total Downloads](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/downloads.svg)](https://packagist.org/packages/FriendsOfSilverStripe/silverstripe-maintenance) [![License](https://poser.pugx.org/FriendsOfSilverStripe/silverstripe-maintenance/license.svg)](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/license.md)
+# SilverStripe Maintenance<br />[![Build Status](https://api.travis-ci.org/bringyourownideas/silverstripe-maintenance.svg?branch=master)](https://travis-ci.org/bringyourownideas/silverstripe-maintenance) [![Latest Stable Version](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/version.svg)](https://github.com/bringyourownideas/silverstripe-maintenance/releases) [![Latest Unstable Version](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/v/unstable.svg)](https://packagist.org/packages/bringyourownideas/silverstripe-maintenance) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/?branch=master) [![Total Downloads](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/downloads.svg)](https://packagist.org/packages/bringyourownideas/silverstripe-maintenance) [![License](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/license.svg)](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/license.md)
 
-### The [SilverStripe Maintenance module](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance "Assists with the maintainence of your SilverStripe application") is reducing your maintenance related work. Currently the module provides you information about available update as well as known security issues. Further enhancements are planned.
+### The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the maintainence of your SilverStripe application") is reducing your maintenance related work. Currently the module provides you information about available update as well as known security issues. Further enhancements are planned.
 
 * Provides information about
  * available updates for composer packages,
@@ -16,9 +16,9 @@ The information is based on your composer files. So you need to have them availa
 
 The main functionality comes from these modules:
 
-* [SilverStripe Composer Security Checker](https://github.com/spekulatius/silverstripe-composer-security-checker "Check your SilverStripe application for security issues")
-* [SilverStripe Composer Update Checker](https://github.com/spekulatius/silverstripe-composer-update-checker "Check your SilverStripe application for available updates of dependencies.")
-* [SilverStripe Composer Versions](https://github.com/spekulatius/silverstripe-composer-versions "Provides your installed composer versions within your SilverStripe app, for review or other use cases.")
+* [SilverStripe Composer Security Checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker "Check your SilverStripe application for security issues")
+* [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker "Check your SilverStripe application for available updates of dependencies.")
+* [SilverStripe Composer Versions](https://github.com/bringyourownideas/silverstripe-composer-versions "Provides your installed composer versions within your SilverStripe app, for review or other use cases.")
 
 
 ## Requirements and installation
@@ -36,10 +36,10 @@ Run the following commands to install the package including all suggestions and 
 
 ```
 # install the packages
-composer require friendsofsilverstripe/silverstripe-maintenance
-composer require spekulatius/silverstripe-composer-security-checker
-composer require spekulatius/silverstripe-composer-update-checker
-composer require spekulatius/silverstripe-composer-versions
+composer require bringyourownideas/silverstripe-maintenance
+composer require bringyourownideas/silverstripe-composer-security-checker
+composer require bringyourownideas/silverstripe-composer-update-checker
+composer require bringyourownideas/silverstripe-composer-versions
 
 # schedule the population of the data
 php ./framework/cli-script.php dev/build
@@ -63,4 +63,4 @@ In the admin section of your SilverStripe website you should see a Maintenance s
 You can schedule updates using the queuedjobs module. Click on either 'Composer Security Vulnerability' or 'Composer Update' and scroll to the bottom of the page. There you find a simple form which allows you to define an interval for your automatic updates. Furthermore the update will automatically scheduled on dev/build.
 
 
-## MISC: [Future ideas/development, issues](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/issues), [Contributing](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/CONTRIBUTING.md), [License](https://github.com/FriendsOfSilverStripe/silverstripe-maintenance/blob/master/license.md)
+## MISC: [Future ideas/development, issues](https://github.com/bringyourownideas/silverstripe-maintenance/issues), [Contributing](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/CONTRIBUTING.md), [License](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/license.md)
