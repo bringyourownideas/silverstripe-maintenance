@@ -34,4 +34,4 @@ before_script:
 
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit silverstripe-maintenance/tests; fi
-  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ *.php; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs silverstripe-maintenance/src/ silverstripe-maintenance/tests/; fi
