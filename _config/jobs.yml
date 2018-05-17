@@ -1,4 +1,6 @@
-only:
+---
+Name: maintenancejobs
+Only:
   moduleexists: queuedjobs
 ---
 ScheduledRun:
