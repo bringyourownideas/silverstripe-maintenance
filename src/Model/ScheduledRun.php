@@ -21,12 +21,24 @@ class ScheduledRun extends DataObject
      */
     public function onScheduledExecution()
     {
-        // only attempt to execute this if the class exists
-        if (class_exists($this->Type)) {
+        $type = $this->getTypeInstance();
+        if ($type && $type->hasMethod('getJobName')) {
             // find which job needs to be added
-            $job = singleton($this->Type)->jobName;
-            singleton('QueuedJobService')->queueJob(new $job);
+            $jobName = $type->getJobName();
+            Injector::inst()->get(QueuedJobService::class)->queueJob(
+                Injector::inst()->create($jobName)
+            );
         }
+    }
+
+    /**
+     * Gets a singleton instance of the job, referred to as "Type"
+     *
+     * @return DataObject|null
+     */
+    public function getTypeInstance()
+    {
+        return Injector::inst()->get($this->Type);
     }
 
     /**
