@@ -1,6 +1,10 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
+
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use SapphireTest;
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
 
 class UpdatePackageInfoTest extends SapphireTest
 {

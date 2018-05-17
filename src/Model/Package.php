@@ -1,8 +1,9 @@
 <?php
+
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
+
 /**
- * Describes a installed composer package version.
- *
- * This is a DataObject to cache the a package's information for later use.
+ * Describes an installed composer package version.
  */
 class Package extends DataObject
 {
@@ -10,7 +11,6 @@ class Package extends DataObject
         'Name' => 'Varchar(255)',
         'Description' => 'Varchar(255)',
         'Version' => 'Varchar(255)',
-        // 'Direct' => 'Boolean',
     ];
 
     private static $summary_fields = [

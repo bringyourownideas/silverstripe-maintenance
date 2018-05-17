@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A report listing all installed modules used in this site (from a cache).
+ */
 class SiteSummary extends SS_Report
 {
     public function title()
@@ -12,10 +15,10 @@ class SiteSummary extends SS_Report
         return _t(
             __CLASS__ . '.DESCRIPTION',
             <<<DESC
-            Provides information about what SilverStripe modules are installed,
-            giving an insight to project statistics such as how big the installation is,
-            what it would take to upgrade it, and what funcitonality is available
-            to both editors and users.
+Provides information about what SilverStripe modules are installed,
+giving an insight to project statistics such as how big the installation is,
+what it would take to upgrade it, and what functionality is available
+to both editors and users.
 DESC
         );
     }

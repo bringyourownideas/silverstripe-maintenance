@@ -1,14 +1,24 @@
 <?php
 
-use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+namespace BringYourOwnIdeas\Maintenance\Tasks;
 
+use BuildTask;
+use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use Package;
+use SQLDelete;
+
+/**
+ * Parses a composer lock file in order to cache information about the installation.
+ */
 class UpdatePackageInfo extends BuildTask
 {
-    public function getTitle() {
+    public function getTitle()
+    {
         return _t(__CLASS__ . '.TITLE', 'Refresh installed package info');
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return _t(
             __CLASS__ . '.DESCRIPTION',
             'Repopulates installation summary, listing installed modules'.
@@ -40,6 +50,8 @@ class UpdatePackageInfo extends BuildTask
 
     /**
      * Fetch information about the installed packages.
+     *
+     * @param array $packageList list of packages as objects, formatted as one finds in a composer.lock
      *
      * @return array indexed array of package information, represented as associative arrays.
      */
