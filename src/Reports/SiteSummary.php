@@ -36,17 +36,24 @@ DESC
         ];
     }
 
+    /**
+     * Add a button row, including link out to the SilverStripe addons repository, and export button
+     *
+     * {@inheritdoc}
+     */
     public function getReportField()
     {
         Requirements::css('silverstripe-maintenance/css/sitesummary.css');
         $grid = parent::getReportField();
-        $grid->getConfig()
+        $config = $grid->getConfig();
+        $config->addComponents(
+            Injector::inst()->create('GridFieldButtonRow', 'before'),
+            Injector::inst()->create('GridFieldLinkButton', 'https://addons.silverstripe.org', 'buttons-before-left')
+        )
             ->getComponentByType(GridFieldExportButton::class)
-            ->setExportColumns([
-                'Title',
-                'Description',
-                'Version'
-            ]);
+            ->setExportColumns(
+                Package::create()->summaryFields()
+            );
         return $grid;
     }
 }
