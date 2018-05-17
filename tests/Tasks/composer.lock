@@ -1,0 +1,9 @@
+{
+    "packages": [
+        {
+            "name": "fake/package",
+            "description": "A faux package from a mocked composer.lock for testing purposes",
+            "version": "1.0.0"
+        }
+    ]
+}

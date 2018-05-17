@@ -1,0 +1,34 @@
+Package:
+  uptodate:
+    Name: pretend/uptodate
+    Description: An up to date fixture for testing
+    Version: 1.0.0
+    Latest: 1.0.0
+    Latest-status: up-to-date
+    Vendor: pretened
+    Package: uptodate
+    NiceName: uptodate
+    Upgradable: 0
+    Direct: 1
+  minorupdate:
+    Name: pretend/minor
+    Description: A fixture with a minor update available for testing
+    Version: 1.0.0
+    Latest: 1.2.0
+    Latest-status: semver-safe-update
+    Vendor: pretened
+    Package: minor
+    NiceName: minor
+    Upgradable: 1
+    Direct: 0
+  majorupdate:
+    Name: pretend/major
+    Description: A fixture for testing with an API breaking change available
+    Version: 1.0.0
+    Latest: 2.0.0
+    Latest-status: update-possible
+    Vendor: pretened
+    Package: major
+    NiceName: major
+    Upgradable: 1
+    Direct: 1
