@@ -10,7 +10,19 @@ class UpdatePackageInfoTest extends SapphireTest
 {
     public function testGetPackageInfo()
     {
-        $loader = new ComposerLoader(__DIR__);
+        $loader = $this->createMock(ComposerLoader::class);
+        $loader->method('getLock')->willReturn(json_decode(<<<LOCK
+{
+    "packages": [
+        {
+            "name": "fake/package",
+            "description": "A faux package from a mocked composer.lock for testing purposes",
+            "version": "1.0.0"
+        }
+    ]
+}
+LOCK
+        ));
         $processor = new UpdatePackageInfo;
         $output = $processor->getPackageInfo($loader->getLock()->packages);
         $this->assertTrue(is_array($output));

@@ -19,7 +19,8 @@ class SiteSummaryTest extends SapphireTest
         $this->assertStringStartsWith('pretend/', $firstRecord->Name);
     }
 
-    public function testOnlySilverStripeModulesAreShown() {
+    public function testOnlySilverStripeModulesAreShown()
+    {
         $summaryReport = new SiteSummary;
         $records = $summaryReport->sourceRecords(null);
         $this->assertEquals(3, $records->count());

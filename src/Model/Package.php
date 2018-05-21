@@ -39,7 +39,7 @@ class Package extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $task = new UpdatePackageInfo;
+        $task = Injector::inst()->create(UpdatePackageInfo::class);
         $task->run(null);
     }
 }

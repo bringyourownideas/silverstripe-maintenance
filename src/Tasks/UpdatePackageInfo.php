@@ -4,6 +4,7 @@ namespace BringYourOwnIdeas\Maintenance\Tasks;
 
 use BuildTask;
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use Injector;
 use Package;
 use SQLDelete;
 
@@ -12,6 +13,38 @@ use SQLDelete;
  */
 class UpdatePackageInfo extends BuildTask
 {
+
+    private $composerLoader;
+
+    public function __construct($composerLoader = null)
+    {
+        parent::__construct();
+        $this->composerLoader = $composerLoader ?: Injector::inst()->create(ComposerLoader::class);
+    }
+
+    /**
+     * Fetch the composer loader
+     *
+     * @return ComposerLoader
+     */
+    public function getComposerLoader()
+    {
+        return $this->composerLoader;
+    }
+
+    /**
+     * set composer loader - provided for use with Injector {@see Injector}
+     *
+     * @param ComposerLoader $composerLoader
+     *
+     * @return UpdatePackageInfo $this
+     */
+    public function setComposerLoader($composerLoader)
+    {
+        $this->composerLoader = $composerLoader;
+        return $this;
+    }
+
     public function getTitle()
     {
         return _t(__CLASS__ . '.TITLE', 'Refresh installed package info');
@@ -31,9 +64,7 @@ class UpdatePackageInfo extends BuildTask
      */
     public function run($request)
     {
-        $loader = new ComposerLoader;
-
-        $packages = $this->getPackageInfo($loader->getLock()->packages);
+        $packages = $this->getPackageInfo($this->composerLoader->getLock()->packages);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
