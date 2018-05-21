@@ -15,7 +15,8 @@ class Package extends DataObject
     ];
 
     private static $summary_fields = [
-        'Summary',
+        'Title',
+        'Description',
         'Version',
     ];
 

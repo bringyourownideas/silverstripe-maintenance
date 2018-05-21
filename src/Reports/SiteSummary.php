@@ -30,6 +30,21 @@ DESC
 
     public function columns()
     {
-        return singleton(Package::class)->summaryFields();
+        return [
+            'Summary' => 'Description',
+            'Version' => 'Version',
+        ];
+    }
+
+    public function getReportField()
+    {
+        $grid = parent::getReportField();
+        $export = $grid->getConfig()->getComponentByType(GridFieldExportButton::class);
+        $export->setExportColumns([
+            'Title',
+            'Description',
+            'Version'
+        ]);
+        return $grid;
     }
 }
