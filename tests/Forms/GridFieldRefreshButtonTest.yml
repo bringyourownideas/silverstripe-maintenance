@@ -1,0 +1,13 @@
+QueuedJobDescriptor:
+  runningjob:
+    JobStatus: 'Running'
+    Implementation: 'CheckForUpdatesJob'
+    JobType: 2
+  brokenjob:
+    JobStatus: 'Broken'
+    Implementation: 'CheckForUpdatesJob'
+    JobType: 2
+  cancelledjob:
+    JobStatus: 'Cancelled'
+    Implementation: 'CheckForUpdatesJob'
+    JobType: 2

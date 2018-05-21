@@ -72,6 +72,7 @@ class SiteSummary extends SS_Report
 
         $config->addComponents(
             Injector::inst()->create(GridFieldButtonRow::class, 'before'),
+            Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
             Injector::inst()->create(
                 GridFieldLinkButton::class,
                 'https://addons.silverstripe.org',
