@@ -14,7 +14,7 @@ matrix:
       env: DB=PGSQL CORE_RELEASE=3 PHPUNIT_TEST=1
     - php: 7.1
       env: DB=PGSQL CORE_RELEASE=3 PHPUNIT_TEST=1
-    - php: 7.2
+    - php: 7.1
       env: DB=MYSQL CORE_RELEASE=3 PHPUNIT_TEST=1
 
 before_script:
