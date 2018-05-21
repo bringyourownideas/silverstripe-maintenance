@@ -1,0 +1,21 @@
+Package:
+  uptodate:
+    Name: pretend/uptodate
+    Description: An up to date fixture for testing
+    Version: 1.0.0
+    Type: 'silverstripe-module'
+  minorupdate:
+    Name: pretend/minor
+    Description: A fixture with a minor update available for testing
+    Version: 1.0.0
+    Type: 'silverstripe-module'
+  majorupdate:
+    Name: pretend/major
+    Description: A fixture for testing with an API breaking change available
+    Version: 1.0.0
+    Type: 'silverstripe-module'
+  omitted:
+    Name: pretend/library
+    Description: A non-silverstripe module fixture
+    Version: 1.0.0
+    Type: 'library'
