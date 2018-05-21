@@ -11,7 +11,7 @@ class Package extends DataObject
         'Name' => 'Varchar(255)',
         'Description' => 'Varchar(255)',
         'Version' => 'Varchar(255)',
-        "Type" => 'Varchar(255)',
+        'Type' => 'Varchar(255)',
     ];
 
     private static $summary_fields = [
@@ -20,15 +20,19 @@ class Package extends DataObject
         'Version',
     ];
 
+    /**
+     * Strips vendor and 'silverstripe-' prefix from Name property
+     * @return string More easily digestable module name for human consumers
+     */
     public function getTitle()
     {
-        $niceName = preg_replace('#^[^/]+/(silverstripe-)?#', '', $this->Name);
-        $niceName = explode('-', $niceName);
-        $niceName = implode(' ', $niceName);
-        $niceName = ucwords($niceName);
-        return $niceName;
+        return preg_replace('#^[^/]+/(silverstripe-)?#', '', $this->Name);
     }
 
+    /**
+     * Returns HTML formatted summary of this object, uses a template to do this.
+     * @return string
+     */
     public function getSummary()
     {
         return $this->renderWith('Package_summary');

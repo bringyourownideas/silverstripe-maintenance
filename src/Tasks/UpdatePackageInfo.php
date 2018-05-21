@@ -14,13 +14,18 @@ use SQLDelete;
 class UpdatePackageInfo extends BuildTask
 {
 
-    private $composerLoader;
+    /**
+     * @var array Injector configuration
+     * @config
+     */
+    private static $dependencies = [
+        'ComposerLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ComposerLoader'
+    ];
 
-    public function __construct($composerLoader = null)
-    {
-        parent::__construct();
-        $this->composerLoader = $composerLoader ?: Injector::inst()->create(ComposerLoader::class);
-    }
+    /**
+     * @var ComposerLoader
+     */
+    protected $composerLoader;
 
     /**
      * Fetch the composer loader
@@ -61,10 +66,12 @@ class UpdatePackageInfo extends BuildTask
 
     /**
      * Update database cached information about this site.
+     *
+     * @param SS_HTTPRequest $request unused, can be null (must match signature of parent function).
      */
     public function run($request)
     {
-        $packages = $this->getPackageInfo($this->composerLoader->getLock()->packages);
+        $packages = $this->getPackageInfo($this->getComposerLoader()->getLock()->packages);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -98,7 +105,7 @@ class UpdatePackageInfo extends BuildTask
         };
 
         $packageList = array_map($formatInfo, $packageList);
-        $this->extend(__FUNCTION__, $packageList);
+        $this->extend('updatePackageInfo', $packageList);
         return $packageList;
     }
 }

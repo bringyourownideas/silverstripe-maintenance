@@ -23,7 +23,7 @@ class SiteSummaryTest extends SapphireTest
     {
         $summaryReport = new SiteSummary;
         $records = $summaryReport->sourceRecords(null);
-        $this->assertEquals(3, $records->count());
+        $this->assertCount(3, $records);
         foreach ($records as $record) {
             $this->assertEquals('silverstripe-module', $record->Type);
         }

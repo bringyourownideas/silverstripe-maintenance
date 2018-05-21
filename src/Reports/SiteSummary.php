@@ -38,13 +38,15 @@ DESC
 
     public function getReportField()
     {
+        Requirements::css('silverstripe-maintenance/css/sitesummary.css');
         $grid = parent::getReportField();
-        $export = $grid->getConfig()->getComponentByType(GridFieldExportButton::class);
-        $export->setExportColumns([
-            'Title',
-            'Description',
-            'Version'
-        ]);
+        $grid->getConfig()
+            ->getComponentByType(GridFieldExportButton::class)
+            ->setExportColumns([
+                'Title',
+                'Description',
+                'Version'
+            ]);
         return $grid;
     }
 }
