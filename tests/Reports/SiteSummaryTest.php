@@ -18,4 +18,13 @@ class SiteSummaryTest extends SapphireTest
         $this->assertInstanceOf(Package::class, $firstRecord);
         $this->assertStringStartsWith('pretend/', $firstRecord->Name);
     }
+
+    public function testOnlySilverStripeModulesAreShown() {
+        $summaryReport = new SiteSummary;
+        $records = $summaryReport->sourceRecords(null);
+        $this->assertEquals(3, $records->count());
+        foreach ($records as $record) {
+            $this->assertEquals('silverstripe-module', $record->Type);
+        }
+    }
 }

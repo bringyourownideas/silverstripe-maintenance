@@ -25,7 +25,7 @@ DESC
 
     public function sourceRecords($params)
     {
-        return Package::get();
+        return Package::get()->filter('Type:StartsWith', 'silverstripe');
     }
 
     public function columns()
