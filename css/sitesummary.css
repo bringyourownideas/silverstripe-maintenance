@@ -2,6 +2,12 @@
   display:block;
 }
 
+/* Due to a rule applied to `.cms .ss-gridfield > div` we have to be specific here */
+.cms .ss-gridfield > div.site-summary__clearfix {
+    margin: 0;
+    clear: both;
+}
+
 .gridfield-button-link {
     margin-bottom: 12px;
 }
