@@ -3,6 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Util;
 
 use Exception;
+use Object;
 
 /**
  * The composer loader class is responsible for dealing directly with composer.json and composer.lock files,
@@ -10,7 +11,7 @@ use Exception;
  *
  * Any requirements for dealing with these files directly should use this class as a proxy.
  */
-class ComposerLoader
+class ComposerLoader extends Object
 {
     /**
      * @var object
@@ -33,9 +34,12 @@ class ComposerLoader
      */
     public function __construct($basePath = '')
     {
+        parent::__construct();
+
         if ($basePath) {
             $this->setBasePath($basePath);
         }
+
         $this->build();
     }
 
@@ -57,6 +61,8 @@ class ComposerLoader
 
         $this->setJson(json_decode($composerJson));
         $this->setLock(json_decode($composerLock));
+
+        $this->extend('onAfterBuild');
     }
 
     /**
