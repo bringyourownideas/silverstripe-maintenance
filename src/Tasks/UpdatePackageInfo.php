@@ -23,6 +23,17 @@ class UpdatePackageInfo extends BuildTask
     ];
 
     /**
+     * The "types" of composer libraries that will be processed. Anything without these types will be ignored.
+     *
+     * @config
+     * @var array
+     */
+    private static $allowed_types = [
+        'silverstripe-module',
+        'silverstripe-vendormodule',
+    ];
+
+    /**
      * @var ComposerLoader
      */
     protected $composerLoader;
