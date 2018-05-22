@@ -12,27 +12,14 @@ class SiteSummary extends SS_Report
         return _t(__CLASS__ . '.TITLE', 'Installed modules');
     }
 
-    public function description()
-    {
-        return _t(
-            __CLASS__ . '.DESCRIPTION',
-            <<<DESC
-Provides information about what SilverStripe modules are installed,
-giving an insight to project statistics such as how big the installation is,
-what it would take to upgrade it, and what functionality is available
-to both editors and users.
-DESC
-        );
-    }
-
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
         $this->beforeExtending('updateCMSFields', function (FieldList $fields) {
-            $fields->insertAfter('ReportDescription', new LiteralField(
+            $fields->unshift(new LiteralField(
                 'Version',
-                '<p><strong>' . _t(__CLASS__ . '.VERSION', 'Version: ') . $this->resolveCmsVersion() . '</strong></p>'
+                '<h3>' . _t(__CLASS__ . '.VERSION', 'Version: ') . $this->resolveCmsVersion() . '</h3>'
             ));
         });
 
