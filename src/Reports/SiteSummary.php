@@ -25,7 +25,21 @@ DESC
         );
     }
 
-    public function sourceRecords($params)
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+
+        $this->beforeExtending('updateCMSFields', function (FieldList $fields) {
+            $fields->insertAfter('ReportDescription', new LiteralField(
+                'Version',
+                '<p><strong>' . _t(__CLASS__ . '.VERSION', 'Version: ') . $this->resolveCmsVersion() . '</strong></p>'
+            ));
+        });
+
+        return $fields;
+    }
+
+    public function sourceRecords()
     {
         $packageList = Package::get();
         $typeFilters = Config::inst()->get(UpdatePackageInfo::class, 'allowed_types');
@@ -83,5 +97,34 @@ DESC
         );
 
         return $gridField;
+    }
+
+    /**
+     * @return string
+     */
+    protected function resolveCmsVersion()
+    {
+
+        $versionModules = [
+            'silverstripe/framework' => 'Framework',
+            'silverstripe/cms' => 'CMS',
+        ];
+        $this->extend('updateVersionModules', $versionModules);
+
+        $records = $this->sourceRecords()->filter('name', array_keys($versionModules));
+        $versionParts = [];
+
+        foreach ($versionModules as $name => $label) {
+            $record = $records->find('Name', $name);
+            if (!$record) {
+                $version = _t(__CLASS__.'.VersionUnknown', 'Unknown');
+            } else {
+                $version = $record->Version;
+            }
+
+            $versionParts[] = "$label $version";
+        }
+
+        return implode(', ', $versionParts);
     }
 }
