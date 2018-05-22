@@ -1,5 +1,7 @@
 <?php
 
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
+
 /**
  * A report listing all installed modules used in this site (from a cache).
  */
@@ -25,7 +27,16 @@ DESC
 
     public function sourceRecords($params)
     {
-        return Package::get()->filter('Type:StartsWith', 'silverstripe');
+        $packageList = Package::get();
+        $typeFilters = Config::inst()->get(UpdatePackageInfo::class, 'allowed_types');
+
+        if (!empty($typeFilters)) {
+            $packageList = $packageList->filter('Type', $typeFilters);
+        }
+
+        $this->extend('updateSourceRecords', $packageList);
+
+        return $packageList;
     }
 
     public function columns()
