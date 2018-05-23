@@ -12,20 +12,7 @@ class SiteSummary extends SS_Report
         return _t(__CLASS__ . '.TITLE', 'Installed modules');
     }
 
-    public function description()
-    {
-        return _t(
-            __CLASS__ . '.DESCRIPTION',
-            <<<DESC
-Provides information about what SilverStripe modules are installed,
-giving an insight to project statistics such as how big the installation is,
-what it would take to upgrade it, and what functionality is available
-to both editors and users.
-DESC
-        );
-    }
-
-    public function sourceRecords($params)
+    public function sourceRecords()
     {
         $packageList = Package::get();
         $typeFilters = Config::inst()->get(UpdatePackageInfo::class, 'allowed_types');
@@ -68,20 +55,61 @@ DESC
     {
         Requirements::css('silverstripe-maintenance/css/sitesummary.css');
 
-        /** @var GridField $gridField */
-        $gridField = parent::getReportField();
+        /** @var GridField $grid */
+        $grid = parent::getReportField();
 
-        $config = $gridField->getConfig();
+        /** @var GridFieldConfig $config */
+        $config = $grid->getConfig();
 
         /** @var GridFieldExportButton $exportButton */
         $exportButton = $config->getComponentByType(GridFieldExportButton::class);
         $exportButton->setExportColumns(Package::create()->summaryFields());
 
+        $versionHtml = ArrayData::create([
+            'Title' => _t(__CLASS__ . '.VERSION', 'Version'),
+            'Version' => $this->resolveCmsVersion(),
+        ])->renderWith('SiteSummary_VersionHeader');
+
         $config->addComponents(
-            Injector::inst()->create('GridFieldButtonRow', 'before'),
-            Injector::inst()->create('GridFieldLinkButton', 'https://addons.silverstripe.org', 'buttons-before-left')
+            Injector::inst()->create(GridFieldButtonRow::class, 'before'),
+            Injector::inst()->create(
+                GridFieldLinkButton::class,
+                'https://addons.silverstripe.org',
+                'buttons-before-left'
+            ),
+            Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
         );
 
-        return $gridField;
+        return $grid;
+    }
+
+    /**
+     * Extract CMS and Framework version details from the records in the report
+     *
+     * @return string
+     */
+    protected function resolveCmsVersion()
+    {
+        $versionModules = [
+            'silverstripe/framework' => 'Framework',
+            'silverstripe/cms' => 'CMS',
+        ];
+        $this->extend('updateVersionModules', $versionModules);
+
+        $records = $this->sourceRecords()->filter('Name', array_keys($versionModules));
+        $versionParts = [];
+
+        foreach ($versionModules as $name => $label) {
+            $record = $records->find('Name', $name);
+            if (!$record) {
+                $version = _t(__CLASS__.'.VersionUnknown', 'Unknown');
+            } else {
+                $version = $record->Version;
+            }
+
+            $versionParts[] = "$label $version";
+        }
+
+        return implode(', ', $versionParts);
     }
 }
