@@ -39,12 +39,24 @@ DESC
         return $packageList;
     }
 
+    /**
+     * Provide column selection and formatting rules for the CMS report. You can extend data columns by extending
+     * {@link Package::summary_fields}, or you can extend this method to adjust the formatting rules, or to provide
+     * composite fields (such as Summary below) for the CMS report but not the CSV export.
+     *
+     * {@inheritDoc}
+     */
     public function columns()
     {
-        return [
-            'Summary' => 'Description',
-            'Version' => 'Version',
-        ];
+        $columns = Package::create()->summaryFields();
+
+        // Remove the default Title and Description and create Summary as a composite of both for the CMS report only
+        unset($columns['Title'], $columns['Description']);
+        $columns = ['Summary' => 'Summary'] + $columns;
+
+        $this->extend('updateColumns', $columns);
+
+        return $columns;
     }
 
     /**
@@ -55,16 +67,21 @@ DESC
     public function getReportField()
     {
         Requirements::css('silverstripe-maintenance/css/sitesummary.css');
-        $grid = parent::getReportField();
-        $config = $grid->getConfig();
+
+        /** @var GridField $gridField */
+        $gridField = parent::getReportField();
+
+        $config = $gridField->getConfig();
+
+        /** @var GridFieldExportButton $exportButton */
+        $exportButton = $config->getComponentByType(GridFieldExportButton::class);
+        $exportButton->setExportColumns(Package::create()->summaryFields());
+
         $config->addComponents(
             Injector::inst()->create('GridFieldButtonRow', 'before'),
             Injector::inst()->create('GridFieldLinkButton', 'https://addons.silverstripe.org', 'buttons-before-left')
-        )
-            ->getComponentByType(GridFieldExportButton::class)
-            ->setExportColumns(
-                Package::create()->summaryFields()
-            );
-        return $grid;
+        );
+
+        return $gridField;
     }
 }

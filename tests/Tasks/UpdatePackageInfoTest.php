@@ -11,7 +11,7 @@ class UpdatePackageInfoTest extends SapphireTest
     public function testGetPackageInfo()
     {
         $loader = $this->getMockBuilder(ComposerLoader::class)->setMethods(['getLock'])->getMock();
-        $loader->method('getLock')->willReturn(json_decode(<<<LOCK
+        $loader->expects($this->any())->method('getLock')->will($this->returnValue(json_decode(<<<LOCK
 {
     "packages": [
         {
@@ -22,7 +22,7 @@ class UpdatePackageInfoTest extends SapphireTest
     ]
 }
 LOCK
-        ));
+        )));
         $processor = new UpdatePackageInfo;
         $output = $processor->getPackageInfo($loader->getLock()->packages);
         $this->assertInternalType('array', $output);
