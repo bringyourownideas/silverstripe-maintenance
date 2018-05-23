@@ -1,7 +1,5 @@
 <?php
 
-use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
-
 /**
  * A report listing all installed modules used in this site (from a cache).
  */
@@ -15,7 +13,7 @@ class SiteSummary extends SS_Report
     public function sourceRecords()
     {
         $packageList = Package::get();
-        $typeFilters = Config::inst()->get(UpdatePackageInfo::class, 'allowed_types');
+        $typeFilters = Config::inst()->get(UpdatePackageInfoTask::class, 'allowed_types');
 
         if (!empty($typeFilters)) {
             $packageList = $packageList->filter('Type', $typeFilters);

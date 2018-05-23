@@ -1,17 +1,11 @@
 <?php
 
-namespace BringYourOwnIdeas\Maintenance\Tasks;
-
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
-use BuildTask;
-use Package;
-use SQLDelete;
-use SS_HTTPRequest;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
  */
-class UpdatePackageInfo extends BuildTask
+class UpdatePackageInfoTask extends BuildTask
 {
 
     /**
@@ -53,7 +47,7 @@ class UpdatePackageInfo extends BuildTask
      *
      * @param ComposerLoader $composerLoader
      *
-     * @return UpdatePackageInfo $this
+     * @return UpdatePackageInfoTask $this
      */
     public function setComposerLoader($composerLoader)
     {
