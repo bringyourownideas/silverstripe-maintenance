@@ -1,6 +1,5 @@
 <?php
 
-use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
 
 /**
  * Describes an installed composer package version.
@@ -44,7 +43,7 @@ class Package extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $task = Injector::inst()->create(UpdatePackageInfo::class);
+        $task = Injector::inst()->create(UpdatePackageInfoTask::class);
         $task->run(null);
     }
 }

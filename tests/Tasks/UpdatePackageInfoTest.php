@@ -4,7 +4,7 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
 use SapphireTest;
-use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
+use UpdatePackageInfoTask;
 
 class UpdatePackageInfoTest extends SapphireTest
 {
@@ -23,7 +23,7 @@ class UpdatePackageInfoTest extends SapphireTest
 }
 LOCK
         )));
-        $processor = new UpdatePackageInfo;
+        $processor = new UpdatePackageInfoTask;
         $output = $processor->getPackageInfo($loader->getLock()->packages);
         $this->assertInternalType('array', $output);
         $this->assertCount(1, $output);
