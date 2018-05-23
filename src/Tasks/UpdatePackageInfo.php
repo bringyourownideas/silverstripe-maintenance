@@ -2,11 +2,11 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tasks;
 
-use BuildTask;
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
-use Injector;
+use BuildTask;
 use Package;
 use SQLDelete;
+use SS_HTTPRequest;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
@@ -82,7 +82,9 @@ class UpdatePackageInfo extends BuildTask
      */
     public function run($request)
     {
-        $packages = $this->getPackageInfo($this->getComposerLoader()->getLock()->packages);
+        $composerLock = $this->getComposerLoader()->getLock();
+        $rawPackages = array_merge($composerLock->packages, $composerLock->{'packages-dev'});
+        $packages = $this->getPackageInfo($rawPackages);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -90,7 +92,7 @@ class UpdatePackageInfo extends BuildTask
         // to remove everything. Stale information is better than no information.
         if ($packages) {
             // There is no onBeforeDelete for Package
-            SQLDelete::create(Package::class)->execute();
+            SQLDelete::create('Package')->execute();
             foreach ($packages as $package) {
                 Package::create()->update($package)->write();
             }
