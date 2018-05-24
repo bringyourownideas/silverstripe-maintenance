@@ -11,3 +11,19 @@
 .gridfield-button-link {
     margin-bottom: 12px;
 }
+
+.package-summary table.ss-gridfield-table tr td.col-Summary {
+    padding: 0;
+}
+
+a.package-summary__anchor {
+    color: inherit;
+    text-decoration: inherit;
+    display: block;
+    padding: 8px;
+}
+
+a.package-summary__anchor:hover, a.package-summary__anchor:active {
+    color: inherit;
+    text-decoration: inherit;
+}
