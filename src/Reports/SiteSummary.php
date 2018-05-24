@@ -59,6 +59,8 @@ class SiteSummary extends SS_Report
         /** @var GridFieldConfig $config */
         $config = $grid->getConfig();
 
+        $grid->addExtraClass('package-summary');
+
         /** @var GridFieldExportButton $exportButton */
         $exportButton = $config->getComponentByType(GridFieldExportButton::class);
         $exportButton->setExportColumns(Package::create()->summaryFields());
