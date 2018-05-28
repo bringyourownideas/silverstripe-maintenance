@@ -1,3 +1,17 @@
+.package-summary{
+    margin-top: 0;
+}
+
+.package-summary .message {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+}
+
+.package-summary .grid-refresh-button {
+    margin-bottom: 0;
+}
+
 .package-summary__title {
   display:block;
 }
@@ -23,7 +37,8 @@ a.package-summary__anchor {
     padding: 8px;
 }
 
-a.package-summary__anchor:hover, a.package-summary__anchor:active {
+a.package-summary__anchor:hover,
+a.package-summary__anchor:active {
     color: inherit;
     text-decoration: inherit;
 }

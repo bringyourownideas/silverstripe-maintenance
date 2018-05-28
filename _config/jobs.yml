@@ -1,8 +1,0 @@
----
-Name: maintenancejobs
-Only:
-  moduleexists: queuedjobs
----
-ScheduledRun:
-  extensions:
-    - ScheduledExecutionExtension
