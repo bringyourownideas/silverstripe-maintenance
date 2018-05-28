@@ -11,6 +11,7 @@ class Package extends DataObject
         'Description' => 'Varchar(255)',
         'Version' => 'Varchar(255)',
         'Type' => 'Varchar(255)',
+        'Supported' => 'Boolean',
     ];
 
     private static $summary_fields = [
