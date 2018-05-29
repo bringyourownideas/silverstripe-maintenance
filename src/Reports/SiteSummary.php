@@ -70,6 +70,27 @@ class SiteSummary extends SS_Report
             'Version' => $this->resolveCmsVersion(),
         ])->renderWith('SiteSummary_VersionHeader');
 
+        /** @var GridFieldDropdownFilter $dropdownFilter */
+        $dropdownFilter = Injector::inst()->create(
+            GridFieldDropdownFilter::class,
+            'addonFilter',
+            'buttons-before-right',
+            _t(__CLASS__ . '.ShowAllModules', 'Show all modules')
+        );
+
+        $dropdownFilter->addFilterOption(
+            'supported',
+            _t(__CLASS__ . '.FilterSupported', 'Supported modules'),
+            ['Supported' => true]
+        );
+        $dropdownFilter->addFilterOption(
+            'unsupported',
+            _t(__CLASS__ . '.FilterUnsupported', 'Unsupported modules'),
+            ['Supported' => false]
+        );
+
+        $this->extend('updateDropdownFilterOptions', $dropdownFilter);
+
         $config->addComponents(
             Injector::inst()->create(GridFieldButtonRow::class, 'before'),
             Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
@@ -78,8 +99,14 @@ class SiteSummary extends SS_Report
                 'https://addons.silverstripe.org',
                 'buttons-before-left'
             ),
+            $dropdownFilter,
             Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
         );
+
+        // Re-order the paginator to ensure it counts correctly.
+        $paginator = $config->getComponentByType(GridFieldPaginator::class);
+        $config->removeComponent($paginator);
+        $config->addComponent($paginator);
 
         return $grid;
     }

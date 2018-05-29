@@ -42,3 +42,11 @@ a.package-summary__anchor:active {
     color: inherit;
     text-decoration: inherit;
 }
+
+.gridfield-dropdown-filter {
+    padding-right: 10px;
+}
+
+.gridfield-dropdown-filter button {
+    display: none;
+}

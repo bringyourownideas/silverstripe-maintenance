@@ -1,6 +1,7 @@
 <?php
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
@@ -13,7 +14,8 @@ class UpdatePackageInfoTask extends BuildTask
      * @config
      */
     private static $dependencies = [
-        'ComposerLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ComposerLoader'
+        'ComposerLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ComposerLoader',
+        'SupportedAddonsLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\SupportedAddonsLoader',
     ];
 
     /**
@@ -31,6 +33,11 @@ class UpdatePackageInfoTask extends BuildTask
      * @var ComposerLoader
      */
     protected $composerLoader;
+
+    /**
+     * @var SupportedAddonsLoader
+     */
+    protected $supportedAddonsLoader;
 
     /**
      * Fetch the composer loader
@@ -52,6 +59,24 @@ class UpdatePackageInfoTask extends BuildTask
     public function setComposerLoader($composerLoader)
     {
         $this->composerLoader = $composerLoader;
+        return $this;
+    }
+
+    /**
+     * @return SupportedAddonsLoader
+     */
+    public function getSupportedAddonsLoader()
+    {
+        return $this->supportedAddonsLoader;
+    }
+
+    /**
+     * @param SupportedAddonsLoader $supportedAddonsLoader
+     * @return $this
+     */
+    public function setSupportedAddonsLoader(SupportedAddonsLoader $supportedAddonsLoader)
+    {
+        $this->supportedAddonsLoader = $supportedAddonsLoader;
         return $this;
     }
 
@@ -77,8 +102,10 @@ class UpdatePackageInfoTask extends BuildTask
     public function run($request)
     {
         $composerLock = $this->getComposerLoader()->getLock();
-        $rawPackages = array_merge($composerLock->packages, $composerLock->{'packages-dev'});
+        $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
         $packages = $this->getPackageInfo($rawPackages);
+
+        $supportedPackages = $this->getSupportedPackages();
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -86,8 +113,11 @@ class UpdatePackageInfoTask extends BuildTask
         // to remove everything. Stale information is better than no information.
         if ($packages) {
             // There is no onBeforeDelete for Package
-            SQLDelete::create('Package')->execute();
+            SQLDelete::create('"Package"')->execute();
             foreach ($packages as $package) {
+                if (is_array($supportedPackages)) {
+                    $package['Supported'] = in_array($package['Name'], $supportedPackages);
+                }
                 Package::create()->update($package)->write();
             }
         }
@@ -114,5 +144,22 @@ class UpdatePackageInfoTask extends BuildTask
         $packageList = array_map($formatInfo, $packageList);
         $this->extend('updatePackageInfo', $packageList);
         return $packageList;
+    }
+
+    /**
+     * Return an array of supported modules as fetched from addons.silverstripe.org. Outputs a message and returns null
+     * if an error occurs
+     *
+     * @return null|array
+     */
+    public function getSupportedPackages()
+    {
+        try {
+            return $this->getSupportedAddonsLoader()->getAddonNames() ?: [];
+        } catch (RuntimeException $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+        }
+
+        return null;
     }
 }
