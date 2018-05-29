@@ -1,5 +1,9 @@
 <?php
 
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
+
 /**
  * A report listing all installed modules used in this site (from a cache).
  */
@@ -59,7 +63,7 @@ class SiteSummary extends SS_Report
         /** @var GridFieldConfig $config */
         $config = $grid->getConfig();
 
-        $grid->addExtraClass('package-summary');
+        $grid->addExtraClass('site-summary');
 
         /** @var GridFieldExportButton $exportButton */
         $exportButton = $config->getComponentByType(GridFieldExportButton::class);
@@ -82,6 +86,30 @@ class SiteSummary extends SS_Report
         );
 
         return $grid;
+    }
+
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+        $alerts = $this->getAlerts();
+        if ($alerts) {
+            $summaryInfo = '<div class="site-summary message warning">' . implode("\n", $alerts) . '</div>';
+            $fields->unshift(LiteralField::create('AlertSummary', $summaryInfo));
+        }
+        return $fields;
+    }
+
+    /**
+     * Return a list of alerts to display in a message box above the report
+     * A combination of free text fields - combined alerts as opposed to a message box per alert.
+     *
+     * @return array
+     */
+    protected function getAlerts()
+    {
+        $alerts = [];
+        $this->extend('updateAlerts', $alerts);
+        return $alerts;
     }
 
     /**
