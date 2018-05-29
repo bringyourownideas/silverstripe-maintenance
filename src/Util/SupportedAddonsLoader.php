@@ -7,7 +7,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use Object;
+use Package;
 use RuntimeException;
+use SS_Cache;
+use Zend_Cache_Core;
 
 /**
  * Handles fetching supported addon details from addons.silverstripe.org
@@ -22,6 +25,11 @@ class SupportedAddonsLoader extends Object
      * @var Client
      */
     protected $guzzleClient;
+
+    /**
+     * @var Zend_Cache_Core
+     */
+    protected $cache;
 
     /**
      * @return Client
@@ -42,12 +50,36 @@ class SupportedAddonsLoader extends Object
     }
 
     /**
+     * @return Zend_Cache_Core
+     */
+    public function getCache()
+    {
+        if (!$this->cache) {
+            $this->cache = SS_Cache::factory('SupportedAddons');
+        }
+
+        return $this->cache;
+    }
+
+    /**
+     * @param Zend_Cache_Core $cache
+     */
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * Return the list of supported addons as provided by addons.silverstripe.org
      *
      * @return array
      */
     public function getAddonNames()
     {
+        if (($addons = $this->getCache()->load('addons')) !== false) {
+            return $addons;
+        }
+
         return $this->doRequest();
     }
 
@@ -87,6 +119,50 @@ class SupportedAddonsLoader extends Object
             throw new RuntimeException($failureMessage . 'Response returned unsuccessfully');
         }
 
+        // Handle caching if requested
+        if ($cacheControl = $response->getHeader('Cache-Control')) {
+            // Combine separate header rows
+            $cacheControl = implode(', ', $cacheControl);
+
+            if (strpos($cacheControl, 'no-store') === false &&
+                preg_match('/(?:max-age=)(\d+)/i', $cacheControl, $matches)) {
+                $duration = (int) $matches[1];
+                $this->getCache()->save($responseBody['addons'], 'addons', [], $duration);
+            }
+        }
+
         return $responseBody['addons'] ?: [];
+    }
+
+    /**
+     * Create a request with some standard headers
+     *
+     * @param string $uri
+     * @param string $method
+     * @return Request
+     */
+    protected function createRequest($uri, $method = 'GET')
+    {
+        $headers = [];
+        $version = $this->resolveVersion();
+        if (!empty($version)) {
+            $headers['Silverstripe-Framework-Version'] = $version;
+        }
+
+        return new Request($method, $uri, $headers);
+    }
+
+    /**
+     * Resolve the framework version of SilverStripe.
+     *
+     * @return string|null
+     */
+    protected function resolveVersion()
+    {
+        $frameworkPackage = Package::get()->find('Name', 'silverstripe/framework');
+        if (!$frameworkPackage) {
+            return null;
+        }
+        return $frameworkPackage->Version;
     }
 }
