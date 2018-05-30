@@ -1,5 +1,7 @@
 <?php
 
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
+
 class GridFieldLinkButtonTest extends SapphireTest
 {
     /**

@@ -1,46 +1,64 @@
-.package-summary{
-    margin-top: 0;
+.site-summary {
+  margin-top: 0;
 }
 
-.package-summary .message {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
+.site-summary.message,
+.site-summary .message {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
 }
 
-.package-summary .grid-refresh-button {
-    margin-bottom: 0;
-}
-
-.package-summary__title {
-  display:block;
+.site-summary .grid-refresh-button {
+  margin-bottom: 0;
 }
 
 /* Due to a rule applied to `.cms .ss-gridfield > div` we have to be specific here */
 .cms .ss-gridfield > div.site-summary__clearfix {
-    margin: 0;
-    clear: both;
+  margin: 0;
+  clear: both;
 }
 
 .gridfield-button-link {
-    margin-bottom: 12px;
-}
-
-.package-summary table.ss-gridfield-table tr td.col-Summary {
-    padding: 0;
+  margin-bottom: 12px;
 }
 
 a.package-summary__anchor {
-    color: inherit;
-    text-decoration: inherit;
-    display: block;
-    padding: 8px;
+  color: inherit;
+  text-decoration: inherit;
+  display: block;
+  padding: 0 8px;
+  margin: 0 -8px;
 }
 
 a.package-summary__anchor:hover,
 a.package-summary__anchor:active {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.package-summary__badge {
+  font-size: 0.8em;
+  padding: 3px 5px;
+  background: grey;
+  border-radius: 2px;
+  color: white;
+  position: relative;
+  top: -1px;
+}
+/* Colours for badge classes */
+.package-summary__badge--good {
+  background: #3fa142;
+}
+.package-summary__badge--warning {
+  background: #ff7f22;
+}
+.package-summary__badge--bad {
+  background: #d40404;
+}
+
+.package-summary__description {
+  display:block;
 }
 
 .gridfield-dropdown-filter {

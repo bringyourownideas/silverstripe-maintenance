@@ -1,5 +1,7 @@
 <?php
 
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
+
 class GridFieldRefreshButtonTest extends SapphireTest
 {
     protected static $fixture_file = 'GridFieldRefreshButtonTest.yml';

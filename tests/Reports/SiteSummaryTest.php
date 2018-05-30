@@ -2,6 +2,7 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Reports;
 
+use BringYourOwnIdeas\Maintenance\Tests\Reports\Stubs\SiteSummaryExtensionStub;
 use Package;
 use SapphireTest;
 use SiteSummary;
@@ -9,6 +10,10 @@ use SiteSummary;
 class SiteSummaryTest extends SapphireTest
 {
     protected static $fixture_file = 'Package.yml';
+
+    protected $requiredExtensions = [
+        SiteSummary::class => [SiteSummaryExtensionStub::class]
+    ];
 
     public function testSourceRecords()
     {
@@ -27,5 +32,14 @@ class SiteSummaryTest extends SapphireTest
         foreach ($records as $record) {
             $this->assertEquals('silverstripe-module', $record->Type);
         }
+    }
+
+    public function testAlertsRenderAtopTheReportField()
+    {
+        $summaryReport = new SiteSummary;
+        $fields = $summaryReport->getCMSFields();
+        $alertSummary = $fields->fieldByName('AlertSummary');
+        $this->assertInstanceOf('LiteralField', $alertSummary);
+        $this->assertContains('Sound the alarm!', $alertSummary->getContent());
     }
 }

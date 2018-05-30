@@ -1,11 +1,26 @@
 <?php
+
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use ArrayData;
+use CheckForUpdatesJob;
+use Convert;
+use GridField;
+use GridField_ActionProvider;
+use GridField_FormAction;
+use GridField_HTMLProvider;
+use GridField_URLHandler;
+use Injector;
+use QueuedJob;
+use QueuedJobService;
+use Requirements;
+
 /**
  * Adds a "Refresh" button to the bottom or top of a GridField.
  *
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_ActionProvider, GridField_URLHandler
 {
     /**
@@ -60,7 +75,9 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
         }
 
         return [
-            $this->targetFragment => ArrayData::create(['Button' => $button->Field()])->renderWith(__CLASS__)
+            $this->targetFragment => ArrayData::create([
+                'Button' => $button->Field()
+            ])->renderWith('GridFieldRefreshButton')
         ];
     }
 

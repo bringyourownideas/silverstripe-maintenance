@@ -1,12 +1,16 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use ArrayData;
+use GridField_HTMLProvider;
+
 /**
  * A button that contains a link to an URL.
  *
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldLinkButton implements GridField_HTMLProvider
 {
     /**
@@ -43,7 +47,7 @@ class GridFieldLinkButton implements GridField_HTMLProvider
         $fragment = ArrayData::create([
             'Link' => $this->link,
             'Caption' => _t('GridFieldLinkButton.LINK_TO_ADDONS', 'Explore Addons')
-        ])->renderWith(__CLASS__);
+        ])->renderWith('GridFieldLinkButton');
 
         return [$this->targetFragment => $fragment];
     }

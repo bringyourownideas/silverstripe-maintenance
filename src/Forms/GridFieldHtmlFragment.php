@@ -1,12 +1,15 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use GridField_HTMLProvider;
+
 /**
  * Facilitates adding arbitrary HTML to grid fields
  *
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldHtmlFragment implements GridField_HTMLProvider
 {
     /**
