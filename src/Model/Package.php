@@ -52,11 +52,13 @@ class Package extends DataObject
      *   title is the unique string to display
      *   type is an optional class attribute (applied as a BEM modifier, by default)
      *
+     * @param array $extraBadges allow a user to include extra badges at call time
+     *
      * @return ArrayList
      */
-    public function getBadges()
+    public function getBadges($extraBadges = [])
     {
-        $badgeDefinitions = $this->badges;
+        $badgeDefinitions = array_merge($this->badges, $extraBadges);
         $badges = ArrayList::create();
         foreach ($badgeDefinitions as $title => $type) {
             $badges->push(ArrayData::create([
@@ -65,7 +67,7 @@ class Package extends DataObject
             ]));
         }
 
-        $this->extend('updateBadges', $badgeDefinitions);
+        $this->extend('updateBadges', $badges);
         return $badges;
     }
 
