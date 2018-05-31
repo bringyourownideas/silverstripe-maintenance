@@ -1,19 +1,31 @@
 /* global window */
 
 window.jQuery.entwine('ss', ($) => {
-  // p tag that holds button
+  /**
+   * p tag that holds button
+   */
   $('#checkForUpdates').entwine({
-    // Magically set by the magic get/set{thisMemberProperty} (see poll function below)
+    /**
+     * Magically set by the magic get/set{thisMemberProperty} (see poll function below)
+     */
     PollTimeout: null,
+
+    /**
+     * Start the loading process
+     */
     onclick() {
       this.setLoading();
     },
+
+    /**
+     * Poll the current job and update the frontend status
+     */
     onmatch() {
-      // Poll the current job and update the front end status
       if (this.getButton(true).length) {
         this.setLoading();
       }
     },
+
     /**
      * Add warning message (set as data attribute on GridFieldRefreshButton) before
      * and has finished
@@ -22,19 +34,21 @@ window.jQuery.entwine('ss', ($) => {
       const message = this.getButton().data('message');
       $('.ss-gridfield-buttonrow')
         .first()
-        .prepend(`<p class="message warning">${message}</p>`);
+        .prepend(`<p class="alert alert-info">${message}</p>`);
       this.poll();
     },
+
     /**
      * Poll the provided "check" endpoint to determine whether the job has been processed
      * and has finished.
      */
     poll() {
+      const self = this;
       $.ajax({
-        url: this.getButton().data('check'),
+        url: self.getButton().data('check'),
         async: true,
         success: (data) => {
-          this.clearLoading(JSON.parse(data));
+          self.clearLoading(JSON.parse(data));
         },
         error: (error) => {
           if (typeof console !== 'undefined') {
@@ -43,15 +57,27 @@ window.jQuery.entwine('ss', ($) => {
         }
       });
     },
+
+    /**
+     * Returns the "Check for updates" button
+     *
+     * @param {boolean} disabled
+     */
     getButton(disabled) {
       let button = 'button';
       if (disabled) {
-          button += ':disabled';
+        button += ':disabled';
       }
       return this.children(button).first();
     },
-    clearLoading(hasRunningJob) {
-      if (hasRunningJob === false) {
+
+    /**
+     * Cleanup timers and reload the GridField
+     * @param {String|boolean} checkResult
+     */
+    clearLoading(checkResult) {
+      if (checkResult !== true) {
+        // Reload the report
         this.closest('fieldset.ss-gridfield').reload();
         return;
       }
@@ -63,6 +89,6 @@ window.jQuery.entwine('ss', ($) => {
       this.setPollTimeout(setTimeout(() => {
         $('#checkForUpdates').poll();
       }, 5000));
-    }
+    },
   });
 });

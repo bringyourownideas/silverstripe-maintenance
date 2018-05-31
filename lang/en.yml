@@ -17,7 +17,9 @@ en:
     AddonsLinkTitle: 'View {package} on addons.silverstripe.org'
     FilterSupported: 'Supported modules'
     FilterUnsupported: 'Unsupported modules'
+    LAST_UPDATED: 'Last updated {updated}'
     LINK_TO_ADDONS: 'Explore Addons'
+    MORE_INFORMATION: 'More information'
     ShowAllModules: 'Show all modules'
     TITLE: 'Installed modules'
     VERSION: Version

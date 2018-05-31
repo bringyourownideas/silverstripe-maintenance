@@ -23,7 +23,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
     public function testHasRunningJob()
     {
         $button = new GridFieldRefreshButton('test');
-        $this->assertTrue($button->hasActiveJob());
+        $this->assertTrue($button->hasPendingJob());
     }
 
     public function testDoesNotHaveCancelledCompletedOrBrokenJob()
@@ -31,7 +31,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
         $this->completeRunningJob();
 
         $button = new GridFieldRefreshButton('test');
-        $this->assertFalse($button->hasActiveJob());
+        $this->assertFalse($button->hasPendingJob());
     }
 
     public function testHandleRefreshDoesNotCreateJobWhenJobIsRunning()
