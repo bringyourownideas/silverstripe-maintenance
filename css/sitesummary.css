@@ -48,3 +48,15 @@ a.package-summary__anchor:active {
 .gridfield-dropdown-filter button {
     display: none;
 }
+
+/* Move this to webpack when https://github.com/bringyourownideas/silverstripe-maintenance/pull/85 is merged */
+.site-summary__more-info {
+    color: inherit;
+    /* use a variable for this */
+    margin: .6154rem;
+}
+
+.site-summary__more-info:hover {
+    text-decoration: none;
+    color: inherit;
+}
