@@ -101,6 +101,7 @@ class SiteSummary extends Report
                 'buttons-before-left'
             ),
             $this->getDropdownFilter(),
+            $this->getInfoLink(),
             Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
         );
 

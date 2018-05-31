@@ -1,0 +1,45 @@
+.package-summary {
+  margin-top: 0;
+
+  h3 {
+    margin-bottom: 0;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  .grid-refresh-button {
+    margin-bottom: 0;
+  }
+}
+
+.package-summary__title {
+  display: block;
+}
+
+.package-summary__anchor {
+  color: inherit;
+  text-decoration: inherit;
+  display: block;
+
+  &:hover,
+  &:active {
+    color: inherit;
+    text-decoration: inherit;
+  }
+}
+
+.gridfield-dropdown-filter button {
+  display: none;
+}
+
+.site-summary__more-info {
+  color: inherit;
+  margin: $input-padding-y;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
