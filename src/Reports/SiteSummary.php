@@ -2,22 +2,23 @@
 
 namespace BringYourOwnIdeas\Maintenance\Reports;
 
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldDropdownFilter;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
 use BringYourOwnIdeas\Maintenance\Model\Package;
-use SilverStripe\Core\Config\Config;
 use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
-use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
-use SilverStripe\View\ArrayData;
-use SilverStripe\Core\Injector\Injector;
-use BringYourOwnIdeas\Maintenance\Forms\GridFieldDropdownFilter;
-use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
-use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
-use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Reports\Report;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
 
 /**
  * A report listing all installed modules used in this site (from a cache).
@@ -98,14 +99,18 @@ class SiteSummary extends Report
                 'buttons-before-left'
             ),
             $this->getDropdownFilter(),
-            $this->getInfoLink(),
             Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
         );
 
-        // Re-order the paginator to ensure it counts correctly.
+        // Re-order the paginator to ensure it counts correctly, and reorder the buttons
         $paginator = $config->getComponentByType(GridFieldPaginator::class);
-        $config->removeComponent($paginator);
-        $config->addComponent($paginator);
+        $config->removeComponent($paginator)->addComponent($paginator);
+
+        $exportButton = $config->getComponentByType(GridFieldExportButton::class);
+        $config->removeComponent($exportButton)->addComponent($exportButton);
+
+        $printButton = $config->getComponentByType(GridFieldPrintButton::class);
+        $config->removeComponentsByType($printButton)->addComponent($printButton);
 
         return $grid;
     }

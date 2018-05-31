@@ -61,7 +61,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
             null
         );
 
-        $button->addExtraClass('btn btn-secondary font-icon-sync');
+        $button->addExtraClass('btn btn-primary font-icon-sync');
 
         $button->setAttribute('data-check', $gridField->Link('check'));
         $button->setAttribute(
