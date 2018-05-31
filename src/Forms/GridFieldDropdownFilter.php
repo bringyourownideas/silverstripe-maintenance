@@ -150,7 +150,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
      */
     public function getHTMLFragments($gridField)
     {
-        Requirements::javascript('bringyourownideas/silverstripe-maintenance: javascript/GridfieldDropdownFilter.js');
+        Requirements::javascript('bringyourownideas/silverstripe-maintenance: client/dist/js/bundle.js');
 
         $dropdownOptions = [static::DEFAULT_OPTION_VALUE => $this->defaultOption] +
             $this->filterOptions->map('name', 'title')->toArray();

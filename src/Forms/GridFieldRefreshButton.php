@@ -51,7 +51,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function getHTMLFragments($gridField)
     {
-        Requirements::javascript('bringyourownideas/silverstripe-maintenance: javascript/CheckForUpdates.js');
+        Requirements::javascript('bringyourownideas/silverstripe-maintenance: client/dist/js/bundle.js');
 
         $button = GridField_FormAction::create(
             $gridField,
