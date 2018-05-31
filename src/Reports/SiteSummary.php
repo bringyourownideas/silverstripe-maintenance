@@ -16,6 +16,7 @@ use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Reports\Report;
 
 /**
@@ -88,6 +89,34 @@ class SiteSummary extends Report
             'Version' => $this->resolveCmsVersion(),
         ])->renderWith('SiteSummary_VersionHeader');
 
+        $config->addComponents(
+            Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
+            Injector::inst()->create(
+                GridFieldLinkButton::class,
+                'https://addons.silverstripe.org',
+                _t(__CLASS__ . '.LINK_TO_ADDONS', 'Explore Addons'),
+                'buttons-before-left'
+            ),
+            $this->getDropdownFilter(),
+            $this->getInfoLink(),
+            Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
+        );
+
+        // Re-order the paginator to ensure it counts correctly.
+        $paginator = $config->getComponentByType(GridFieldPaginator::class);
+        $config->removeComponent($paginator);
+        $config->addComponent($paginator);
+
+        return $grid;
+    }
+
+    /**
+     * Returns a dropdown filter with user configurable options in it
+     *
+     * @return GridFieldDropdownFilter
+     */
+    protected function getDropdownFilter()
+    {
         /** @var GridFieldDropdownFilter $dropdownFilter */
         $dropdownFilter = Injector::inst()->create(
             GridFieldDropdownFilter::class,
@@ -109,24 +138,24 @@ class SiteSummary extends Report
 
         $this->extend('updateDropdownFilterOptions', $dropdownFilter);
 
-        $config->addComponents(
-            Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
-            Injector::inst()->create(
-                GridFieldLinkButton::class,
-                'https://addons.silverstripe.org',
-                _t(__CLASS__ . '.LINK_TO_ADDONS', 'Explore Addons'),
-                'buttons-before-left'
-            ),
-            $dropdownFilter,
-            Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
+        return $dropdownFilter;
+    }
+
+    /**
+     * Returns a link to more information on this module on the addons site
+     *
+     * @return GridFieldHtmlFragment
+     */
+    protected function getInfoLink()
+    {
+        return Injector::inst()->create(
+            GridFieldHtmlFragment::class,
+            'buttons-before-right',
+            DBField::create_field('HTMLFragment', ArrayData::create([
+                'Link' => 'https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-maintenance',
+                'Label' => _t(__CLASS__ . '.MORE_INFORMATION', 'More information'),
+            ])->renderWith(__CLASS__ . '/MoreInformationLink'))
         );
-
-        // Re-order the paginator to ensure it counts correctly.
-        $paginator = $config->getComponentByType(GridFieldPaginator::class);
-        $config->removeComponent($paginator);
-        $config->addComponent($paginator);
-
-        return $grid;
     }
 
     /**
