@@ -43,22 +43,37 @@ class PackageTest extends SapphireTest
     public function testBadges()
     {
         $testPackage = new Package();
-        $testBadges = [
+
+        // setBadges to test
+        $setBadges = [
             'A good Badge' => 'good',
             'A typeless badge' => null
         ];
-        $testPackage->setBadges($testBadges);
-        $badgeViewData = $testPackage->getBadges();
+        $testPackage->setBadges($setBadges);
+
+        // test addBadge appends badge to the stored list
+        $addedBadgeTitle = 'Integer badge';
+        $addedBadgeValue = 3;
+        $testPackage->addBadge($addedBadgeTitle, $addedBadgeValue);
+
+        // tests adding badges via getBadges optional parameter
+        $extraBadge = ['Extra' => 'warning'];
+
+        // combine the input data to test outputs against
+        $badgeControlSample = array_merge($setBadges, [$addedBadgeTitle => $addedBadgeValue], $extraBadge);
+
+        $badgeViewData = $testPackage->getBadges($extraBadge);
 
         // Test expected data structure is correct
         $this->assertInstanceOf('ArrayList', $badgeViewData);
         $this->assertContainsOnlyInstancesOf('ArrayData', $badgeViewData->toArray());
 
         // Test that the output format is correct
-        reset($testBadges);
+        // and that all our input is output
+        reset($badgeControlSample);
         foreach ($badgeViewData as $badgeData) {
-            $title = key($testBadges);
-            $type = current($testBadges);
+            $title = key($badgeControlSample);
+            $type = current($badgeControlSample);
             $this->assertSame(
                 [
                     'Title' => $title,
@@ -66,9 +81,9 @@ class PackageTest extends SapphireTest
                 ],
                 $badgeData->toMap()
             );
-            // testBadges is a keyed array, so shift the pointer manually
+            // badgeControlSample is a keyed array, so shift the pointer manually
             // (because we can't lookup by index)
-            next($testBadges);
+            next($badgeControlSample);
         }
     }
 }
