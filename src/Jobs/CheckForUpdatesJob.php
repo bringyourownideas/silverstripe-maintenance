@@ -1,7 +1,11 @@
 <?php
 
-use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
-use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+namespace BringYourOwnIdeas\Maintenance\Jobs;
+
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
+use Symbiote\QueuedJobs\Services\QueuedJob;
+use SilverStripe\Core\Injector\Injector;
+use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
 
 /**
  * Refresh report job. Runs as a queued job.

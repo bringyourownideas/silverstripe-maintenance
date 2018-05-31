@@ -1,5 +1,10 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+
 /**
  * Facilitates adding arbitrary HTML to grid fields
  *

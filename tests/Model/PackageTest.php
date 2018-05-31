@@ -2,8 +2,8 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Model;
 
-use Package;
-use SapphireTest;
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Dev\SapphireTest;
 
 class PackageTest extends SapphireTest
 {

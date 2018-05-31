@@ -1,8 +1,24 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Tests\Forms;
+
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
+use SilverStripe\Core\Config\Config;
+use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Dev\SapphireTest;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
+
 class GridFieldRefreshButtonTest extends SapphireTest
 {
     protected static $fixture_file = 'GridFieldRefreshButtonTest.yml';
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Config::modify()->set(QueuedJobService::class, 'use_shutdown_function', false);
+    }
 
     public function testHasRunningJob()
     {
@@ -75,7 +91,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
      */
     protected function completeRunningJob()
     {
-        $runningJob = $this->objFromFixture('QueuedJobDescriptor', 'runningjob');
+        $runningJob = $this->objFromFixture(QueuedJobDescriptor::class, 'runningjob');
         $runningJob->JobStatus = 'Complete';
         $runningJob->write();
     }

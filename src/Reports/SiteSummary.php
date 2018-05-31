@@ -1,9 +1,27 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Reports;
+
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Core\Config\Config;
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\View\Requirements;
+use SilverStripe\Forms\GridField\GridFieldExportButton;
+use SilverStripe\View\ArrayData;
+use SilverStripe\Core\Injector\Injector;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldDropdownFilter;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Reports\Report;
+
 /**
  * A report listing all installed modules used in this site (from a cache).
  */
-class SiteSummary extends SS_Report
+class SiteSummary extends Report
 {
     public function title()
     {
@@ -51,7 +69,7 @@ class SiteSummary extends SS_Report
      */
     public function getReportField()
     {
-        Requirements::css('silverstripe-maintenance/css/sitesummary.css');
+        Requirements::css('bringyourownideas/silverstripe-maintenance: css/sitesummary.css');
 
         /** @var GridField $grid */
         $grid = parent::getReportField();
@@ -92,11 +110,11 @@ class SiteSummary extends SS_Report
         $this->extend('updateDropdownFilterOptions', $dropdownFilter);
 
         $config->addComponents(
-            Injector::inst()->create(GridFieldButtonRow::class, 'before'),
             Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
             Injector::inst()->create(
                 GridFieldLinkButton::class,
                 'https://addons.silverstripe.org',
+                _t(__CLASS__ . '.LINK_TO_ADDONS', 'Explore Addons'),
                 'buttons-before-left'
             ),
             $dropdownFilter,

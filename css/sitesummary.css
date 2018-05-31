@@ -16,25 +16,23 @@
   display:block;
 }
 
-/* Due to a rule applied to `.cms .ss-gridfield > div` we have to be specific here */
-.cms .ss-gridfield > div.site-summary__clearfix {
-    margin: 0;
-    clear: both;
-}
-
 .gridfield-button-link {
     margin-bottom: 12px;
 }
 
-.package-summary table.ss-gridfield-table tr td.col-Summary {
+.package-summary table.grid-field__table tr td.col-Summary {
     padding: 0;
+}
+
+.package-summary td {
+    vertical-align: middle;
 }
 
 a.package-summary__anchor {
     color: inherit;
     text-decoration: inherit;
     display: block;
-    padding: 8px;
+    padding: 1.23rem;
 }
 
 a.package-summary__anchor:hover,

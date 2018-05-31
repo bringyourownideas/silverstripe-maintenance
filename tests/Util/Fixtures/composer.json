@@ -1,0 +1,9 @@
+{
+  "name": "silverstripe/installer",
+  "type": "test",
+  "description": "A fake composer file for testing",
+  "require": {
+    "php": ">=9.6.12",
+    "silverstripe/framework": "4.2"
+  }
+}

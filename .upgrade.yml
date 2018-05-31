@@ -1,0 +1,11 @@
+mappings:
+  GridFieldDropdownFilter: BringYourOwnIdeas\Maintenance\Forms\GridFieldDropdownFilter
+  GridFieldHtmlFragment: BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment
+  GridFieldLinkButton: BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton
+  GridFieldRefreshButton: BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton
+  CheckForUpdatesJob: BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob
+  Package: BringYourOwnIdeas\Maintenance\Model\Package
+  SiteSummary: BringYourOwnIdeas\Maintenance\Reports\SiteSummary
+  UpdatePackageInfoTask: BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask
+  GridFieldLinkButtonTest: BringYourOwnIdeas\Maintenance\Tests\Forms\GridFieldLinkButtonTest
+  GridFieldRefreshButtonTest: BringYourOwnIdeas\Maintenance\Tests\Forms\GridFieldRefreshButtonTest

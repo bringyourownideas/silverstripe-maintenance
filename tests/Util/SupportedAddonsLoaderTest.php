@@ -9,8 +9,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
-use SapphireTest;
-use Zend_Cache_Core;
+use SilverStripe\Dev\SapphireTest;
+use Symfony\Component\Cache\Simple\NullCache;
 
 /**
  * @mixin PHPUnit_Framework_TestCase
@@ -81,14 +81,14 @@ class SupportedAddonsLoaderTest extends SapphireTest
     {
         $fakeAddons = ['foo/bar', 'bin/baz'];
 
-        $cacheMock = $this->getMockBuilder(Zend_Cache_Core::class)
-            ->setMethods(['load', 'save'])
+        $cacheMock = $this->getMockBuilder(NullCache::class)
+            ->setMethods(['get', 'set'])
             ->getMock();
 
-        $cacheMock->expects($this->once())->method('load')->will($this->returnValue(false));
+        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
         $cacheMock->expects($this->once())
-            ->method('save')
-            ->with($fakeAddons, $this->anything(), [], 5000, $this->anything())
+            ->method('set')
+            ->with($this->anything(), $fakeAddons, 5000)
             ->will($this->returnValue(true));
 
         $loader = $this->getSupportedAddonsLoader($cacheMock);
@@ -105,11 +105,11 @@ class SupportedAddonsLoaderTest extends SapphireTest
     {
         $fakeAddons = ['foo/bar', 'bin/baz'];
 
-        $cacheMock = $this->getMockBuilder(Zend_Cache_Core::class)
-            ->setMethods(['load', 'save'])
+        $cacheMock = $this->getMockBuilder(NullCache::class)
+            ->setMethods(['get', 'set'])
             ->getMock();
 
-        $cacheMock->expects($this->once())->method('load')->will($this->returnValue($fakeAddons));
+        $cacheMock->expects($this->once())->method('get')->will($this->returnValue($fakeAddons));
         $loader = $this->getSupportedAddonsLoader($cacheMock);
 
         $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();
@@ -138,11 +138,11 @@ class SupportedAddonsLoaderTest extends SapphireTest
     protected function getSupportedAddonsLoader($cacheMock = false)
     {
         if (!$cacheMock) {
-            $cacheMock = $this->getMockBuilder(Zend_Cache_Core::class)
-                ->setMethods(['load', 'save'])
+            $cacheMock = $this->getMockBuilder(NullCache::class)
+                ->setMethods(['get', 'set'])
                 ->getMock();
-            $cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-            $cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+            $cacheMock->expects($this->any())->method('get')->will($this->returnValue(false));
+            $cacheMock->expects($this->any())->method('set')->will($this->returnValue(true));
         }
 
         $loader = new SupportedAddonsLoader;
