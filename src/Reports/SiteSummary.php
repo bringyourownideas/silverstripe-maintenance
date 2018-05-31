@@ -15,6 +15,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Reports\Report;
 use SilverStripe\View\ArrayData;
@@ -206,6 +207,8 @@ class SiteSummary extends Report
         if (!$packages->count()) {
             return '';
         }
-        return $packages->first()->dbObject('LastEdited')->Nice();
+        /** @var DBDatetime $datetime */
+        $datetime = $packages->first()->dbObject('LastEdited');
+        return $datetime->Date() . ' ' . $datetime->Time12();
     }
 }
