@@ -2,9 +2,9 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Reports;
 
-use Package;
-use SapphireTest;
-use SiteSummary;
+use BringYourOwnIdeas\Maintenance\Reports\SiteSummary;
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Dev\SapphireTest;
 
 class SiteSummaryTest extends SapphireTest
 {

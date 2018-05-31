@@ -1,0 +1,25 @@
+{
+  "packages": [
+    {
+      "name": "a/a",
+      "version": "dev-master",
+      "dist": {
+        "type": "zip",
+        "url": "http://www.example.com/dist.zip",
+        "reference": "459720ff3b74ee0c0d159277c6f2f5df89d8a4f6",
+        "shasum": null
+      },
+      "type": "library"
+    }
+  ],
+  "packages-dev": [],
+  "aliases": [],
+  "minimum-stability": "dev",
+  "stability-flags": {
+    "a/a": 20
+  },
+  "prefer-stable": false,
+  "prefer-lowest": false,
+  "platform": [],
+  "platform-dev": []
+}

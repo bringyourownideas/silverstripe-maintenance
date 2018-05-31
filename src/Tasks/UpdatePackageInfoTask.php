@@ -1,7 +1,14 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Tasks;
+
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
+use RuntimeException;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\ORM\Queries\SQLDelete;
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Dev\BuildTask;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
@@ -97,7 +104,7 @@ class UpdatePackageInfoTask extends BuildTask
     /**
      * Update database cached information about this site.
      *
-     * @param SS_HTTPRequest $request unused, can be null (must match signature of parent function).
+     * @param HTTPRequest $request unused, can be null (must match signature of parent function).
      */
     public function run($request)
     {

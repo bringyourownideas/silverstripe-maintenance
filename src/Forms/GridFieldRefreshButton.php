@@ -1,4 +1,21 @@
 <?php
+
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use SilverStripe\ORM\DataList;
+use SilverStripe\View\Requirements;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\View\ArrayData;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
+use Symbiote\QueuedJobs\Services\QueuedJob;
+use BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField_ActionProvider;
+use SilverStripe\Forms\GridField\GridField_URLHandler;
+
 /**
  * Adds a "Refresh" button to the bottom or top of a GridField.
  *
@@ -34,7 +51,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function getHTMLFragments($gridField)
     {
-        Requirements::javascript('silverstripe-maintenance/javascript/CheckForUpdates.js');
+        Requirements::javascript('bringyourownideas/silverstripe-maintenance: javascript/CheckForUpdates.js');
 
         $button = GridField_FormAction::create(
             $gridField,
@@ -44,7 +61,8 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
             null
         );
 
-        $button->setAttribute('data-icon', 'arrow-circle-double');
+        $button->addExtraClass('btn btn-secondary font-icon-sync');
+
         $button->setAttribute('data-check', $gridField->Link('check'));
         $button->setAttribute(
             'data-message',
@@ -60,7 +78,8 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
         }
 
         return [
-            $this->targetFragment => ArrayData::create(['Button' => $button->Field()])->renderWith(__CLASS__)
+            $this->targetFragment => ArrayData::create(['Button' => $button->Field()])
+                ->renderWith(__CLASS__)
         ];
     }
 
@@ -124,6 +143,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function hasActiveJob()
     {
+        /** @var DataList $jobList */
         $jobList = Injector::inst()
             ->get(QueuedJobService::class)
             ->getJobList(QueuedJob::QUEUED)

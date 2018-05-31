@@ -1,11 +1,18 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Model;
+
+use SilverStripe\Core\Injector\Injector;
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Describes an installed composer package version.
  */
 class Package extends DataObject
 {
+    private static $table_name = 'Package';
+
     private static $db = [
         'Name' => 'Varchar(255)',
         'Description' => 'Varchar(255)',

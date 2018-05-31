@@ -3,7 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Util;
 
 use Exception;
-use Object;
+use SilverStripe\Core\Extensible;
 
 /**
  * The composer loader class is responsible for dealing directly with composer.json and composer.lock files,
@@ -11,8 +11,10 @@ use Object;
  *
  * Any requirements for dealing with these files directly should use this class as a proxy.
  */
-class ComposerLoader extends Object
+class ComposerLoader
 {
+    use Extensible;
+
     /**
      * @var object
      */
@@ -34,8 +36,6 @@ class ComposerLoader extends Object
      */
     public function __construct($basePath = '')
     {
-        parent::__construct();
-
         if ($basePath) {
             $this->setBasePath($basePath);
         }

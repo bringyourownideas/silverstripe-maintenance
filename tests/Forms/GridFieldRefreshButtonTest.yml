@@ -1,13 +1,13 @@
-QueuedJobDescriptor:
+Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor:
   runningjob:
     JobStatus: 'Running'
-    Implementation: 'CheckForUpdatesJob'
+    Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'
     JobType: 2
   brokenjob:
     JobStatus: 'Broken'
-    Implementation: 'CheckForUpdatesJob'
+    Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'
     JobType: 2
   cancelledjob:
     JobStatus: 'Cancelled'
-    Implementation: 'CheckForUpdatesJob'
+    Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'
     JobType: 2

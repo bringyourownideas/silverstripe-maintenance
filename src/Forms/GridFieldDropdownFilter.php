@@ -1,5 +1,21 @@
 <?php
 
+namespace BringYourOwnIdeas\Maintenance\Forms;
+
+use LogicException;
+use Closure;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\ORM\Filterable;
+use SilverStripe\View\Requirements;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\View\ArrayData;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField_ActionProvider;
+use SilverStripe\Forms\GridField\GridField_DataManipulator;
+
 /**
  * GridFieldDropdownFilter provides a dropdown that can be used to filter a GridField arbitrarily
  *
@@ -102,7 +118,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
      */
     public function getManipulatedData(GridField $gridField, SS_List $dataList)
     {
-        if (!$dataList instanceof SS_Filterable) {
+        if (!$dataList instanceof Filterable) {
             throw new LogicException(__CLASS__ . ' is only compatible with SS_Filterable lists');
         }
 
@@ -137,7 +153,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
         Requirements::javascript('silverstripe-maintenance/javascript/GridfieldDropdownFilter.js');
 
         $dropdownOptions = [static::DEFAULT_OPTION_VALUE => $this->defaultOption] +
-            $this->filterOptions->map('name', 'title');
+            $this->filterOptions->map('name', 'title')->toArray();
 
         $dropdown = DropdownField::create(
             'filter-selection',
@@ -151,7 +167,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
             $this->targetFragment => ArrayData::create([
                 'Filter' => $dropdown,
                 'Action' => GridField_FormAction::create($gridField, 'filter', 'Go', 'filter', null),
-            ])->renderWith('GridFieldDropdownFilter'),
+            ])->renderWith(GridFieldDropdownFilter::class),
         ];
     }
 }

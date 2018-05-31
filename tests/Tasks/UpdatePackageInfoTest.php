@@ -4,11 +4,11 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
-use Package;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
-use SapphireTest;
-use UpdatePackageInfoTask;
+use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * @mixin PHPUnit_Framework_TestCase

@@ -2,21 +2,23 @@
 
 namespace BringYourOwnIdeas\Maintenance\Util;
 
-use Convert;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
-use Object;
-use Package;
+use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
-use SS_Cache;
-use Zend_Cache_Core;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Convert;
+use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Core\Injector\Injector;
 
 /**
  * Handles fetching supported addon details from addons.silverstripe.org
  */
-class SupportedAddonsLoader extends Object
+class SupportedAddonsLoader
 {
+    use Extensible;
+
     private static $dependencies = [
         'GuzzleClient' => '%$GuzzleHttp\Client',
     ];
@@ -27,7 +29,7 @@ class SupportedAddonsLoader extends Object
     protected $guzzleClient;
 
     /**
-     * @var Zend_Cache_Core
+     * @var CacheInterface
      */
     protected $cache;
 
@@ -50,19 +52,19 @@ class SupportedAddonsLoader extends Object
     }
 
     /**
-     * @return Zend_Cache_Core
+     * @return CacheInterface
      */
     public function getCache()
     {
         if (!$this->cache) {
-            $this->cache = SS_Cache::factory('SupportedAddons');
+            $this->cache = Injector::inst()->get(CacheInterface::class . '.supportedAddons');
         }
 
         return $this->cache;
     }
 
     /**
-     * @param Zend_Cache_Core $cache
+     * @param CacheInterface $cache
      */
     public function setCache($cache)
     {
@@ -76,7 +78,7 @@ class SupportedAddonsLoader extends Object
      */
     public function getAddonNames()
     {
-        if (($addons = $this->getCache()->load('addons')) !== false) {
+        if (($addons = $this->getCache()->get('addons')) !== false) {
             return $addons;
         }
 
@@ -127,7 +129,7 @@ class SupportedAddonsLoader extends Object
             if (strpos($cacheControl, 'no-store') === false &&
                 preg_match('/(?:max-age=)(\d+)/i', $cacheControl, $matches)) {
                 $duration = (int) $matches[1];
-                $this->getCache()->save($responseBody['addons'], 'addons', [], $duration);
+                $this->getCache()->set('addons', $responseBody['addons'], $duration);
             }
         }
 
