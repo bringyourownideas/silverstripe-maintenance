@@ -77,7 +77,7 @@ class SupportedAddonsLoader extends Object
     public function getAddonNames()
     {
         if (($addons = $this->getCache()->load('addons')) !== false) {
-            return $addons;
+            return Convert::json2array($addons) ?: [];
         }
 
         return $this->doRequest();
@@ -127,7 +127,8 @@ class SupportedAddonsLoader extends Object
             if (strpos($cacheControl, 'no-store') === false &&
                 preg_match('/(?:max-age=)(\d+)/i', $cacheControl, $matches)) {
                 $duration = (int) $matches[1];
-                $this->getCache()->save($responseBody['addons'], 'addons', [], $duration);
+                $serializedData = Convert::raw2json($responseBody['addons']);
+                $this->getCache()->save($serializedData, 'addons', [], $duration);
             }
         }
 
