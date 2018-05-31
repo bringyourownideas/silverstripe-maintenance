@@ -88,7 +88,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
         $cacheMock->expects($this->once())->method('load')->will($this->returnValue(false));
         $cacheMock->expects($this->once())
             ->method('save')
-            ->with($fakeAddons, $this->anything(), [], 5000, $this->anything())
+            ->with(json_encode($fakeAddons), $this->anything(), [], 5000, $this->anything())
             ->will($this->returnValue(true));
 
         $loader = $this->getSupportedAddonsLoader($cacheMock);
@@ -109,7 +109,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
             ->setMethods(['load', 'save'])
             ->getMock();
 
-        $cacheMock->expects($this->once())->method('load')->will($this->returnValue($fakeAddons));
+        $cacheMock->expects($this->once())->method('load')->will($this->returnValue(json_encode($fakeAddons)));
         $loader = $this->getSupportedAddonsLoader($cacheMock);
 
         $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();

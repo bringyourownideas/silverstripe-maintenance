@@ -15,7 +15,7 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
     {
         return _t(
             'CheckForUpdates.TITLE',
-            'Check for updates'
+            'Check for updates to installed modules'
         );
     }
 
