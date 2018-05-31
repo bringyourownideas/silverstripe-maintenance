@@ -1,7 +1,7 @@
 {
     "name": "bringyourownideas/silverstripe-maintenance",
     "description": "Toolset to help with the day by day maintenance work.",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "license": "BSD-3-Clause",
     "homepage": "https://github.com/bringyourownideas/silverstripe-maintenance",
     "keywords": [
