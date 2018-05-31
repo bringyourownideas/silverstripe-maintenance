@@ -2,6 +2,7 @@
 
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
+use BringYourOwnIdeas\Maintenance\Reports\SiteSummary;
 use SilverStripe\ORM\DataList;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridField_FormAction;
@@ -9,6 +10,7 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob;
@@ -51,7 +53,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function getHTMLFragments($gridField)
     {
-        Requirements::javascript('bringyourownideas/silverstripe-maintenance: javascript/CheckForUpdates.js');
+        Requirements::javascript('bringyourownideas/silverstripe-maintenance: client/dist/js/bundle.js');
 
         $button = GridField_FormAction::create(
             $gridField,
@@ -72,7 +74,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
             )
         );
 
-        if ($this->hasActiveJob()) {
+        if ($this->hasPendingJob()) {
             $button->setTitle(_t(__CLASS__ . '.UPDATE', 'Updating...'));
             $button->setDisabled(true);
         }
@@ -126,12 +128,12 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     }
 
     /**
-     * @see hasActiveJob
-     * @return string JSON boolean
+     * @see hasPendingJob
+     * @return string JSON encoded value for whether there is a job pending or in process to update the report
      */
     public function handleCheck()
     {
-        $isRunning = $this->hasActiveJob();
+        $isRunning = $this->hasPendingJob();
         return Convert::raw2json($isRunning);
     }
 
@@ -141,10 +143,10 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      *
      * @return boolean
      */
-    public function hasActiveJob()
+    public function hasPendingJob()
     {
-        /** @var DataList $jobList */
-        $jobList = Injector::inst()
+        /** @var QueuedJobDescriptor $job */
+        $job = Injector::inst()
             ->get(QueuedJobService::class)
             ->getJobList(QueuedJob::QUEUED)
             ->filter([
@@ -158,7 +160,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
                 ]
             ]);
 
-        return $jobList->exists();
+        return $job->exists();
     }
 
     /**
@@ -166,7 +168,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function handleRefresh()
     {
-        if (!$this->hasActiveJob()) {
+        if (!$this->hasPendingJob()) {
             $injector = Injector::inst();
             $injector->get(QueuedJobService::class)->queueJob($injector->create(CheckForUpdatesJob::class));
         }

@@ -15,6 +15,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Reports\Report;
 use SilverStripe\View\ArrayData;
@@ -71,7 +72,7 @@ class SiteSummary extends Report
      */
     public function getReportField()
     {
-        Requirements::css('bringyourownideas/silverstripe-maintenance: css/sitesummary.css');
+        Requirements::css('bringyourownideas/silverstripe-maintenance: client/dist/styles/bundle.css');
 
         /** @var GridField $grid */
         $grid = parent::getReportField();
@@ -88,6 +89,7 @@ class SiteSummary extends Report
         $versionHtml = ArrayData::create([
             'Title' => _t(__CLASS__ . '.VERSION', 'Version'),
             'Version' => $this->resolveCmsVersion(),
+            'LastUpdated' => $this->getLastUpdated(),
         ])->renderWith('SiteSummary_VersionHeader');
 
         $config->addComponents(
@@ -99,6 +101,7 @@ class SiteSummary extends Report
                 'buttons-before-left'
             ),
             $this->getDropdownFilter(),
+            $this->getInfoLink(),
             Injector::inst()->create(GridFieldHtmlFragment::class, 'header', $versionHtml)
         );
 
@@ -191,5 +194,22 @@ class SiteSummary extends Report
         }
 
         return implode(', ', $versionParts);
+    }
+
+    /**
+     * Get the "last updated" date for the report. This is based on the modified date of any of the records, since
+     * they are regenerated when the report is generated.
+     *
+     * @return string
+     */
+    public function getLastUpdated()
+    {
+        $packages = Package::get()->limit(1);
+        if (!$packages->count()) {
+            return '';
+        }
+        /** @var DBDatetime $datetime */
+        $datetime = $packages->first()->dbObject('LastEdited');
+        return $datetime->Date() . ' ' . $datetime->Time12();
     }
 }
