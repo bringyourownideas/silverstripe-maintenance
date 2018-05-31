@@ -25,7 +25,8 @@ class UpdatePackageInfoTest extends SapphireTest
             "version" => "1.0.0",
         ]];
 
-        $processor = new UpdatePackageInfoTask;
+        /** @var UpdatePackageInfoTask $processor */
+        $processor = UpdatePackageInfoTask::create();
         $output = $processor->getPackageInfo($lockOutput);
         $this->assertInternalType('array', $output);
         $this->assertCount(1, $output);
@@ -46,7 +47,8 @@ class UpdatePackageInfoTest extends SapphireTest
             ->method('getAddonNames')
             ->will($this->throwException(new RuntimeException('A test message')));
 
-        $task = new UpdatePackageInfoTask;
+        /** @var UpdatePackageInfoTask $task */
+        $task = UpdatePackageInfoTask::create();
         $task->setSupportedAddonsLoader($supportedAddonsLoader);
 
         ob_start();
