@@ -20,10 +20,7 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
      */
     public function getTitle()
     {
-        return _t(
-            'CheckForUpdates.TITLE',
-            'Check for updates'
-        );
+        return _t(__CLASS__ . '.TITLE', 'Check for updates');
     }
 
     /**

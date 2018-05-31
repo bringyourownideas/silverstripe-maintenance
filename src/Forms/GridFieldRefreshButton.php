@@ -56,7 +56,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
         $button = GridField_FormAction::create(
             $gridField,
             'refresh',
-            _t('GridFieldRefreshButton.REFRESH', 'Check for updates'),
+            _t(__CLASS__ . '.REFRESH', 'Check for updates'),
             'refresh',
             null
         );
@@ -67,13 +67,13 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
         $button->setAttribute(
             'data-message',
             _t(
-                'GridFieldRefreshButton.MESSAGE',
+                __CLASS__ . '.MESSAGE',
                 'Updating this list may take 2-3 minutes. You can continue to use the CMS while we run the update.'
             )
         );
 
         if ($this->hasActiveJob()) {
-            $button->setTitle(_t('GridFieldRefreshButton.UPDATE', 'Updating...'));
+            $button->setTitle(_t(__CLASS__ . '.UPDATE', 'Updating...'));
             $button->setDisabled(true);
         }
 
