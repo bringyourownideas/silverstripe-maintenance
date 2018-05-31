@@ -1,8 +1,5 @@
 <?php
 
-use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfo;
-use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
-
 /**
  * Refresh report job. Runs as a queued job.
  *
