@@ -3,6 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
 use ArrayData;
+use GridField;
 use GridField_HTMLProvider;
 
 /**

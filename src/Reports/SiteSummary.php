@@ -1,5 +1,6 @@
 <?php
 
+use BringYourOwnIdeas\Maintenance\Forms\GridFieldDropdownFilter;
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldHtmlFragment;
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldLinkButton;
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;

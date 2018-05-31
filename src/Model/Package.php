@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Describes an installed composer package version.
  */

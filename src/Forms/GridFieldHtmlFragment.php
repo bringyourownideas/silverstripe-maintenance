@@ -2,6 +2,7 @@
 
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
+use GridField;
 use GridField_HTMLProvider;
 
 /**
