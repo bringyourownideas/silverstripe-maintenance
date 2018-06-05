@@ -3,9 +3,11 @@
 namespace BringYourOwnIdeas\Maintenance\Jobs;
 
 use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
-use Symbiote\QueuedJobs\Services\QueuedJob;
+use DateTime;
 use SilverStripe\Core\Injector\Injector;
 use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
+use Symbiote\QueuedJobs\Services\QueuedJob;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 /**
  * Refresh report job. Runs as a queued job.
@@ -51,5 +53,20 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
 
         // mark job as completed
         $this->isComplete = true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterComplete()
+    {
+        // Queue a new job to run in the future
+        $injector = Injector::inst();
+        $queuedJobService = $injector->get(QueuedJobService::class);
+        $startAfter = new DateTime('+24 hours');
+        $queuedJobService->queueJob(
+            $injector->create(CheckForUpdatesJob::class),
+            $startAfter->format(DateTime::ISO8601)
+        );
     }
 }
