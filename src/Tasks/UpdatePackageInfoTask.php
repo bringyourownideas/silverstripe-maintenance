@@ -15,6 +15,11 @@ use SilverStripe\Dev\BuildTask;
  */
 class UpdatePackageInfoTask extends BuildTask
 {
+    /**
+     * {@inheritDoc}
+     * @var string
+     */
+    private static $segment = 'UpdatePackageInfoTask';
 
     /**
      * @var array Injector configuration
