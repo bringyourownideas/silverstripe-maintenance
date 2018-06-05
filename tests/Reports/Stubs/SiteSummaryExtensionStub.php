@@ -2,8 +2,8 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Reports\Stubs;
 
-use Extension;
-use TestOnly;
+use SilverStripe\Core\Extension;
+use SilverStripe\Dev\TestOnly;
 
 class SiteSummaryExtensionStub extends Extension implements TestOnly
 {
