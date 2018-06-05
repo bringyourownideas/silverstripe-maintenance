@@ -98,12 +98,22 @@ class Package extends DataObject
     }
 
     /**
-     * requireDefaultRecords() gets abused to update the information on dev/build.
+     * Queue up a job to check for updates to packages if there isn't a pending job in the queue already
      */
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $task = Injector::inst()->create(UpdatePackageInfoTask::class);
-        $task->run(null);
+
+        $pendingJobs = QueuedJobDescriptor::get()->filter([
+            'Implementation' => CheckForUpdatesJob::class,
+            'JobStatus' => QueuedJob::STATUS_NEW
+        ]);
+        if ($pendingJobs->count()) {
+            return;
+        }
+
+        /** @var QueuedJobService $jobService */
+        $jobService = QueuedJobService::singleton();
+        $jobService->queueJob(Injector::inst()->create(CheckForUpdatesJob::class));
     }
 }
