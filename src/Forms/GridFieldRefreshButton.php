@@ -2,21 +2,19 @@
 
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
-use BringYourOwnIdeas\Maintenance\Reports\SiteSummary;
-use SilverStripe\ORM\DataList;
-use SilverStripe\View\Requirements;
-use SilverStripe\Forms\GridField\GridField_FormAction;
-use SilverStripe\View\ArrayData;
-use SilverStripe\Forms\GridField\GridField;
+use BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
-use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
-use Symbiote\QueuedJobs\Services\QueuedJobService;
-use Symbiote\QueuedJobs\Services\QueuedJob;
-use BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob;
-use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
+use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
+use Symbiote\QueuedJobs\Services\QueuedJob;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 /**
  * Adds a "Refresh" button to the bottom or top of a GridField.
@@ -146,9 +144,8 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     public function hasPendingJob()
     {
         /** @var QueuedJobDescriptor $job */
-        $job = Injector::inst()
-            ->get(QueuedJobService::class)
-            ->getJobList(QueuedJob::QUEUED)
+        $job = $this->getQueuedJobService()
+            ->getJobList(QueuedJob::IMMEDIATE)
             ->filter([
                 'Implementation' => CheckForUpdatesJob::class
             ])
@@ -169,8 +166,27 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     public function handleRefresh()
     {
         if (!$this->hasPendingJob()) {
-            $injector = Injector::inst();
-            $injector->get(QueuedJobService::class)->queueJob($injector->create(CheckForUpdatesJob::class));
+            // Queue the job in the immediate queue
+            $job = Injector::inst()->create(CheckForUpdatesJob::class);
+            $jobDescriptorId = $this->getQueuedJobService()->queueJob($job, null, null, QueuedJob::IMMEDIATE);
+            
+            // Check the job descriptor on the queue
+            $jobDescriptor = QueuedJobDescriptor::get()->filter('ID', $jobDescriptorId)->first();
+
+            // If the job is not immediate, change it to immediate and reschedule it to occur immediately
+            if ($jobDescriptor->JobType !== QueuedJob::IMMEDIATE) {
+                $jobDescriptor->JobType = QueuedJob::IMMEDIATE;
+                $jobDescriptor->StartAfter = null;
+                $jobDescriptor->write();
+            }
         }
+    }
+
+    /**
+     * @return QueuedJobService
+     */
+    protected function getQueuedJobService()
+    {
+        return Injector::inst()->get(QueuedJobService::class);
     }
 }
