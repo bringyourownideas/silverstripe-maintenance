@@ -12,6 +12,7 @@ use GridField_HTMLProvider;
 use GridField_URLHandler;
 use Injector;
 use QueuedJob;
+use QueuedJobDescriptor;
 use QueuedJobService;
 use Requirements;
 
@@ -141,9 +142,9 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function hasActiveJob()
     {
-        $jobList = Injector::inst()
-            ->get(QueuedJobService::class)
-            ->getJobList(QueuedJob::QUEUED)
+        /** @var QueuedJobDescriptor $job */
+        $job = $this->getQueuedJobService()
+            ->getJobList(QueuedJob::IMMEDIATE)
             ->filter([
                 'Implementation' => CheckForUpdatesJob::class
             ])
@@ -155,7 +156,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
                 ]
             ]);
 
-        return $jobList->exists();
+        return $job->exists();
     }
 
     /**
@@ -164,8 +165,27 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     public function handleRefresh()
     {
         if (!$this->hasActiveJob()) {
-            $injector = Injector::inst();
-            $injector->get(QueuedJobService::class)->queueJob($injector->create(CheckForUpdatesJob::class));
+            // Queue the job in the immediate queue
+            $job = Injector::inst()->create(CheckForUpdatesJob::class);
+            $jobDescriptorId = $this->getQueuedJobService()->queueJob($job, null, null, QueuedJob::IMMEDIATE);
+
+            // Check the job descriptor on the queue
+            $jobDescriptor = QueuedJobDescriptor::get()->filter('ID', $jobDescriptorId)->first();
+
+            // If the job is not immediate, change it to immediate and reschedule it to occur immediately
+            if ($jobDescriptor->JobType !== QueuedJob::IMMEDIATE) {
+                $jobDescriptor->JobType = QueuedJob::IMMEDIATE;
+                $jobDescriptor->StartAfter = null;
+                $jobDescriptor->write();
+            }
         }
+    }
+
+    /**
+     * @return QueuedJobService
+     */
+    protected function getQueuedJobService()
+    {
+        return Injector::inst()->get(QueuedJobService::class);
     }
 }

@@ -13,10 +13,7 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
      */
     public function getTitle()
     {
-        return _t(
-            'CheckForUpdates.TITLE',
-            'Check for updates to installed modules'
-        );
+        return _t(__CLASS__ . '.TITLE', 'Check for updates');
     }
 
     /**
@@ -47,5 +44,20 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
 
         // mark job as completed
         $this->isComplete = true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterComplete()
+    {
+        // Queue a new job to run in the future
+        $injector = Injector::inst();
+        $queuedJobService = $injector->get(QueuedJobService::class);
+        $startAfter = new DateTime('+24 hours');
+        $queuedJobService->queueJob(
+            $injector->create(CheckForUpdatesJob::class),
+            $startAfter->format(DateTime::ISO8601)
+        );
     }
 }
