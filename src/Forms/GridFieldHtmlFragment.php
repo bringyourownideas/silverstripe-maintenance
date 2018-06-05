@@ -11,7 +11,6 @@ use SilverStripe\Forms\GridField\GridField_HTMLProvider;
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldHtmlFragment implements GridField_HTMLProvider
 {
     /**

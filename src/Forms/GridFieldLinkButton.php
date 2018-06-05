@@ -12,7 +12,6 @@ use SilverStripe\Forms\GridField\GridField_HTMLProvider;
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldLinkButton implements GridField_HTMLProvider
 {
     /**

@@ -67,7 +67,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
      *
      * @param string $name
      * @param string $title
-     * @param Closure|array $filter Either a Closure to filter a given SS_Filterable or a simple associative array will
+     * @param callable|array $filter Either a closure to filter a given SS_Filterable or a simple associative array will
      *                              be used for filtering
      * @return $this
      */
@@ -130,7 +130,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
 
         $filterSpec = $option['filter'];
 
-        if ($filterSpec instanceof Closure) {
+        if (is_callable($filterSpec)) {
             return $filterSpec($dataList);
         }
         if (is_array($filterSpec)) {

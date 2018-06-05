@@ -2,8 +2,6 @@
 
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
-use BringYourOwnIdeas\Maintenance\Reports\SiteSummary;
-use SilverStripe\ORM\DataList;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\View\ArrayData;
@@ -24,7 +22,6 @@ use SilverStripe\Forms\GridField\GridField_URLHandler;
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_ActionProvider, GridField_URLHandler
 {
     /**

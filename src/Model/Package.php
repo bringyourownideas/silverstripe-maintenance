@@ -5,6 +5,8 @@ namespace BringYourOwnIdeas\Maintenance\Model;
 use SilverStripe\Core\Injector\Injector;
 use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
 
 /**
  * Describes an installed composer package version.
@@ -28,6 +30,11 @@ class Package extends DataObject
     ];
 
     /**
+     * @var array badge definitions - a keyed array in the format of [Title => Type] {@see getBadges()}
+     */
+    protected $badges = [];
+
+    /**
      * Strips vendor and 'silverstripe-' prefix from Name property
      * @return string More easily digestable module name for human consumers
      */
@@ -42,7 +49,62 @@ class Package extends DataObject
      */
     public function getSummary()
     {
-        return $this->renderWith('Package_summary');
+        $summary = $this->renderWith('Package_summary');
+        $this->extend('updateSummary', $summary);
+        return $summary;
+    }
+
+    /**
+     * Gives the summary template {@see getSummary()} a list of badges to show against a package
+     *
+     * badgeDefinitions are in the format [$title => $type] where:
+     *   title is the unique string to display
+     *   type is an optional class attribute (applied as a BEM modifier, by default)
+     *
+     * @param array $extraBadges allow a user to include extra badges at call time
+     *
+     * @return ArrayList
+     */
+    public function getBadges($extraBadges = [])
+    {
+        $badgeDefinitions = array_merge($this->badges, $extraBadges);
+        $badges = ArrayList::create();
+        foreach ($badgeDefinitions as $title => $type) {
+            $badges->push(ArrayData::create([
+                'Title' => $title,
+                'Type' => $type,
+            ]));
+        }
+
+        $this->extend('updateBadges', $badges);
+        return $badges;
+    }
+
+    /**
+     * Adds a badge to the list of badges {@see $badges}
+     *
+     * @param string $title
+     * @param string $type
+     *
+     * @return $this
+     */
+    public function addBadge($title, $type)
+    {
+        $this->badges[$title] = $type;
+        return $this;
+    }
+
+    /**
+     * Replaces the list of badges
+     *
+     * @param array $badges {@see $badges}
+     *
+     * @return $this
+     */
+    public function setBadges($badges)
+    {
+        $this->badges = $badges;
+        return $this;
     }
 
     /**
