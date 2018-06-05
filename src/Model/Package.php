@@ -58,7 +58,11 @@ class Package extends DataObject
 
         $pendingJobs = QueuedJobDescriptor::get()->filter([
             'Implementation' => CheckForUpdatesJob::class,
-            'JobStatus' => QueuedJob::STATUS_NEW
+            'JobStatus' => [
+                QueuedJob::STATUS_NEW,
+                QueuedJob::STATUS_INIT,
+                QueuedJob::STATUS_RUN,
+            ],
         ]);
         if ($pendingJobs->count()) {
             return;
