@@ -80,7 +80,7 @@ class SupportedAddonsLoader
      */
     public function getAddonNames()
     {
-        if (($addons = $this->getCache()->get('addons')) !== false) {
+        if (($addons = $this->getCache()->get('addons', false)) !== false) {
             return Convert::json2array($addons) ?: [];
         }
 
