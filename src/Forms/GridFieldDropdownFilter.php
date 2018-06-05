@@ -3,18 +3,17 @@
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
 use LogicException;
-use Closure;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\ORM\SS_List;
-use SilverStripe\ORM\Filterable;
-use SilverStripe\View\Requirements;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\GridField\GridField_FormAction;
-use SilverStripe\View\ArrayData;
-use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_DataManipulator;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\Filterable;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
 
 /**
  * GridFieldDropdownFilter provides a dropdown that can be used to filter a GridField arbitrarily
@@ -67,7 +66,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
      *
      * @param string $name
      * @param string $title
-     * @param Closure|array $filter Either a Closure to filter a given SS_Filterable or a simple associative array will
+     * @param callable|array $filter Either a closure to filter a given SS_Filterable or a simple associative array will
      *                              be used for filtering
      * @return $this
      */
@@ -130,7 +129,7 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
 
         $filterSpec = $option['filter'];
 
-        if ($filterSpec instanceof Closure) {
+        if (is_callable($filterSpec)) {
             return $filterSpec($dataList);
         }
         if (is_array($filterSpec)) {

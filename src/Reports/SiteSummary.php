@@ -15,6 +15,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Reports\Report;
@@ -80,7 +81,7 @@ class SiteSummary extends Report
         /** @var GridFieldConfig $config */
         $config = $grid->getConfig();
 
-        $grid->addExtraClass('package-summary');
+        $grid->addExtraClass('site-summary');
 
         /** @var GridFieldExportButton $exportButton */
         $exportButton = $config->getComponentByType(GridFieldExportButton::class);
@@ -164,6 +165,30 @@ class SiteSummary extends Report
                 'Label' => _t(__CLASS__ . '.MORE_INFORMATION', 'More information'),
             ])->renderWith(__CLASS__ . '/MoreInformationLink'))
         );
+    }
+
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+        $alerts = $this->getAlerts();
+        if ($alerts) {
+            $summaryInfo = '<div class="site-summary message warning">' . implode("\n", $alerts) . '</div>';
+            $fields->unshift(LiteralField::create('AlertSummary', $summaryInfo));
+        }
+        return $fields;
+    }
+
+    /**
+     * Return a list of alerts to display in a message box above the report
+     * A combination of free text fields - combined alerts as opposed to a message box per alert.
+     *
+     * @return array
+     */
+    protected function getAlerts()
+    {
+        $alerts = [];
+        $this->extend('updateAlerts', $alerts);
+        return $alerts;
     }
 
     /**

@@ -24,7 +24,6 @@ use SilverStripe\Forms\GridField\GridField_URLHandler;
  * @package forms
  * @subpackage fields-gridfield
  */
-
 class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_ActionProvider, GridField_URLHandler
 {
     /**

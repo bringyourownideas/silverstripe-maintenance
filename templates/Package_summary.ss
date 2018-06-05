@@ -2,5 +2,12 @@
    title="<%t BringYourOwnIdeas\\Maintenance\\Reports\\SiteSummary.AddonsLinkTitle "View {package} on addons.silverstripe.org" package=$Title.ATT %>"
    class="package-summary__anchor" target="_blank" rel="noopener">
     <strong class="package-summary__title">$Title.XML</strong>
-    <% if $Description %><span class="package-summary__description">$Description.XML</span><% end_if %>
+
+    <% loop $Badges %>
+        <span class="package-summary__badge<% if $Type %> package-summary__badge--$Type.ATT<% end_if %>">$Title.XML</span>
+    <% end_loop %>
+
+    <% if $Description %>
+        <span class="package-summary__description">$Description.XML</span>
+    <% end_if %>
 </a>

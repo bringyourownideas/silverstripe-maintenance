@@ -65,10 +65,12 @@ class SupportedAddonsLoader
 
     /**
      * @param CacheInterface $cache
+     * @return $this
      */
-    public function setCache($cache)
+    public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
+        return $this;
     }
 
     /**
@@ -79,7 +81,7 @@ class SupportedAddonsLoader
     public function getAddonNames()
     {
         if (($addons = $this->getCache()->get('addons')) !== false) {
-            return $addons;
+            return Convert::json2array($addons) ?: [];
         }
 
         return $this->doRequest();
@@ -129,7 +131,8 @@ class SupportedAddonsLoader
             if (strpos($cacheControl, 'no-store') === false &&
                 preg_match('/(?:max-age=)(\d+)/i', $cacheControl, $matches)) {
                 $duration = (int) $matches[1];
-                $this->getCache()->set('addons', $responseBody['addons'], $duration);
+                $serializedData = Convert::raw2json($responseBody['addons']);
+                $this->getCache()->set('addons', $serializedData, $duration);
             }
         }
 

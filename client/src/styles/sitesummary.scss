@@ -1,4 +1,4 @@
-.package-summary {
+.site-summary {
   margin-top: 0;
 
   h3 {
@@ -28,6 +28,32 @@
     color: inherit;
     text-decoration: inherit;
   }
+}
+
+.package-summary__badge {
+  font-size: $font-size-xs;
+  padding: 3px 5px;
+  background: grey;
+  border-radius: 2px;
+  color: white;
+  position: relative;
+  top: -1px;
+}
+
+/* Colours for badge classes */
+/* @todo replace with bootstrap alerts */
+.package-summary__badge--good {
+  background: #3fa142;
+}
+.package-summary__badge--warning {
+  background: #ff7f22;
+}
+.package-summary__badge--bad {
+  background: #d40404;
+}
+
+.package-summary__description {
+  display: block;
 }
 
 .gridfield-dropdown-filter button {

@@ -17,18 +17,22 @@ use Symfony\Component\Cache\Simple\NullCache;
  */
 class SupportedAddonsLoaderTest extends SapphireTest
 {
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Could not obtain information about supported addons. Error code 404
+     */
     public function testNon200ErrorCodesAreHandled()
     {
         $loader = $this->getSupportedAddonsLoader();
         $loader->setGuzzleClient($this->getMockClient(new Response(404)));
 
-        $this->setExpectedException(
-            RuntimeException::class,
-            'Could not obtain information about supported addons. Error code 404'
-        );
         $loader->getAddonNames();
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Could not obtain information about supported addons. Response is not JSON
+     */
     public function testNonJsonResponsesAreHandled()
     {
         $loader = $this->getSupportedAddonsLoader();
@@ -37,13 +41,13 @@ class SupportedAddonsLoaderTest extends SapphireTest
             ['Content-Type' => 'text/html; charset=utf-8']
         )));
 
-        $this->setExpectedException(
-            RuntimeException::class,
-            'Could not obtain information about supported addons. Response is not JSON'
-        );
         $loader->getAddonNames();
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Could not obtain information about supported addons. Response returned unsuccessfully
+     */
     public function testUnsuccessfulResponsesAreHandled()
     {
         $loader = $this->getSupportedAddonsLoader();
@@ -53,10 +57,6 @@ class SupportedAddonsLoaderTest extends SapphireTest
             json_encode(['success' => 'false'])
         )));
 
-        $this->setExpectedException(
-            RuntimeException::class,
-            'Could not obtain information about supported addons. Response returned unsuccessfully'
-        );
         $loader->getAddonNames();
     }
 
@@ -88,7 +88,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
         $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with($this->anything(), $fakeAddons, 5000)
+            ->with($this->anything(), json_encode($fakeAddons), 5000)
             ->will($this->returnValue(true));
 
         $loader = $this->getSupportedAddonsLoader($cacheMock);
@@ -109,7 +109,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
             ->setMethods(['get', 'set'])
             ->getMock();
 
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue($fakeAddons));
+        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($fakeAddons)));
         $loader = $this->getSupportedAddonsLoader($cacheMock);
 
         $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();
