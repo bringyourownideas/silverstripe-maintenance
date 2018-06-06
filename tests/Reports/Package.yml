@@ -1,4 +1,4 @@
-Package:
+BringYourOwnIdeas\Maintenance\Model\Package:
   uptodate:
     Name: pretend/uptodate
     Description: An up to date fixture for testing

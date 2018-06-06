@@ -49,11 +49,6 @@ window.jQuery.entwine('ss', ($) => {
         async: true,
         success: (data) => {
           self.clearLoading(JSON.parse(data));
-        },
-        error: (error) => {
-          if (typeof console !== 'undefined') {
-            console.log(error);
-          }
         }
       });
     },
