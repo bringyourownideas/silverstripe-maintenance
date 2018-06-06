@@ -52,7 +52,7 @@ class Package extends DataObject
      */
     public function getSummary()
     {
-        $summary = $this->renderWith('Package_summary');
+        $summary = $this->renderWith(__CLASS__ . '/Summary');
         $this->extend('updateSummary', $summary);
         return $summary;
     }

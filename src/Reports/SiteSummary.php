@@ -91,7 +91,7 @@ class SiteSummary extends Report
             'Title' => _t(__CLASS__ . '.VERSION', 'Version'),
             'Version' => $this->resolveCmsVersion(),
             'LastUpdated' => $this->getLastUpdated(),
-        ])->renderWith('SiteSummary_VersionHeader');
+        ])->renderWith(__CLASS__ . '/VersionHeader');
 
         $config->addComponents(
             Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
