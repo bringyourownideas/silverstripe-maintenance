@@ -12,6 +12,7 @@ use GridField_HTMLProvider;
 use GridField_URLHandler;
 use Injector;
 use QueuedJob;
+use QueuedJobDescriptor;
 use QueuedJobService;
 use Requirements;
 
@@ -23,6 +24,10 @@ use Requirements;
  */
 class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_ActionProvider, GridField_URLHandler
 {
+    private static $dependencies = [
+        'QueuedJobService' => '%$QueuedJobService'
+    ];
+
     /**
      * @var array
      * @config
@@ -34,6 +39,11 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      * @var string
      */
     protected $targetFragment;
+
+    /**
+     * @var QueuedJobService
+     */
+    protected $queuedJobService;
 
     /**
      * @param string $targetFragment The HTML fragment to write the button into
@@ -141,9 +151,11 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function hasActiveJob()
     {
-        $jobList = Injector::inst()
-            ->get(QueuedJobService::class)
-            ->getJobList(QueuedJob::QUEUED)
+        // We care about any queued job in the immediate queue, or any queue if the job is already running
+        /** @var QueuedJobDescriptor $job */
+
+        $immediateJob = $this->getQueuedJobService()
+            ->getJobList(QueuedJob::IMMEDIATE)
             ->filter([
                 'Implementation' => CheckForUpdatesJob::class
             ])
@@ -155,7 +167,13 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
                 ]
             ]);
 
-        return $jobList->exists();
+        $runningJob = QueuedJobDescriptor::get()
+            ->filter([
+                'Implementation' => CheckForUpdatesJob::class,
+                'JobStatus' => QueuedJob::STATUS_RUN,
+            ]);
+
+        return $immediateJob->exists() || $runningJob->exists();
     }
 
     /**
@@ -163,9 +181,40 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function handleRefresh()
     {
-        if (!$this->hasActiveJob()) {
-            $injector = Injector::inst();
-            $injector->get(QueuedJobService::class)->queueJob($injector->create(CheckForUpdatesJob::class));
+        if ($this->hasActiveJob()) {
+            return;
         }
+
+        // Queue the job in the immediate queue
+        $job = Injector::inst()->create(CheckForUpdatesJob::class);
+        $jobDescriptorId = $this->getQueuedJobService()->queueJob($job, null, null, QueuedJob::IMMEDIATE);
+
+        // Check the job descriptor on the queue
+        $jobDescriptor = QueuedJobDescriptor::get()->filter('ID', $jobDescriptorId)->first();
+
+        // If the job is not immediate, change it to immediate and reschedule it to occur immediately
+        if ($jobDescriptor->JobType !== QueuedJob::IMMEDIATE) {
+            $jobDescriptor->JobType = QueuedJob::IMMEDIATE;
+            $jobDescriptor->StartAfter = null;
+            $jobDescriptor->write();
+        }
+    }
+
+    /**
+     * @return QueuedJobService
+     */
+    public function getQueuedJobService()
+    {
+        return $this->queuedJobService;
+    }
+
+    /**
+     * @param QueuedJobService $queuedJobService
+     * @return $this
+     */
+    public function setQueuedJobService(QueuedJobService $queuedJobService)
+    {
+        $this->queuedJobService = $queuedJobService;
+        return $this;
     }
 }

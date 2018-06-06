@@ -3,6 +3,10 @@ QueuedJobDescriptor:
     JobStatus: 'Running'
     Implementation: 'CheckForUpdatesJob'
     JobType: 2
+  immediatependingjob:
+    JobStatus: 'Pending'
+    Implementation: 'CheckForUpdatesJob'
+    JobType: 1
   brokenjob:
     JobStatus: 'Broken'
     Implementation: 'CheckForUpdatesJob'
