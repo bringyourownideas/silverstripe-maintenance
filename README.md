@@ -1,74 +1,71 @@
 # SilverStripe Maintenance
 
 [![Build Status](https://api.travis-ci.org/bringyourownideas/silverstripe-maintenance.svg?branch=master)](https://travis-ci.org/bringyourownideas/silverstripe-maintenance)
-[![Latest Stable Version](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/version.svg)](https://github.com/bringyourownideas/silverstripe-maintenance/releases)
-[![Latest Unstable Version](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/v/unstable.svg)](https://packagist.org/packages/bringyourownideas/silverstripe-maintenance)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/?branch=master)
 [![codecov](https://codecov.io/gh/bringyourownideas/silverstripe-maintenance/branch/master/graph/badge.svg)](https://codecov.io/gh/bringyourownideas/silverstripe-maintenance)
-[![Total Downloads](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/downloads.svg)](https://packagist.org/packages/bringyourownideas/silverstripe-maintenance)
-[![License](https://poser.pugx.org/bringyourownideas/silverstripe-maintenance/license.svg)](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/license.md)
 
-### The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the maintainence of your SilverStripe application") is reducing your maintenance related work. Currently the module provides you information about available update as well as known security issues. Further enhancements are planned.
+## Overview
 
-* Provides information about
- * available updates for composer packages,
- * known security issues of all installed packages, even dependencies of dependencies and
- * complete list of installed composer packages, including global packages and dependencies.
-* All information will be saved to the database as well as displayed in a model admin.
-* Scheduling of updates of the information
+The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the 
+maintenance of your SilverStripe application") reduces your maintenance related work.
 
+## Requirements
 
-## Source of the information
+* You require the composer.json and composer.lock files to be available and readible in the environment you plan to use this module. All information is based on these files.
+* Install at least one of the modules mentioned under "Source of the information".
+* The queuedjob module is a dependency as the checks are scheduled using queuedjobs. This saves you time and work at the end.
 
-The information is based on your composer files. So you need to have them available in the environment you plan to use this module. The modules below process the content of the composer files and check in suitable sources for information regarding your set up.
+Note: Release line 1 is compatible with SilverStripe 3. For SilverStripe 4, please see the 2.x release line.
+
+### Suggested Modules
+
+While the installation of the following modules is optional, it is recommended:
+- [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
+- [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
+     
+
+### Installation 
+ 
+Install the maintenance package.
+```
+composer require bringyourownideas/silverstripe-maintenance
+```
+
+Build schema and queue a job to populate the database:
+```
+sake dev/build
+```
+ 
+Run the update task to gather update information if the update-checker module is installed:
+```
+sake dev/tasks/UpdatePackageInfoTask
+```
+ 
+Run the security task if that module is installed:
+```
+sake dev/tasks/SecurityAlertCheckTask
+```   
+
+## Source of the Information
+
+The information is based on your composer files. These need to be available in the environment the module is used in. 
+If installed, the modules below process the content of the composer files and check suitable sources for information 
+regarding your set up.
 
 The main functionality comes from these modules:
 
 * [SilverStripe Composer Security Checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker "Check your SilverStripe application for security issues")
 * [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker "Check your SilverStripe application for available updates of dependencies.")
-* [SilverStripe Composer Versions](https://github.com/bringyourownideas/silverstripe-composer-versions "Provides your installed composer versions within your SilverStripe app, for review or other use cases.")
 
+## Documentation
 
-## Requirements and installation
+Please see the [user guide](docs/en/userguide) section.
 
-### Requirements
+## Contributing
 
-* You require the composer.json and composer.lock files to be available and readible in the environment you plan to use this module. All information is based on these files.
-* Install at least one of the modules mentioned under "Source of the information". As a development dependency should be fine in most cases.
-* The queuedjob module is a dependency as the checks are scheduled using queuedjobs. This saves you time and work at the end.
+Contributions are welcome! Create an issue, explaining a bug or propose development ideas. Find more information on 
+[contributing](https://docs.silverstripe.org/en/contributing/) in the SilverStripe developer documentation.
 
+## Reporting Issues
 
-### Installation
-
-Run the following commands to install the package including all suggestions and populate the information initially:
-
-```
-# install the packages
-composer require bringyourownideas/silverstripe-maintenance
-composer require bringyourownideas/silverstripe-composer-security-checker
-composer require bringyourownideas/silverstripe-composer-update-checker
-composer require bringyourownideas/silverstripe-composer-versions
-
-# schedule the population of the data
-php ./framework/cli-script.php dev/build
-
-# run the queuedjobs
-php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
-php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
-php ./framework/cli-script.php dev/tasks/ProcessJobQueueTask
-```
-
-*If you don't want to install all packages adjust the command above.*
-
-
-## Usage
-
-In the admin section of your SilverStripe website you should see a Maintenance section now. Click on this to view the available information. *You are required to have admin access to view this information.*
-
-
-### Scheduling of updates
-
-You can schedule updates using the queuedjobs module. Click on either 'Composer Security Vulnerability' or 'Composer Update' and scroll to the bottom of the page. There you find a simple form which allows you to define an interval for your automatic updates. Furthermore the update will automatically scheduled on dev/build.
-
-
-## MISC: [Future ideas/development, issues](https://github.com/bringyourownideas/silverstripe-maintenance/issues), [Contributing](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/CONTRIBUTING.md), [License](https://github.com/bringyourownideas/silverstripe-maintenance/blob/master/license.md)
+Please [create an issue](https://github.com/bringyourownideas/silverstripe-maintenance/issues) for any bugs you've found, or features you're missing.
