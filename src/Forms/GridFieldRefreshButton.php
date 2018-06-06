@@ -181,20 +181,22 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function handleRefresh()
     {
-        if (!$this->hasActiveJob()) {
-            // Queue the job in the immediate queue
-            $job = Injector::inst()->create(CheckForUpdatesJob::class);
-            $jobDescriptorId = $this->getQueuedJobService()->queueJob($job, null, null, QueuedJob::IMMEDIATE);
+        if ($this->hasActiveJob()) {
+            return;
+        }
 
-            // Check the job descriptor on the queue
-            $jobDescriptor = QueuedJobDescriptor::get()->filter('ID', $jobDescriptorId)->first();
+        // Queue the job in the immediate queue
+        $job = Injector::inst()->create(CheckForUpdatesJob::class);
+        $jobDescriptorId = $this->getQueuedJobService()->queueJob($job, null, null, QueuedJob::IMMEDIATE);
 
-            // If the job is not immediate, change it to immediate and reschedule it to occur immediately
-            if ($jobDescriptor->JobType !== QueuedJob::IMMEDIATE) {
-                $jobDescriptor->JobType = QueuedJob::IMMEDIATE;
-                $jobDescriptor->StartAfter = null;
-                $jobDescriptor->write();
-            }
+        // Check the job descriptor on the queue
+        $jobDescriptor = QueuedJobDescriptor::get()->filter('ID', $jobDescriptorId)->first();
+
+        // If the job is not immediate, change it to immediate and reschedule it to occur immediately
+        if ($jobDescriptor->JobType !== QueuedJob::IMMEDIATE) {
+            $jobDescriptor->JobType = QueuedJob::IMMEDIATE;
+            $jobDescriptor->StartAfter = null;
+            $jobDescriptor->write();
         }
     }
 
@@ -210,7 +212,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      * @param QueuedJobService $queuedJobService
      * @return $this
      */
-    public function setQueuedJobService($queuedJobService)
+    public function setQueuedJobService(QueuedJobService $queuedJobService)
     {
         $this->queuedJobService = $queuedJobService;
         return $this;
