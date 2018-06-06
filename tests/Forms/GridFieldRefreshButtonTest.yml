@@ -3,6 +3,10 @@ Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor:
     JobStatus: 'Running'
     Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'
     JobType: 2
+  immediatependingjob:
+    JobStatus: 'Pending'
+    Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'
+    JobType: 1
   brokenjob:
     JobStatus: 'Broken'
     Implementation: 'BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob'

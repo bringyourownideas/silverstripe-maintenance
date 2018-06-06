@@ -84,9 +84,13 @@ class SiteSummary extends Report
 
         $grid->addExtraClass('site-summary');
 
+        $summaryFields = Package::create()->summaryFields();
         /** @var GridFieldExportButton $exportButton */
         $exportButton = $config->getComponentByType(GridFieldExportButton::class);
-        $exportButton->setExportColumns(Package::create()->summaryFields());
+        $exportButton->setExportColumns($summaryFields);
+        /** @var GridFieldPrintButton $printButton */
+        $printButton = $config->getComponentByType(GridFieldPrintButton::class);
+        $printButton->setPrintColumns($summaryFields);
 
         $versionHtml = ArrayData::create([
             'Title' => _t(__CLASS__ . '.VERSION', 'Version'),

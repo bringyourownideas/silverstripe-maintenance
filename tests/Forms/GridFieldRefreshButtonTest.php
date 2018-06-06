@@ -4,9 +4,10 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Forms;
 
 use BringYourOwnIdeas\Maintenance\Forms\GridFieldRefreshButton;
 use SilverStripe\Core\Config\Config;
-use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
-use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Forms\GridField\GridField;
+use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 class GridFieldRefreshButtonTest extends SapphireTest
@@ -20,17 +21,25 @@ class GridFieldRefreshButtonTest extends SapphireTest
         Config::modify()->set(QueuedJobService::class, 'use_shutdown_function', false);
     }
 
-    public function testHasRunningJob()
+    public function testHasRunningJobReturnsTrueWhenJobIsRunning()
     {
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
         $this->assertTrue($button->hasPendingJob());
+    }
+
+    public function testHasRunningJobReturnsTrueForPendingJobsOnImmediateQueue()
+    {
+        $runningJob = $this->objFromFixture(QueuedJobDescriptor::class, 'runningjob');
+        $runningJob->JobStatus = 'Complete';
+        $runningJob->write();
+        $this->assertTrue($this->getButton()->hasPendingJob());
     }
 
     public function testDoesNotHaveCancelledCompletedOrBrokenJob()
     {
         $this->completeRunningJob();
 
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
         $this->assertFalse($button->hasPendingJob());
     }
 
@@ -38,7 +47,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
     {
         $count = QueuedJobDescriptor::get()->count();
 
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
         $button->handleRefresh();
 
         $this->assertSame($count, QueuedJobDescriptor::get()->count());
@@ -50,7 +59,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
 
         $count = QueuedJobDescriptor::get()->count();
 
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
         $button->handleRefresh();
 
         $this->assertSame($count + 1, QueuedJobDescriptor::get()->count());
@@ -58,13 +67,13 @@ class GridFieldRefreshButtonTest extends SapphireTest
 
     public function testHandleCheckReturnsValidJson()
     {
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
         $this->assertSame('true', $button->handleCheck());
     }
 
     public function testButtonIsDisabledWhenJobIsRunning()
     {
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
 
         $gridFieldMock = $this->getGridFieldMock();
 
@@ -77,7 +86,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
     {
         $this->completeRunningJob();
 
-        $button = new GridFieldRefreshButton('test');
+        $button = $this->getButton();
 
         $gridFieldMock = $this->getGridFieldMock();
 
@@ -92,6 +101,10 @@ class GridFieldRefreshButtonTest extends SapphireTest
     protected function completeRunningJob()
     {
         $runningJob = $this->objFromFixture(QueuedJobDescriptor::class, 'runningjob');
+        $runningJob->JobStatus = 'Complete';
+        $runningJob->write();
+
+        $runningJob = $this->objFromFixture(QueuedJobDescriptor::class, 'immediatependingjob');
         $runningJob->JobStatus = 'Complete';
         $runningJob->write();
     }
@@ -114,5 +127,13 @@ class GridFieldRefreshButtonTest extends SapphireTest
             ->will($this->returnValue('http://example.com'));
 
         return $gridFieldMock;
+    }
+
+    /**
+     * @return GridFieldRefreshButton
+     */
+    protected function getButton()
+    {
+        return Injector::inst()->create(GridFieldRefreshButton::class, 'test');
     }
 }
