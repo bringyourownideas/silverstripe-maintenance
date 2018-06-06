@@ -7,6 +7,7 @@ use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use RuntimeException;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\ORM\Queries\SQLDelete;
+use SilverStripe\ORM\DataObjectSchema;
 use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Dev\BuildTask;
 
@@ -125,7 +126,8 @@ class UpdatePackageInfoTask extends BuildTask
         // to remove everything. Stale information is better than no information.
         if ($packages) {
             // There is no onBeforeDelete for Package
-            SQLDelete::create('"Package"')->execute();
+            $table = DataObjectSchema::create()->tableName(Package::class);
+            SQLDelete::create("\"$table\"")->execute();
             foreach ($packages as $package) {
                 if (is_array($supportedPackages)) {
                     $package['Supported'] = in_array($package['Name'], $supportedPackages);

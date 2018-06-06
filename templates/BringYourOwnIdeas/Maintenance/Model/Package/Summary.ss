@@ -4,7 +4,7 @@
     <strong class="package-summary__title">$Title.XML</strong>
 
     <% loop $Badges %>
-        <span class="package-summary__badge<% if $Type %> package-summary__badge--$Type.ATT<% end_if %>">$Title.XML</span>
+        <span class="package-summary__badge badge<% if $Type %> badge-$Type.ATT<% end_if %>">$Title.XML</span>
     <% end_loop %>
 
     <% if $Description %>

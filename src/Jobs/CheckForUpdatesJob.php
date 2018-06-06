@@ -33,14 +33,6 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
     }
 
     /**
-     * Create the instance of the task
-     */
-    public function setup()
-    {
-        $this->task = Injector::inst()->create(CheckForUpdatesJob::class);
-    }
-
-    /**
      * Processes the task as a job
      */
     public function process()

@@ -1,21 +1,15 @@
+.site-alert {
+  margin-top: -$panel-padding-y / 2;
+  margin-bottom: $panel-padding-y;
+}
+
 .site-summary {
-  margin-top: 0;
-
   h3 {
-    margin-bottom: 0;
+    margin: 8px 0 4px;
   }
-
   td {
     vertical-align: middle;
   }
-
-  .grid-refresh-button {
-    margin-bottom: 0;
-  }
-}
-
-.package-summary__title {
-  display: block;
 }
 
 .package-summary__anchor {
@@ -28,28 +22,6 @@
     color: inherit;
     text-decoration: inherit;
   }
-}
-
-.package-summary__badge {
-  font-size: $font-size-xs;
-  padding: 3px 5px;
-  background: grey;
-  border-radius: 2px;
-  color: white;
-  position: relative;
-  top: -1px;
-}
-
-/* Colours for badge classes */
-/* @todo replace with bootstrap alerts */
-.package-summary__badge--good {
-  background: #3fa142;
-}
-.package-summary__badge--warning {
-  background: #ff7f22;
-}
-.package-summary__badge--bad {
-  background: #d40404;
 }
 
 .package-summary__description {

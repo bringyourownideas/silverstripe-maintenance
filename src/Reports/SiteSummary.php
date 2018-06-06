@@ -172,7 +172,7 @@ class SiteSummary extends Report
         $fields = parent::getCMSFields();
         $alerts = $this->getAlerts();
         if ($alerts) {
-            $summaryInfo = '<div class="site-summary message warning">' . implode("\n", $alerts) . '</div>';
+            $summaryInfo = '<div class="site-alert alert alert-warning">' . implode("\n", $alerts) . '</div>';
             $fields->unshift(LiteralField::create('AlertSummary', $summaryInfo));
         }
         return $fields;
