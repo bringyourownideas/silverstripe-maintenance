@@ -18,6 +18,9 @@ const PATHS = {
   DIST: Path.resolve('client/dist'),
 };
 
+const externals = externalJS(ENV, PATHS);
+delete externals.reactstrap;
+
 const config = [
   {
     name: 'js',
@@ -30,7 +33,7 @@ const config = [
     },
     devtool: (ENV !== 'production') ? 'source-map' : '',
     resolve: resolveJS(ENV, PATHS),
-    externals: externalJS(ENV, PATHS),
+    externals,
     module: moduleJS(ENV, PATHS),
     plugins: pluginJS(ENV, PATHS),
   },

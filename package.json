@@ -2,7 +2,6 @@
   "name": "silverstripe-maintenance",
   "version": "0.0.0",
   "description": "Provides information about the packages you have installed in your SilverStripe site",
-  "main": "./client/src/boot/index.js",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
@@ -35,7 +34,9 @@
   },
   "dependencies": {
     "babel-polyfill": "6.7.4",
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "react": "15.3.1",
+    "react-dom": "15.3.1",
+    "reactstrap": "^5.0.0"
   }
 }
-

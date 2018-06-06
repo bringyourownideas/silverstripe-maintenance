@@ -74,6 +74,7 @@ class SiteSummary extends Report
     public function getReportField()
     {
         Requirements::css('bringyourownideas/silverstripe-maintenance: client/dist/styles/bundle.css');
+        Requirements::javascript('bringyourownideas/silverstripe-maintenance: client/dist/js/bundle.js');
 
         /** @var GridField $grid */
         $grid = parent::getReportField();
