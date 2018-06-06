@@ -117,7 +117,7 @@ class Package extends DataObject
         }
 
         /** @var QueuedJobService $jobService */
-        $jobService = QueuedJobService::singleton();
+        $jobService = Injector::inst()->get(QueuedJobService::class);
         $jobService->queueJob(Injector::inst()->create(CheckForUpdatesJob::class));
     }
 }
