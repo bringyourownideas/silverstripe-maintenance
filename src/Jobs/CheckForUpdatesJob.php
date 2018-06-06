@@ -54,7 +54,9 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
         // Queue a new job to run in the future
         $injector = Injector::inst();
         $queuedJobService = $injector->get(QueuedJobService::class);
-        $startAfter = new DateTime('+24 hours');
+
+        $startAfter = new DateTime(SS_Datetime::now()->getValue());
+        $startAfter->modify('+1 day');
         $queuedJobService->queueJob(
             $injector->create(CheckForUpdatesJob::class),
             $startAfter->format(DateTime::ISO8601)

@@ -24,6 +24,10 @@ use Requirements;
  */
 class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_ActionProvider, GridField_URLHandler
 {
+    private static $dependencies = [
+        'QueuedJobService' => '%$QueuedJobService'
+    ];
+
     /**
      * @var array
      * @config
@@ -35,6 +39,11 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      * @var string
      */
     protected $targetFragment;
+
+    /**
+     * @var QueuedJobService
+     */
+    protected $queuedJobService;
 
     /**
      * @param string $targetFragment The HTML fragment to write the button into
@@ -142,8 +151,10 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
      */
     public function hasActiveJob()
     {
+        // We care about any queued job in the immediate queue, or any queue if the job is already running
         /** @var QueuedJobDescriptor $job */
-        $job = $this->getQueuedJobService()
+
+        $immediateJob = $this->getQueuedJobService()
             ->getJobList(QueuedJob::IMMEDIATE)
             ->filter([
                 'Implementation' => CheckForUpdatesJob::class
@@ -156,7 +167,13 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
                 ]
             ]);
 
-        return $job->exists();
+        $runningJob = QueuedJobDescriptor::get()
+            ->filter([
+                'Implementation' => CheckForUpdatesJob::class,
+                'JobStatus' => QueuedJob::STATUS_RUN,
+            ]);
+
+        return $immediateJob->exists() || $runningJob->exists();
     }
 
     /**
@@ -184,8 +201,18 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     /**
      * @return QueuedJobService
      */
-    protected function getQueuedJobService()
+    public function getQueuedJobService()
     {
-        return Injector::inst()->get(QueuedJobService::class);
+        return $this->queuedJobService;
+    }
+
+    /**
+     * @param QueuedJobService $queuedJobService
+     * @return $this
+     */
+    public function setQueuedJobService($queuedJobService)
+    {
+        $this->queuedJobService = $queuedJobService;
+        return $this;
     }
 }
