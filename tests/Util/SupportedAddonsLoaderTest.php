@@ -3,151 +3,57 @@
 namespace BringYourOwnIdeas\Maintenance\Tests\Util;
 
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
-use RuntimeException;
 use SilverStripe\Dev\SapphireTest;
-use Symfony\Component\Cache\Simple\NullCache;
 
-/**
- * @mixin PHPUnit_Framework_TestCase
- */
 class SupportedAddonsLoaderTest extends SapphireTest
 {
     /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about supported addons. Error code 404
+     * @var SupportedAddonsLoader
      */
-    public function testNon200ErrorCodesAreHandled()
+    protected $loader;
+
+    protected function setUp()
     {
-        $loader = $this->getSupportedAddonsLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(404)));
+        parent::setUp();
 
-        $loader->getAddonNames();
-    }
-
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about supported addons. Response is not JSON
-     */
-    public function testNonJsonResponsesAreHandled()
-    {
-        $loader = $this->getSupportedAddonsLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'text/html; charset=utf-8']
-        )));
-
-        $loader->getAddonNames();
-    }
-
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about supported addons. Response returned unsuccessfully
-     */
-    public function testUnsuccessfulResponsesAreHandled()
-    {
-        $loader = $this->getSupportedAddonsLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['success' => 'false'])
-        )));
-
-        $loader->getAddonNames();
-    }
-
-
-    public function testAddonsAreParsedAndReturnedCorrectly()
-    {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
-
-        $loader = $this->getSupportedAddonsLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['success' => true, 'addons' => $fakeAddons])
-        )));
-
-        $addons = $loader->getAddonNames();
-
-        $this->assertSame($fakeAddons, $addons);
-    }
-
-    public function testCacheControlSettingsAreRespected()
-    {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
-
-        $cacheMock = $this->getMockBuilder(NullCache::class)
-            ->setMethods(['get', 'set'])
+        $this->loader = $this->getMockBuilder(SupportedAddonsLoader::class)
+            ->setMethods(['doRequest'])
             ->getMock();
-
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
-        $cacheMock->expects($this->once())
-            ->method('set')
-            ->with($this->anything(), json_encode($fakeAddons), 5000)
-            ->will($this->returnValue(true));
-
-        $loader = $this->getSupportedAddonsLoader($cacheMock);
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'application/json', 'Cache-Control' => 'max-age=5000'],
-            json_encode(['success' => true, 'addons' => $fakeAddons])
-        )));
-
-        $loader->getAddonNames();
     }
 
-    public function testCachedAddonsAreUsedWhenAvailable()
+    public function testCallsSupportedAddonsEndpoint()
     {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
+        $this->loader->expects($this->once())
+            ->method('doRequest')
+            ->with('addons.silverstripe.org/api/supported-addons', function () {
+                // no-op
+            });
 
-        $cacheMock = $this->getMockBuilder(NullCache::class)
-            ->setMethods(['get', 'set'])
-            ->getMock();
-
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($fakeAddons)));
-        $loader = $this->getSupportedAddonsLoader($cacheMock);
-
-        $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();
-        $mockClient->expects($this->never())->method('send');
-        $loader->setGuzzleClient($mockClient);
-
-        $addons = $loader->getAddonNames();
-
-        $this->assertSame($fakeAddons, $addons);
+        $this->loader->getAddonNames();
     }
 
-    /**
-     * @param Response $withResponse
-     * @return Client
-     */
-    protected function getMockClient(Response $withResponse)
+    public function testCallbackReturnsAddonsFromBody()
     {
-        $mock = new MockHandler([
-            $withResponse
-        ]);
+        $this->loader->expects($this->once())
+            ->method('doRequest')
+            ->with($this->isType('string'), $this->isType('callable'))
+            ->will($this->returnArgument(1));
 
-        $handler = HandlerStack::create($mock);
-        return new Client(['handler' => $handler]);
+        $result = $this->loader->getAddonNames();
+        $mockResponse = [
+            'foo' => 'bar',
+            'addons' => 'baz',
+        ];
+
+        $this->assertSame('baz', $result($mockResponse));
     }
 
-    protected function getSupportedAddonsLoader($cacheMock = false)
+    public function testValueOfDoRequestIsReturned()
     {
-        if (!$cacheMock) {
-            $cacheMock = $this->getMockBuilder(NullCache::class)
-                ->setMethods(['get', 'set'])
-                ->getMock();
-            $cacheMock->expects($this->any())->method('get')->will($this->returnValue(false));
-            $cacheMock->expects($this->any())->method('set')->will($this->returnValue(true));
-        }
+        $this->loader->expects($this->once())
+            ->method('doRequest')
+            ->willReturn('hello world');
 
-        $loader = new SupportedAddonsLoader;
-        $loader->setCache($cacheMock);
-
-        return $loader;
+        $this->assertSame('hello world', $this->loader->getAddonNames());
     }
 }

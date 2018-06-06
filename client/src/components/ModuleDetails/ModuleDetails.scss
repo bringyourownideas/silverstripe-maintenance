@@ -33,3 +33,11 @@
     }
   }
 }
+.package-summary__details-header {
+  display: flex;
+
+  a {
+    text-decoration: none;
+    color: $body-color;
+  }
+}

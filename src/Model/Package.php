@@ -24,6 +24,7 @@ class Package extends DataObject
         'Version' => 'Varchar(255)',
         'Type' => 'Varchar(255)',
         'Supported' => 'Boolean',
+        'Rating' => 'Int'
     ];
 
     private static $summary_fields = [
@@ -124,7 +125,8 @@ class Package extends DataObject
                 __CLASS__ . '.ADDONS_LINK_TITLE',
                 'View {package} on addons.silverstripe.org',
                 ['package' => $this->Title]
-            )
+            ),
+            'data-rating'=> $this->Rating
         ];
 
         $this->extend('updateDataSchema', $schema);
