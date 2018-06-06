@@ -26,7 +26,7 @@ class ModuleDetails extends Component {
   }
 
   render() {
-    const { description, detailsId } = this.props;
+    const { description, detailsId, link, linkTitle } = this.props;
 
     const popoverId = `${detailsId}-popover`;
     const triggerId = `${detailsId}-trigger`;
@@ -47,6 +47,7 @@ class ModuleDetails extends Component {
           id={popoverId}
           target={triggerId}
           placement="bottom"
+          className="package-summary__details-popover"
           isOpen={this.state.popoverOpen}
           toggle={this.toggle}
         >
@@ -54,7 +55,19 @@ class ModuleDetails extends Component {
             {i18n._t('ModuleDetails.MODULE_INFO', 'Module info')}
           </PopoverHeader>
 
-          <PopoverBody>{description}</PopoverBody>
+          <PopoverBody>
+            <p>{description}</p>
+
+            <a
+              href={link}
+              title={linkTitle}
+              target="blank"
+              rel="noopener"
+              className="btn btn-sm btn-secondary font-icon-info-circled"
+            >
+              {i18n._t('ModuleDetails.MORE_INFO', 'More info')}
+            </a>
+          </PopoverBody>
         </Popover>
       </div>
     );
@@ -64,6 +77,8 @@ class ModuleDetails extends Component {
 ModuleDetails.propTypes = {
   description: PropTypes.string,
   detailsId: PropTypes.string.isRequired,
+  link: PropTypes.string,
+  linkTitle: PropTypes.string,
 };
 
 export default ModuleDetails;

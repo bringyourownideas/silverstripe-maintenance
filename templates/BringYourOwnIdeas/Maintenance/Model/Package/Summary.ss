@@ -1,8 +1,10 @@
 <strong class="package-summary__title">$Title.XML</strong>
 <span
-    class="package-summary__details"
+    class="package-summary__details-container"
     id="package-summary__details-{$ID}"
     data-description="$Description.ATT"
+    data-link="https://addons.silverstripe.org/add-ons/$Name.ATT"
+    data-link-title="<%t BringYourOwnIdeas\\Maintenance\\Reports\\SiteSummary.AddonsLinkTitle "View {package} on addons.silverstripe.org" package=$Title.ATT %>"
 >
     <%-- Contents are rendered via SiteSummary.js in React --%>
 </span>
