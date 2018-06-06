@@ -21,4 +21,17 @@ window.jQuery.entwine('ss', ($) => {
       ReactDOM.unmountComponentAtNode(this[0]);
     }
   });
+
+  $('.site-summary .ss-gridfield-item').entwine({
+    /**
+     * When you click on a table row (not a button in the table row), trigger the button
+     * to be clicked.
+     */
+    onclick(e) {
+      if ($(e.target).is('button')) {
+        return;
+      }
+      this.find('.package-summary__module-info-trigger').click();
+    }
+  });
 });
