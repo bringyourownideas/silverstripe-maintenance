@@ -10,3 +10,26 @@
   background: 0;
   border: 0;
 }
+
+.package-summary__security-alerts {
+  margin-top: $popover-padding;
+  margin-bottom: $popover-padding * .5;
+
+  h4 {
+    margin-bottom: $popover-padding * .5;
+  }
+
+  // Undoing the default styles that come for .popover-body a from admin module
+  a {
+    background: none;
+    color: inherit;
+    padding: 0;
+    text-decoration: underline;
+
+    &:hover {
+      background: none;
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
+}

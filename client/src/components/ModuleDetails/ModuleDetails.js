@@ -28,8 +28,38 @@ class ModuleDetails extends Component {
     return false;
   }
 
+  /**
+   * Renders a list of any security alerts that may be known for the given module
+   *
+   * @returns {DOMElement}
+   */
+  renderSecurityAlerts() {
+    const { securityAlerts } = this.props.dataSchema;
+
+    if (!securityAlerts || !securityAlerts.length) {
+      return null;
+    }
+
+    return (
+      <div className="package-summary__security-alerts alert alert-warning">
+        <h4 className="h5">{i18n._t('ModuleDetails.SECURITY_ALERTS', 'Security alerts')}</h4>
+        <ul>
+          {
+            securityAlerts.map((alert) => (
+              <li key={alert.Identifier}>
+                <a href={alert.ExternalLink} target="_blank" rel="noopener">
+                  {alert.Identifier}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    );
+  }
+
   render() {
-    const { description, detailsId, link, linkTitle } = this.props;
+    const { dataSchema: { description, link, linkTitle }, detailsId } = this.props;
 
     const popoverId = `${detailsId}-popover`;
     const triggerId = `${detailsId}-trigger`;
@@ -69,6 +99,8 @@ class ModuleDetails extends Component {
             >
               {i18n._t('ModuleDetails.MORE_INFO', 'More info')}
             </a>
+
+            {this.renderSecurityAlerts()}
           </PopoverBody>
         </Popover>
       </div>
@@ -77,10 +109,13 @@ class ModuleDetails extends Component {
 }
 
 ModuleDetails.propTypes = {
-  description: PropTypes.string,
   detailsId: PropTypes.string.isRequired,
-  link: PropTypes.string,
-  linkTitle: PropTypes.string,
+  dataSchema: PropTypes.shape({
+    description: PropTypes.string,
+    link: PropTypes.string,
+    linkTitle: PropTypes.string,
+    securityAlerts: PropTypes.array,
+  }),
 };
 
 export default ModuleDetails;

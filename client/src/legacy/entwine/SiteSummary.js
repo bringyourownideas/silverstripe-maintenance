@@ -6,12 +6,12 @@ import ModuleDetails from 'components/ModuleDetails/ModuleDetails';
 window.jQuery.entwine('ss', ($) => {
   $('.js-injector-boot .package-summary__details-container').entwine({
     onmatch() {
+      const dataSchema = this.data('schema');
+
       ReactDOM.render(
         <ModuleDetails
-          description={this.data('description')}
           detailsId={this.attr('id')}
-          link={this.data('link')}
-          linkTitle={this.data('link-title')}
+          dataSchema={dataSchema}
         />,
         this[0]
       );
