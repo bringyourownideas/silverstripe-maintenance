@@ -19,10 +19,13 @@ class ModuleDetails extends Component {
   /**
    * Toggle the popover with module details being open or not
    */
-  toggle() {
+  toggle(event) {
     this.setState({
       popoverOpen: !this.state.popoverOpen,
     });
+
+    event.preventDefault();
+    return false;
   }
 
   render() {
@@ -33,15 +36,14 @@ class ModuleDetails extends Component {
 
     return (
       <div className="package-summary__details">
-        <span
+        <button
           id={triggerId}
-          className="package-summary__module-info-trigger"
+          // NB: the "edit-link" class is a hack to let GridField.js set pointer cursors
+          className="package-summary__module-info-trigger btn btn-link edit-link"
           onClick={this.toggle}
-          tabIndex={0}
-          role="button"
         >
           {i18n._t('ModuleDetails.MODULE_INFO', 'Module info')}
-        </span>
+        </button>
 
         <Popover
           id={popoverId}
@@ -63,7 +65,7 @@ class ModuleDetails extends Component {
               title={linkTitle}
               target="blank"
               rel="noopener"
-              className="btn btn-sm btn-secondary font-icon-info-circled"
+              className="btn btn-secondary font-icon-info-circled"
             >
               {i18n._t('ModuleDetails.MORE_INFO', 'More info')}
             </a>

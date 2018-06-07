@@ -1,13 +1,12 @@
 // Make the trigger look like an anchor
 .package-summary__module-info-trigger {
-  color: $link-color;
-  cursor: pointer;
+  padding: 0;
 }
 
-// Remove the admin styles that render buttons in a list (e.g secondary actions in CMS)
-.package-summary__details-popover .popover-body .btn {
-  padding: inherit;
-  margin: inherit;
-  width: fit-content;
-  border-radius: $border-radius;
+// Remove the background from the default popover header
+.package-summary__details-header {
+  padding-bottom: 0;
+  padding-top: $popover-padding;
+  background: 0;
+  border: 0;
 }
