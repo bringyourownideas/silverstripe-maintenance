@@ -5,8 +5,10 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Reports;
 use BringYourOwnIdeas\Maintenance\Model\Package;
 use BringYourOwnIdeas\Maintenance\Reports\SiteSummary;
 use BringYourOwnIdeas\Maintenance\Tests\Reports\Stubs\SiteSummaryExtensionStub;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\LiteralField;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 class SiteSummaryTest extends SapphireTest
 {
@@ -17,6 +19,13 @@ class SiteSummaryTest extends SapphireTest
             SiteSummaryExtensionStub::class,
         ],
     ];
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Config::modify()->set(QueuedJobService::class, 'use_shutdown_function', false);
+    }
 
     public function testSourceRecords()
     {
