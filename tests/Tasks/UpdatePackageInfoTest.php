@@ -25,7 +25,8 @@ class UpdatePackageInfoTest extends SapphireTest
             ->getMock();
         return $supportedAddonsLoader;
     }
-    protected function mockModuleHealthLoader() {
+    protected function mockModuleHealthLoader()
+    {
 
         $moduleHealthLoader = $this->getMockBuilder(ModuleHealthLoader::class)
             ->setMethods(['getModuleHealthInfo'])

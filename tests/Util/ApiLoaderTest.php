@@ -2,7 +2,6 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Util;
 
-
 use BringYourOwnIdeas\Maintenance\Util\ApiLoader;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
