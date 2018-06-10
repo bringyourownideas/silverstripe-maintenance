@@ -179,7 +179,7 @@ abstract class ApiLoader
     public function getCache()
     {
         if (!$this->cache) {
-            $this->cache = Injector::inst()->get(CacheInterface::class . '.supportedAddons');
+            $this->cache = Injector::inst()->get(CacheInterface::class . '.silverstripeMaintenance');
         }
 
         return $this->cache;

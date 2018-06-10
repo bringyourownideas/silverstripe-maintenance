@@ -21,7 +21,7 @@ class ModuleHealthIndicator extends Component {
   /**
    * Helper method to add additional div for module indicator symbol
    *
-   * @returns {String}|null
+   * @returns {String|null}
    */
   renderHalfSymbol() {
     const { rating } = this.props;
