@@ -10,9 +10,6 @@ use GuzzleHttp\Psr7\Response;
 use SilverStripe\Dev\SapphireTest;
 use Symfony\Component\Cache\Simple\NullCache;
 
-/**
- * @group wip
- */
 class ApiLoaderTest extends SapphireTest
 {
     /**
@@ -154,6 +151,10 @@ class ApiLoaderTest extends SapphireTest
         return new Client(['handler' => $handler]);
     }
 
+    /**
+     * @param bool $cacheMock
+     * @return ApiLoader
+     */
     protected function getLoader($cacheMock = false)
     {
         if (!$cacheMock) {

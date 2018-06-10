@@ -158,13 +158,12 @@ class UpdatePackageInfoTask extends BuildTask
             $table = DataObjectSchema::create()->tableName(Package::class);
             SQLDelete::create("\"$table\"")->execute();
             foreach ($packages as $package) {
+                $packageName = $package['Name'];
                 if (is_array($supportedPackages)) {
-                    $package['Supported'] = in_array($package['Name'], $supportedPackages);
+                    $package['Supported'] = in_array($packageName, $supportedPackages);
                 }
-                if (is_array($moduleHealthInfo)) {
-                    if (isset($moduleHealthInfo[$package['Name']])) {
-                        $package['Rating'] = $moduleHealthInfo[$package['Name']];
-                    }
+                if (is_array($moduleHealthInfo) && isset($moduleHealthInfo[$packageName])) {
+                    $package['Rating'] = $moduleHealthInfo[$packageName];
                 }
                 Package::create()->update($package)->write();
             }
