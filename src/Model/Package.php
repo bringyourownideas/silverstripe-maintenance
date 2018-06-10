@@ -111,6 +111,28 @@ class Package extends DataObject
     }
 
     /**
+     * Returns a JSON data schema for the frontend React components to use
+     *
+     * @return array
+     */
+    public function getDataSchema()
+    {
+        $schema = [
+            'description' => $this->Description,
+            'link' => 'https://addons.silverstripe.org/add-ons/' . $this->Name,
+            'linkTitle' => _t(
+                __CLASS__ . '.ADDONS_LINK_TITLE',
+                'View {package} on addons.silverstripe.org',
+                ['package' => $this->Title]
+            )
+        ];
+
+        $this->extend('updateDataSchema', $schema);
+
+        return $schema;
+    }
+
+    /**
      * Queue up a job to check for updates to packages if there isn't a pending job in the queue already
      */
     public function requireDefaultRecords()
