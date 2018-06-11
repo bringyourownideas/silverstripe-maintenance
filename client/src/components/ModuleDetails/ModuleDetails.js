@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import i18n from 'i18n';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import ModuleHealthIndicator from 'components/ModuleDetails/ModuleHealthIndicator';
 
 /**
  * Module details are a link and popover, attached to each report row. The popover
@@ -59,8 +60,7 @@ class ModuleDetails extends Component {
   }
 
   render() {
-    const { dataSchema: { description, link, linkTitle }, detailsId } = this.props;
-
+    const { dataSchema: { description, link, linkTitle, rating }, detailsId } = this.props;
     const popoverId = `${detailsId}-popover`;
     const triggerId = `${detailsId}-trigger`;
 
@@ -85,6 +85,8 @@ class ModuleDetails extends Component {
         >
           <PopoverHeader className="package-summary__details-header">
             {i18n._t('ModuleDetails.MODULE_INFO', 'Module info')}
+
+            <ModuleHealthIndicator link={link} rating={rating} />
           </PopoverHeader>
 
           <PopoverBody>
@@ -115,6 +117,7 @@ ModuleDetails.propTypes = {
     link: PropTypes.string,
     linkTitle: PropTypes.string,
     securityAlerts: PropTypes.array,
+    rating: PropTypes.number
   }),
 };
 

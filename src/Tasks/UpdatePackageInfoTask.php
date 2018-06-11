@@ -3,6 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use BringYourOwnIdeas\Maintenance\Util\ModuleHealthLoader;
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use RuntimeException;
 use SilverStripe\Control\HTTPRequest;
@@ -29,6 +30,7 @@ class UpdatePackageInfoTask extends BuildTask
     private static $dependencies = [
         'ComposerLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ComposerLoader',
         'SupportedAddonsLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\SupportedAddonsLoader',
+        'ModuleHealthLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ModuleHealthLoader',
     ];
 
     /**
@@ -51,6 +53,11 @@ class UpdatePackageInfoTask extends BuildTask
      * @var SupportedAddonsLoader
      */
     protected $supportedAddonsLoader;
+
+    /**
+     * @var ModuleHealthLoader
+     */
+    protected $moduleHealthLoader;
 
     /**
      * Fetch the composer loader
@@ -93,6 +100,24 @@ class UpdatePackageInfoTask extends BuildTask
         return $this;
     }
 
+    /**
+     * @return ModuleHealthLoader
+     */
+    public function getModuleHealthLoader()
+    {
+        return $this->moduleHealthLoader;
+    }
+
+    /**
+     * @param ModuleHealthLoader $moduleHealthLoader
+     * @return $this
+     */
+    public function setModuleHealthLoader(ModuleHealthLoader $moduleHealthLoader)
+    {
+        $this->moduleHealthLoader = $moduleHealthLoader;
+        return $this;
+    }
+
     public function getTitle()
     {
         return _t(__CLASS__ . '.TITLE', 'Refresh installed package info');
@@ -118,7 +143,11 @@ class UpdatePackageInfoTask extends BuildTask
         $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
         $packages = $this->getPackageInfo($rawPackages);
 
+        // Get "name" from $packages and put into an array
+        $moduleNames = array_column($packages, 'Name');
+
         $supportedPackages = $this->getSupportedPackages();
+        $moduleHealthInfo = $this->getHealthIndicator($moduleNames);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -129,8 +158,12 @@ class UpdatePackageInfoTask extends BuildTask
             $table = DataObjectSchema::create()->tableName(Package::class);
             SQLDelete::create("\"$table\"")->execute();
             foreach ($packages as $package) {
+                $packageName = $package['Name'];
                 if (is_array($supportedPackages)) {
-                    $package['Supported'] = in_array($package['Name'], $supportedPackages);
+                    $package['Supported'] = in_array($packageName, $supportedPackages);
+                }
+                if (is_array($moduleHealthInfo) && isset($moduleHealthInfo[$packageName])) {
+                    $package['Rating'] = $moduleHealthInfo[$packageName];
                 }
                 Package::create()->update($package)->write();
             }
@@ -170,6 +203,24 @@ class UpdatePackageInfoTask extends BuildTask
     {
         try {
             return $this->getSupportedAddonsLoader()->getAddonNames() ?: [];
+        } catch (RuntimeException $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+        }
+
+        return null;
+    }
+
+    /**
+     * Return an array of module health information as fetched from addons.silverstripe.org. Outputs a message and
+     * returns null if an error occurs
+     *
+     * @param string[] $moduleNames
+     * @return null|array
+     */
+    public function getHealthIndicator(array $moduleNames)
+    {
+        try {
+            return $this->getModuleHealthLoader()->setModuleNames($moduleNames)->getModuleHealthInfo() ?: [];
         } catch (RuntimeException $exception) {
             echo $exception->getMessage() . PHP_EOL;
         }

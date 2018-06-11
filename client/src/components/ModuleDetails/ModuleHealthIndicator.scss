@@ -1,0 +1,42 @@
+// Render the div that holds the symbol and rating number
+.health-indicator {
+  display: flex;
+  position: absolute;
+  right: .75rem;
+  font-weight: normal;
+  font-size: .9rem;
+}
+
+// Render the circle that indicates the module health
+.health-indicator__symbol {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 2px solid;
+  margin-right: 3px;
+  margin-right: 3px;
+  top: 0;
+
+  &--green {
+    background-color: $brand-success;
+    border-color: $brand-success;
+  }
+
+  &--grey {
+    background-color: $gray-200;
+    border-color: $gray-200;
+  }
+}
+
+.health-indicator__symbol--half {
+  top: 2px;
+  left: 2px;
+  height: 4px;
+  width: 8px;
+  border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  -webkit-border-radius: 4px 4px 0 0;
+  background-color: #fff;
+}

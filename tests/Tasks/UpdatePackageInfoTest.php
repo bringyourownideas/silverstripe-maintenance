@@ -3,6 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
+use BringYourOwnIdeas\Maintenance\Util\ModuleHealthLoader;
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
@@ -16,6 +17,24 @@ use SilverStripe\Dev\SapphireTest;
 class UpdatePackageInfoTest extends SapphireTest
 {
     protected $usesDatabase = true;
+
+    protected function mockSupportedAddonsLoader()
+    {
+        $supportedAddonsLoader = $this->getMockBuilder(SupportedAddonsLoader::class)
+            ->setMethods(['getAddonNames'])
+            ->getMock();
+        return $supportedAddonsLoader;
+    }
+    protected function mockModuleHealthLoader()
+    {
+
+        $moduleHealthLoader = $this->getMockBuilder(ModuleHealthLoader::class)
+            ->setMethods(['getModuleHealthInfo'])
+            ->getMock();
+
+        return $moduleHealthLoader;
+    }
+
 
     public function testGetPackageInfo()
     {
@@ -39,9 +58,8 @@ class UpdatePackageInfoTest extends SapphireTest
 
     public function testGetSupportedPackagesEchosErrors()
     {
-        $supportedAddonsLoader = $this->getMockBuilder(SupportedAddonsLoader::class)
-            ->setMethods(['getAddonNames'])
-            ->getMock();
+        $supportedAddonsLoader = $this->mockSupportedAddonsLoader();
+        $moduleHealthLoader = $this->mockModuleHealthLoader();
 
         $supportedAddonsLoader->expects($this->once())
             ->method('getAddonNames')
@@ -50,6 +68,7 @@ class UpdatePackageInfoTest extends SapphireTest
         /** @var UpdatePackageInfoTask $task */
         $task = UpdatePackageInfoTask::create();
         $task->setSupportedAddonsLoader($supportedAddonsLoader);
+        $task->setModuleHealthLoader($moduleHealthLoader);
 
         ob_start();
         $task->getSupportedPackages();
@@ -60,7 +79,8 @@ class UpdatePackageInfoTest extends SapphireTest
 
     public function testPackagesAreAddedCorrectly()
     {
-        $task = new UpdatePackageInfoTask;
+
+        $task = UpdatePackageInfoTask::create();
 
         $composerLoader = $this->getMockBuilder(ComposerLoader::class)
             ->setMethods(['getLock'])->getMock();
@@ -84,9 +104,9 @@ LOCK
         )));
         $task->setComposerLoader($composerLoader);
 
-        $supportedAddonsLoader = $this->getMockBuilder(SupportedAddonsLoader::class)
-            ->setMethods(['getAddonNames'])
-            ->getMock();
+        $supportedAddonsLoader = $this->mockSupportedAddonsLoader();
+        $moduleHealthLoader = $this->mockModuleHealthLoader();
+
         $supportedAddonsLoader->expects($this->once())
             ->method('getAddonNames')
             ->will($this->returnValue(['fake/supported-package']));

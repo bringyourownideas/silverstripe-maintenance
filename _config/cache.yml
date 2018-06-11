@@ -2,7 +2,7 @@
 Name: maintenancecache
 ---
 SilverStripe\Core\Injector\Injector:
-  Psr\SimpleCache\CacheInterface.supportedAddons:
+  Psr\SimpleCache\CacheInterface.silverstripeMaintenance:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
-      namespace: "supportedAddons"
+      namespace: silverstripeMaintenance
