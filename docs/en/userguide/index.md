@@ -2,13 +2,20 @@ title: Installed Modules Report
 summary: Assists with the maintenance of your SilverStripe application
 
 # Installed Modules Report
+
+This user guide provides information on the 
+[SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance). It also covers the two 
+optional modules [Silverstripe Security Checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker)
+and [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker), 
+which provide the main functionality for the _Installed Modules_ report.
+
 ## Usage 
 
 SilverStripe websites and the CMS can be highly customised using SilverStripe modules. The 'Installed modules' report 
 provides an overview of the modules installed for your SilverStripe website. 
 
 In the admin section of your SilverStripe website navigate to the Reports section. Open up the 'Installed modules' 
-report to view the available information. 
+report to view the available information.
 
 Please note that you are required to have admin access to view this information.
 
@@ -20,10 +27,14 @@ the CMS while the update is run.
 
 ## Check for additional modules
 
-Click on the 'Explore Addons' button to access SilverStripe's add-on repository. Use this site to find modules and 
+Click on the 'Explore Addons' button to access [SilverStripe's Add-ons](https://www.silverstripe.org/software/addons/) repository. Use this site to find modules and
 themes to add to your SilverStripe website.
 
 ## What do "Version, Available, Latest" mean?
+
+The [SilverStripe Composer Update Checker module](https://github.com/bringyourownideas/silverstripe-composer-update-checker)
+checks if any of your Composer dependencies needs to be updated, and tracks the available and latest versions that can 
+be updated to.
 
 SilverStripe follows Semantic Versioning. If you would like to learn more see [https://semver.org/](https://semver.org/).
 
@@ -33,16 +44,25 @@ The information in this column shows the current version of each of the modules 
 
 ### Available
 
-The information in this column shows the latest version of the modules available within the version constraints of your 
+The information in this column shows the latest installable version of the modules within the version constraints of your 
 installation. If no version is displayed, you are either already on the latest version available for your constraint, 
 or your constraint might be very restrictive.
 
 ### Latest
 
-The information in this column shows the latest version of the module available. If this varies from the available version, it means that this latest version is outside of your version constraint of your installation.
+The information in this column shows the latest version of the module available. If this varies from the available 
+version, it means that this latest version is outside of your version constraint of your installation.
 
 ## What do the security alerts mean?
 
-If you've got the [SilverStripe Composer Security Checker module](https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-composer-security-checker) 
-installed you may see security alerts. To find out more about these alerts see 
-[the corresponding documentation](https://github.com/bringyourownideas/silverstripe-composer-security-checker/tree/master/docs/en/userguide). 
+The [SilverStripe Composer Security Checker module](https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-composer-security-checker) 
+adds a task which runs a check if any of the dependencies has known security vulnerabilities.
+
+Provided this optional module is installed, you may see security alerts, if security updates are present for installed 
+modules. In that case, clicking on the security badge next to the module name will reveal additional information. 
+
+The [SensioLabs Security Check Web service](http://security.sensiolabs.org/) and the 
+[Security Advisories Database](https://github.com/FriendsOfPHP/security-advisories) are used to generate this information.
+
+Learn more about SilverStripe's [security releases](https://www.silverstripe.org/download/security-releases/) and our 
+[security release process](https://docs.silverstripe.org/en/4/contributing/release_process/#security-releases).
