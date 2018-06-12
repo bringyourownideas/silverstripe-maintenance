@@ -7,6 +7,8 @@ use BringYourOwnIdeas\Maintenance\Util\ModuleHealthLoader;
 use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use RuntimeException;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Environment;
 use SilverStripe\ORM\Queries\SQLDelete;
 use SilverStripe\ORM\DataObjectSchema;
 use BringYourOwnIdeas\Maintenance\Model\Package;
@@ -148,12 +150,12 @@ class UpdatePackageInfoTask extends BuildTask
     public function run($request)
     {
         // Loading packages and all their updates can be quite memory intensive.
-        $memoryLimit = Config::inst()->get(self::class, 'memory_limit');
+        $memoryLimit = $this->config()->get('memory_limit');
         if ($memoryLimit) {
-            if (get_increase_memory_limit_max() < translate_memstring($memoryLimit)) {
-                set_increase_memory_limit_max($memoryLimit);
+            if (Environment::getMemoryLimitMax() < Convert::memstring2bytes($memoryLimit)) {
+                Environment::setMemoryLimitMax($memoryLimit);
             }
-            increase_memory_limit_to($memoryLimit);
+            Environment::increaseMemoryLimitTo($memoryLimit);
         }
 
         $composerLock = $this->getComposerLoader()->getLock();
