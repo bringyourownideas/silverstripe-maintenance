@@ -110,10 +110,12 @@ class UpdatePackageInfoTask extends BuildTask
     {
         // Loading packages and all their updates can be quite memory intensive.
         $memoryLimit = Config::inst()->get(self::class, 'memory_limit');
-        if (get_increase_memory_limit_max() < translate_memstring($memoryLimit)) {
-            set_increase_memory_limit_max($memoryLimit);
+        if ($memoryLimit) {
+            if (get_increase_memory_limit_max() < translate_memstring($memoryLimit)) {
+                set_increase_memory_limit_max($memoryLimit);
+            }
+            increase_memory_limit_to($memoryLimit);
         }
-        increase_memory_limit_to($memoryLimit);
 
         $composerLock = $this->getComposerLoader()->getLock();
         $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
