@@ -13,16 +13,16 @@ class ComposerLoaderTest extends SapphireTest
 {
     public function testGetJson()
     {
-        $loader = new ComposerLoader();
+        $loader = new ComposerLoader(__DIR__ . '/Fixtures');
         $this->assertNotEmpty(
-            $loader->getJson()->name,
+            $loader->getJson()->require->{'silverstripe/framework'},
             'JSON file is loaded and parsed'
         );
     }
 
     public function testGetLock()
     {
-        $loader = new ComposerLoader();
+        $loader = new ComposerLoader(__DIR__ . '/Fixtures');
         $this->assertNotEmpty(
             $loader->getLock()->packages,
             'Lock file is loaded and parsed'
