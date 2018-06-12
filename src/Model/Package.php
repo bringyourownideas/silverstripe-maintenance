@@ -126,7 +126,7 @@ class Package extends DataObject
                 'View {package} on addons.silverstripe.org',
                 ['package' => $this->Title]
             ),
-            'data-rating'=> $this->Rating
+            'rating'=> (int) $this->Rating
         ];
 
         $this->extend('updateDataSchema', $schema);
