@@ -8,6 +8,13 @@ use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
  */
 class UpdatePackageInfoTask extends BuildTask
 {
+    /**
+     * A custom memory limit to set for this to increase to (or do nothing if the memory is already set high enough)
+     *
+     * @config
+     * @var string
+     */
+    private static $memory_limit = '256m';
 
     /**
      * @var array Injector configuration
@@ -101,6 +108,15 @@ class UpdatePackageInfoTask extends BuildTask
      */
     public function run($request)
     {
+        // Loading packages and all their updates can be quite memory intensive.
+        $memoryLimit = Config::inst()->get(self::class, 'memory_limit');
+        if ($memoryLimit) {
+            if (get_increase_memory_limit_max() < translate_memstring($memoryLimit)) {
+                set_increase_memory_limit_max($memoryLimit);
+            }
+            increase_memory_limit_to($memoryLimit);
+        }
+
         $composerLock = $this->getComposerLoader()->getLock();
         $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
         $packages = $this->getPackageInfo($rawPackages);
