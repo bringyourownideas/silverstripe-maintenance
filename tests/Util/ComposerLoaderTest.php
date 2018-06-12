@@ -15,7 +15,7 @@ class ComposerLoaderTest extends SapphireTest
     {
         $loader = new ComposerLoader(__DIR__ . '/Fixtures');
         $this->assertNotEmpty(
-            $loader->getJson()->name,
+            $loader->getJson()->require->{'silverstripe/framework'},
             'JSON file is loaded and parsed'
         );
     }
