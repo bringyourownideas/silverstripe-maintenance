@@ -3,6 +3,7 @@
 [![Build Status](https://api.travis-ci.org/bringyourownideas/silverstripe-maintenance.svg?branch=master)](https://travis-ci.org/bringyourownideas/silverstripe-maintenance)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bringyourownideas/silverstripe-maintenance/?branch=master)
 [![codecov](https://codecov.io/gh/bringyourownideas/silverstripe-maintenance/branch/master/graph/badge.svg)](https://codecov.io/gh/bringyourownideas/silverstripe-maintenance)
+[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 ## Overview
 
