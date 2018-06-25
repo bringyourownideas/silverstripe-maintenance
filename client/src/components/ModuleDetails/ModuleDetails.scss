@@ -6,17 +6,17 @@
 // Remove the background from the default popover header
 .package-summary__details-header {
   padding-bottom: 0;
-  padding-top: $popover-padding;
+  padding-top: $spacer;
   background: 0;
   border: 0;
 }
 
 .package-summary__security-alerts {
-  margin-top: $popover-padding;
-  margin-bottom: $popover-padding * .5;
+  margin-top: $spacer;
+  margin-bottom: $spacer * .5;
 
   h4 {
-    margin-bottom: $popover-padding * .5;
+    margin-bottom: $spacer * .5;
   }
 
   // Undoing the default styles that come for .popover-body a from admin module
@@ -35,6 +35,7 @@
 }
 .package-summary__details-header {
   display: flex;
+  min-width: 12rem;
 
   a {
     text-decoration: none;
