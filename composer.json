@@ -35,11 +35,7 @@
             "BringYourOwnIdeas\\Maintenance\\Tests\\": "tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "1.x-dev": "1.0.x-dev"
-        }
-    },
+    "extra": [],
     "suggest": {
         "bringyourownideas/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
         "bringyourownideas/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
