@@ -21,7 +21,7 @@ abstract class ApiLoader
     use Extensible;
 
     private static $dependencies = [
-        'GuzzleClient' => '%$GuzzleHttp\Client',
+        'GuzzleClient' => '%$' . Client::class,
     ];
 
     /**
@@ -62,7 +62,7 @@ abstract class ApiLoader
 
         try {
             /** @var Response $response */
-            $response = $this->getGuzzleClient()->send($request, ['http_errors' => false]);
+            $response = $this->getGuzzleClient()->send($request, $this->getClientOptions());
         } catch (GuzzleException $exception) {
             throw new RuntimeException($failureMessage);
         }
@@ -110,6 +110,20 @@ abstract class ApiLoader
     {
         $this->guzzleClient = $guzzleClient;
         return $this;
+    }
+
+    /**
+     * Get Guzzle client options
+     *
+     * @return array
+     */
+    public function getClientOptions()
+    {
+        $options = [
+            'http_errors' => false,
+        ];
+        $this->extend('updateClientOptions', $options);
+        return $options;
     }
 
     /**
