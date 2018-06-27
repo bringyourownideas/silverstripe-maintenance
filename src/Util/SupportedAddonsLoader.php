@@ -96,7 +96,7 @@ class SupportedAddonsLoader extends Object
         $failureMessage = 'Could not obtain information about supported addons. ';
 
         try {
-            $response = $this->getGuzzleClient()->send($request, ['http_errors' => false]);
+            $response = $this->getGuzzleClient()->send($request, $this->getClientOptions());
         } catch (GuzzleException $exception) {
             throw new RuntimeException($failureMessage);
         }
@@ -133,6 +133,20 @@ class SupportedAddonsLoader extends Object
         }
 
         return $responseBody['addons'] ?: [];
+    }
+
+    /**
+     * Get Guzzle client options
+     *
+     * @return array
+     */
+    public function getClientOptions()
+    {
+        $options = [
+            'http_errors' => false,
+        ];
+        $this->extend('updateClientOptions', $options);
+        return $options;
     }
 
     /**
