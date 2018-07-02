@@ -31,7 +31,15 @@ window.jQuery.entwine('ss', ($) => {
       if ($(e.target).is('button')) {
         return;
       }
-      this.find('.package-summary__module-info-trigger').click();
+
+      if (this.data('popover-open')) {
+        // Reset state for next click
+        this.data('popover-open', false);
+      } else {
+        // Open the popover
+        this.data('popover-open', true);
+        this.find('.package-summary__module-info-trigger').click();
+      }
     }
   });
 });
