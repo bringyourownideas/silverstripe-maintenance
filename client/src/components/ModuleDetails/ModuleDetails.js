@@ -84,7 +84,9 @@ class ModuleDetails extends Component {
           toggle={this.toggle}
         >
           <PopoverHeader className="package-summary__details-header">
-            {i18n._t('ModuleDetails.MODULE_INFO', 'Module info')}
+            <span className="package-summary__details-header-text">
+              {i18n._t('ModuleDetails.MODULE_INFO', 'Module info')}
+            </span>
 
             <ModuleHealthIndicator link={link} rating={rating} />
           </PopoverHeader>
