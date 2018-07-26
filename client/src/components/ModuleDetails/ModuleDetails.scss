@@ -5,10 +5,20 @@
 
 // Remove the background from the default popover header
 .package-summary__details-header {
+  display: flex;
   padding-bottom: 0;
   padding-top: $spacer;
   background: 0;
   border: 0;
+
+  a {
+    text-decoration: none;
+    color: $body-color;
+  }
+}
+
+.package-summary__details-header-text {
+  flex-grow: 1;
 }
 
 .package-summary__security-alerts {
@@ -31,14 +41,5 @@
       color: inherit;
       text-decoration: underline;
     }
-  }
-}
-.package-summary__details-header {
-  display: flex;
-  min-width: 12rem;
-
-  a {
-    text-decoration: none;
-    color: $body-color;
   }
 }
