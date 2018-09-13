@@ -3,6 +3,8 @@
 namespace BringYourOwnIdeas\Maintenance\Util;
 
 use Exception;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Extensible;
 
 /**
@@ -13,7 +15,16 @@ use SilverStripe\Core\Extensible;
  */
 class ComposerLoader
 {
-    use Extensible;
+    use Extensible, Configurable;
+
+    /**
+     * Set to a custom directory for Composer's '.composer' cache directory. This will only be used if the
+     * `COMPOSER_HOME` environment variable is not defined and `HOME` is not defined or is not writable
+     *
+     * @config
+     * @var string
+     */
+    private static $composer_cache_directory = '/tmp';
 
     /**
      * @var object
@@ -51,6 +62,18 @@ class ComposerLoader
      */
     public function build()
     {
+        // If there's no COMPOSER_HOME variable, set one
+        // Mock COMPOSER_HOME if it's not defined already. Composer requires one of the two to be set.
+        if (!Environment::getEnv('COMPOSER_HOME')) {
+            // Check `HOME` and if it's writable (then we can let that be used).
+            $home = Environment::getEnv('HOME');
+            if (!$home || !is_dir($home) || !is_writable($home)) {
+                // Set our own directory
+                $composerCacheDirectory = $this->config()->get('composer_cache_directory');
+                putenv('COMPOSER_HOME=' . $composerCacheDirectory);
+            }
+        }
+
         $basePath = $this->getBasePath();
         $composerJson = file_get_contents($basePath . '/composer.json');
         $composerLock = file_get_contents($basePath . '/composer.lock');
@@ -63,6 +86,8 @@ class ComposerLoader
         $this->setLock(json_decode($composerLock));
 
         $this->extend('onAfterBuild');
+
+        return $this;
     }
 
     /**
