@@ -60,7 +60,7 @@ The main functionality comes from these modules:
 
 ## Documentation
 
-Please see the [user guide](docs/en/userguide) section.
+Please see the [user guide](docs/en/userguide/index.md) section.
 
 ## Contributing
 
