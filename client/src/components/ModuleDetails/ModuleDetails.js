@@ -101,7 +101,9 @@ class ModuleDetails extends Component {
               rel="noopener"
               className="btn btn-secondary font-icon-info-circled"
             >
-              {i18n._t('ModuleDetails.MORE_INFO', 'More info')}
+              <span className="btn__title">
+                {i18n._t('ModuleDetails.MORE_INFO', 'More info')}
+              </span>
             </a>
 
             {this.renderSecurityAlerts()}
