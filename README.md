@@ -15,7 +15,7 @@ maintenance of your SilverStripe application") reduces your maintenance related 
 ## Requirements
 
 * Requires the `composer.json` and `composer.lock` files to be available and readable in the environment you plan to use this module. All information is based on these files.
-* The [queuedjob module](https://github.com/symbiote/silverstripe-queuedjobs) updates metadata on your installed modules in the background. You need to [configure](https://github.com/symbiote/silverstripe-queuedjobs) it to run those jobs.
+* The [queuedjobs module](https://github.com/symbiote/silverstripe-queuedjobs) updates metadata on your installed modules in the background. You need to [configure](https://github.com/symbiote/silverstripe-queuedjobs) it to run those jobs.
 * For the optional update checkers, the webserver environment needs to be able to contact external information sources through network requests
 
 ### Suggested Modules
