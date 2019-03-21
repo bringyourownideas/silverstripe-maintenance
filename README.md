@@ -10,53 +10,77 @@
 The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the 
 maintenance of your SilverStripe application") reduces your maintenance related work.
 
+![UI Preview](docs/en/_img/ui-with-sec-alert.png)
+
 ## Requirements
 
-* You require the composer.json and composer.lock files to be available and readible in the environment you plan to use this module. All information is based on these files.
-* Install at least one of the modules mentioned under "Source of the information".
-* The queuedjob module is a dependency as the checks are scheduled using queuedjobs. This saves you time and work at the end.
-
-Note: Release line 1 is compatible with SilverStripe 3. For SilverStripe 4, please see the 2.x release line.
+* Requires the `composer.json` and `composer.lock` files to be available and readable in the environment you plan to use this module. All information is based on these files.
+* The [queuedjobs module](https://github.com/symbiote/silverstripe-queuedjobs) updates metadata on your installed modules in the background. You need to [configure](https://github.com/symbiote/silverstripe-queuedjobs) it to run those jobs.
+* For the optional update checkers, the webserver environment needs to be able to contact external information sources through network requests
 
 ### Suggested Modules
 
-While the installation of the following modules is optional, it is recommended:
-- [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
+By default, the module will read your installed modules,
+and present them as a report in the CMS under `admin/reports`.
+
+In order to get information about potential updates to these modules,
+we recommend the installation of two additional modules.
+
 - [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
+- [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
      
 
 ### Installation 
  
-Install the maintenance package.
+Option 1 (recommended): Install the maintenance package and suggested dependencies
+
+```
+composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-security-checker bringyourownideas/silverstripe-composer-update-checker
+```
+
+Option 2 (minimal): Install only the maintenance package without any update checks
+
 ```
 composer require bringyourownideas/silverstripe-maintenance
 ```
 
-Build schema and queue a job to populate the database:
+Build schema and queue an initial job to populate the database:
 ```
 sake dev/build
 ```
- 
-Run the update task to gather update information if the update-checker module is installed:
+
+If you haven't already, you need to [configure the job queue](https://github.com/symbiote/silverstripe-queuedjobs)
+to update module metadata in the background. By default, this happens every day,
+but can be configured to run at different intervals through YAML config:
+
+```yaml
+BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob:
+  reschedule_delay: '+1 hour'
+```
+
+### Manually running tasks
+
+By default, tasks are run through a job queue. You can also choose to manually refresh via the command line.
+
+Run the update task (includes the [update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker))
 ```
 sake dev/tasks/UpdatePackageInfoTask
 ```
  
-Run the security task if that module is installed:
+Run the security update check task (requires the [security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker))
+
 ```
 sake dev/tasks/SecurityAlertCheckTask
 ```   
 
-## Source of the Information
+## How your composer.json influences the report
 
-The information is based on your composer files. These need to be available in the environment the module is used in. 
-If installed, the modules below process the content of the composer files and check suitable sources for information 
-regarding your set up.
-
-The main functionality comes from these modules:
-
-* [SilverStripe Composer Security Checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker "Check your SilverStripe application for security issues")
-* [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker "Check your SilverStripe application for available updates of dependencies.")
+The report available through the CMS shows "Available" and "Latest" versions (see [user guide](docs/en/userguide/index.md)).
+The version recommendations in those columns depend on your
+`composer.json` configuration. When setting tight constraints (e.g. `silverstripe/framework:4.3.2@stable`),
+newer releases don't show up as expected. We recommend to have looser constraints by default
+(e.g. `silverstripe/framework:^4.3`). When the "Latest" version shows `dev-master`,
+it likely means that you have `"minimum-stability": "dev"` in your `composer.json`.
 
 ## Documentation
 

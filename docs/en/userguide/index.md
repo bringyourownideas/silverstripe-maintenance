@@ -9,6 +9,8 @@ optional modules [Silverstripe Security Checker](https://github.com/bringyourown
 and [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker), 
 which provide the main functionality for the _Installed Modules_ report.
 
+![UI Preview](../_img/ui-with-sec-alert.png)
+
 ## Usage 
 
 SilverStripe websites and the CMS can be highly customised using SilverStripe modules. The 'Installed modules' report 
@@ -66,3 +68,17 @@ The [SensioLabs Security Check Web service](http://security.sensiolabs.org/) and
 
 Learn more about SilverStripe's [security releases](https://www.silverstripe.org/download/security-releases/) and our 
 [security release process](https://docs.silverstripe.org/en/4/contributing/release_process/#security-releases).
+
+## Why do I see "dev" versions?
+
+Versions with a `dev` at the start or the end of the version can mean two things:
+
+- Pre-release version: A version that's newer than what's currently stable.
+  This is often used by developers to pull in important bugfixes before they
+  are released. Choosing when this is appropriate requires
+  caution and testing from developers. Example: `4.x-dev`, `dev-master`.
+- Fork: A custom version that's different from the module's release lines,
+  often created by your developers as a temporary workaround.
+  We usually can't tell which version of the module this fork is based on.
+  Forks should be short-lived. We recommend you talk to your developers
+  about plans to remove it. Example: `dev-pulls/fix-my-bug`
