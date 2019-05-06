@@ -13,7 +13,7 @@
   },
   "author": "Bring Your Own Ideas",
   "engines": {
-    "node": ">=6.x"
+    "node": ">=10.x"
   },
   "scripts": {
     "build": "yarn && yarn lint && NODE_ENV=production webpack -p --bail --progress",
@@ -28,16 +28,17 @@
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.4",
-    "@silverstripe/webpack-config": "^0.8.0",
+    "@silverstripe/webpack-config": "^1.0.0",
     "expose-loader": "^0.7.4",
     "sass-loader": "^6.0.7"
   },
   "dependencies": {
     "babel-polyfill": "6.7.4",
     "classnames": "^2.2.5",
-    "jquery": "^3.1.1",
-    "react": "15.3.1",
-    "react-dom": "15.3.1",
-    "reactstrap": "^5.0.0"
+    "jquery": "^3.2.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "reactstrap": "^8.0.0"
   }
 }

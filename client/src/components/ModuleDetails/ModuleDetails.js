@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import i18n from 'i18n';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import ModuleHealthIndicator from 'components/ModuleDetails/ModuleHealthIndicator';
