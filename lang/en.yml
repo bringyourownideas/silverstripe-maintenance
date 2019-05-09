@@ -6,15 +6,15 @@ en:
     REFRESH: 'Check for updates'
     UPDATE: Updating...
   BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob:
-    TITLE: 'Check for updates'
+    TITLE: 'Check for updates to installed modules'
   BringYourOwnIdeas\Maintenance\Model\Package:
+    ADDONS_LINK_TITLE: 'View {package} on addons.silverstripe.org'
     PLURALNAME: Packages
     PLURALS:
       one: 'A Package'
       other: '{count} Packages'
     SINGULARNAME: Package
   BringYourOwnIdeas\Maintenance\Reports\SiteSummary:
-    AddonsLinkTitle: 'View {package} on addons.silverstripe.org'
     FilterSupported: 'Supported modules'
     FilterUnsupported: 'Unsupported modules'
     LAST_UPDATED: 'Last updated {updated}'
