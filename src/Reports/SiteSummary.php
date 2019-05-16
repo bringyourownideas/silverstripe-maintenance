@@ -166,7 +166,7 @@ class SiteSummary extends Report
             GridFieldHtmlFragment::class,
             'buttons-before-right',
             DBField::create_field('HTMLFragment', ArrayData::create([
-                'Link' => 'https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-maintenance',
+                'Link' => 'https://userhelp.silverstripe.org/en/4/optional_features/modules_report',
                 'Label' => _t(__CLASS__ . '.MORE_INFORMATION', 'More information'),
             ])->renderWith(__CLASS__ . '/MoreInformationLink'))
         );
