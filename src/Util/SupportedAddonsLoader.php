@@ -6,7 +6,7 @@ use Convert;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
-use Object;
+use SS_Object;
 use Package;
 use RuntimeException;
 use SS_Cache;
@@ -15,7 +15,7 @@ use Zend_Cache_Core;
 /**
  * Handles fetching supported addon details from addons.silverstripe.org
  */
-class SupportedAddonsLoader extends Object
+class SupportedAddonsLoader extends SS_Object
 {
     private static $dependencies = [
         'GuzzleClient' => '%$GuzzleHttp\Client',
