@@ -19,9 +19,9 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ~7.0.0 || ~7.1.0",
-        "silverstripe/framework": "^3.2",
-        "silverstripe/reports": "^3.2",
+        "php": "^7.1",
+        "silverstripe/framework": "^3.7",
+        "silverstripe/reports": "^3.7",
         "symbiote/silverstripe-queuedjobs": "^3",
         "guzzlehttp/guzzle": "^6.3"
     },

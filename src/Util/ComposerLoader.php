@@ -3,7 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Util;
 
 use Exception;
-use Object;
+use SS_Object;
 
 /**
  * The composer loader class is responsible for dealing directly with composer.json and composer.lock files,
@@ -11,7 +11,7 @@ use Object;
  *
  * Any requirements for dealing with these files directly should use this class as a proxy.
  */
-class ComposerLoader extends Object
+class ComposerLoader extends SS_Object
 {
     /**
      * @var object
