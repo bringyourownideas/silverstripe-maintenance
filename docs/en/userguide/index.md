@@ -1,5 +1,7 @@
+---
 title: Installed Modules Report
 summary: Assists with the maintenance of your SilverStripe application
+---
 
 # Installed Modules Report
 
