@@ -32,6 +32,7 @@ we recommend the installation of two additional modules.
 
 - [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
 - [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
+  - **WARNING:** This module is currently out of action due to an [EOL dependency](https://github.com/bringyourownideas/silverstripe-composer-security-checker/issues/57).
      
 
 ### Installation 
