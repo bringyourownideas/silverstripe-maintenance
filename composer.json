@@ -15,7 +15,7 @@
     "authors": [
         {
             "name": "Peter Thaleikis",
-            "homepage": "https://thaleikis.de"
+            "homepage": "https://releasecandidate.dev"
         }
     ],
     "require": {
@@ -26,7 +26,8 @@
     },
     "require-dev": {
         "sminnee/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^3"
+        "squizlabs/php_codesniffer": "^3",
+        "symfony/thanks": "^1.0"
     },
     "autoload": {
         "psr-4": {
