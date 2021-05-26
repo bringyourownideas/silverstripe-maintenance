@@ -40,7 +40,6 @@
         ]
     },
     "suggest": {
-        "bringyourownideas/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
         "bringyourownideas/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
     },
     "support": {
