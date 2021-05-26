@@ -50,6 +50,7 @@ composer require bringyourownideas/silverstripe-maintenance
 ```
 
 Build schema and queue an initial job to populate the database:
+
 ```
 sake dev/build
 ```
