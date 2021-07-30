@@ -37,7 +37,7 @@ The previously recommended silverstripe-composer-security-checker module [can't 
 
 ### Installation 
  
-Option 1 (recommended): Install the maintenance package and suggested dependencies
+Option 1 (recommended): Install the maintenance package and suggested dependency
 
 ```
 composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-update-checker
