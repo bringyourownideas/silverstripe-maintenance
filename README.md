@@ -28,18 +28,19 @@ By default, the module will read your installed modules,
 and present them as a report in the CMS under `admin/reports`.
 
 In order to get information about potential updates to these modules,
-we recommend the installation of two additional modules.
+we recommend the installation of the following additional module:
 
 - [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
-- [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
-     
+
+The previously recommended silverstripe-composer-security-checker module [can't work anymore](https://github.com/bringyourownideas/silverstripe-composer-security-checker/issues/57) and isn't recommended to be used anymore.
+
 
 ### Installation 
  
-Option 1 (recommended): Install the maintenance package and suggested dependencies
+Option 1 (recommended): Install the maintenance package and suggested dependency
 
 ```
-composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-security-checker bringyourownideas/silverstripe-composer-update-checker
+composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-update-checker
 ```
 
 Option 2 (minimal): Install only the maintenance package without any update checks
@@ -49,6 +50,7 @@ composer require bringyourownideas/silverstripe-maintenance
 ```
 
 Build schema and queue an initial job to populate the database:
+
 ```
 sake dev/build
 ```
@@ -70,12 +72,7 @@ Run the update task (includes the [update-checker](https://github.com/bringyouro
 ```
 sake dev/tasks/UpdatePackageInfoTask
 ```
- 
-Run the security update check task (requires the [security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker))
 
-```
-sake dev/tasks/SecurityAlertCheckTask
-```   
 
 ## How your composer.json influences the report
 

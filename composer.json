@@ -15,7 +15,7 @@
     "authors": [
         {
             "name": "Peter Thaleikis",
-            "homepage": "https://thaleikis.de"
+            "homepage": "https://releasecandidate.dev"
         }
     ],
     "require": {
@@ -25,8 +25,9 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^3"
+        "sminnee/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "^3",
+        "symfony/thanks": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +44,6 @@
         ]
     },
     "suggest": {
-        "bringyourownideas/silverstripe-composer-security-checker": "Checks for known security vulnerabilities",
         "bringyourownideas/silverstripe-composer-update-checker": "Checks for available updates of dependencies"
     },
     "support": {
