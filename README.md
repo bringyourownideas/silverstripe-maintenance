@@ -28,7 +28,7 @@ By default, the module will read your installed modules,
 and present them as a report in the CMS under `admin/reports`.
 
 In order to get information about potential updates to these modules,
-we recommend the installation of two additional modules.
+we recommend the installation of the following additional module:
 
 - [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
 
