@@ -12,7 +12,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
      */
     protected $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

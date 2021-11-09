@@ -14,7 +14,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
 {
     protected static $fixture_file = 'GridFieldRefreshButtonTest.yml';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -68,7 +68,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
     public function testHandleCheckReturnsValidJson()
     {
         $button = $this->getButton();
-        $this->assertSame('true', $button->handleCheck());
+        $this->assertStringContainsString('true', $button->handleCheck());
     }
 
     public function testButtonIsDisabledWhenJobIsRunning()
@@ -79,7 +79,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
 
         $output = $button->getHTMLFragments($gridFieldMock);
 
-        $this->assertContains('disabled', $output['test']);
+        $this->assertStringContainsString('disabled', $output['test']);
     }
 
     public function testButtonIsEnabledWhenNoJobIsRunning()
@@ -92,7 +92,7 @@ class GridFieldRefreshButtonTest extends SapphireTest
 
         $output = $button->getHTMLFragments($gridFieldMock);
 
-        $this->assertNotContains('disabled', $output['test']);
+        $this->assertStringNotContainsString('disabled', $output['test']);
     }
 
     /**
