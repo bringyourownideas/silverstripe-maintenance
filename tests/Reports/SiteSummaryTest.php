@@ -20,7 +20,7 @@ class SiteSummaryTest extends SapphireTest
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -52,6 +52,6 @@ class SiteSummaryTest extends SapphireTest
         $fields = $summaryReport->getCMSFields();
         $alertSummary = $fields->fieldByName('AlertSummary');
         $this->assertInstanceOf(LiteralField::class, $alertSummary);
-        $this->assertContains('Sound the alarm!', $alertSummary->getContent());
+        $this->assertStringContainsString('Sound the alarm!', $alertSummary->getContent());
     }
 }

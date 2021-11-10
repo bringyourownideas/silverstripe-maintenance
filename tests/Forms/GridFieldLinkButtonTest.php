@@ -15,6 +15,6 @@ class GridFieldLinkButtonTest extends SapphireTest
         $button = new GridFieldLinkButton('https://addons.silverstripe.org', 'Explore Addons', 'test');
         $output = $button->getHTMLFragments(null);
 
-        $this->assertContains('https://addons.silverstripe.org', $output['test']);
+        $this->assertStringContainsString('https://addons.silverstripe.org', $output['test']);
     }
 }
