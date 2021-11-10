@@ -2,6 +2,7 @@
 
 namespace BringYourOwnIdeas\Maintenance\Tests\Util;
 
+use RuntimeException;
 use BringYourOwnIdeas\Maintenance\Util\ApiLoader;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -12,12 +13,10 @@ use Symfony\Component\Cache\Simple\NullCache;
 
 class ApiLoaderTest extends SapphireTest
 {
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about module. Error code 404
-     */
     public function testNon200ErrorCodesAreHandled()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Could not obtain information about module. Error code 404');
         $loader = $this->getLoader();
         $loader->setGuzzleClient($this->getMockClient(new Response(404)));
 
@@ -26,12 +25,10 @@ class ApiLoaderTest extends SapphireTest
         });
     }
 
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about module. Response is not JSON
-     */
     public function testNonJsonResponsesAreHandled()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Could not obtain information about module. Response is not JSON');
         $loader = $this->getLoader();
         $loader->setGuzzleClient($this->getMockClient(new Response(
             200,
@@ -43,12 +40,10 @@ class ApiLoaderTest extends SapphireTest
         });
     }
 
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Could not obtain information about module. Response returned unsuccessfully
-     */
     public function testUnsuccessfulResponsesAreHandled()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Could not obtain information about module. Response returned unsuccessfully');
         $loader = $this->getLoader();
         $loader->setGuzzleClient($this->getMockClient(new Response(
             200,

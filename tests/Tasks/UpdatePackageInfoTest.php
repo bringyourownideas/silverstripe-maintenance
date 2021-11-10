@@ -47,7 +47,7 @@ class UpdatePackageInfoTest extends SapphireTest
         /** @var UpdatePackageInfoTask $processor */
         $processor = UpdatePackageInfoTask::create();
         $output = $processor->getPackageInfo($lockOutput);
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertCount(1, $output);
         $this->assertContains([
             "Name" => "fake/package",
@@ -74,7 +74,7 @@ class UpdatePackageInfoTest extends SapphireTest
         $task->getSupportedPackages();
         $output = ob_get_clean();
 
-        $this->assertContains('A test message', $output);
+        $this->assertStringContainsString('A test message', $output);
     }
 
     public function testPackagesAreAddedCorrectly()

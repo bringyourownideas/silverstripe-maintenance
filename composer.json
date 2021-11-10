@@ -19,13 +19,14 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.4",
+        "php": "^7.3 || ^8.0",
+        "silverstripe/framework": "^4.10",
         "silverstripe/reports": "^4.4",
         "symbiote/silverstripe-queuedjobs": "^4",
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "sminnee/phpunit": "^5.7",
+        "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3",
         "symfony/thanks": "^1.0"
     },
@@ -36,9 +37,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        },
         "expose": [
             "client/dist"
         ]
