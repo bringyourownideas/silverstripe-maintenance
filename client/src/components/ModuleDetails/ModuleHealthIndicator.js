@@ -41,7 +41,7 @@ class ModuleHealthIndicator extends Component {
         href={`${link}#rating-breakdown`}
         className="health-indicator"
         target="_blank"
-        rel="noopener"
+        rel="noreferrer"
       >
         <div className={this.getSymbolClasses()}>
           {this.renderHalfSymbol()}

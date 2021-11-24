@@ -1,3 +1,3 @@
-require('legacy/entwine/CheckForUpdates.js');
-require('legacy/entwine/GridfieldDropdownFilter.js');
-require('legacy/entwine/SiteSummary.js');
+require('legacy/entwine/CheckForUpdates');
+require('legacy/entwine/GridfieldDropdownFilter');
+require('legacy/entwine/SiteSummary');

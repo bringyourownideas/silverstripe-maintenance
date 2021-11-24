@@ -49,7 +49,7 @@ class ModuleDetails extends Component {
           {
             securityAlerts.map((alert) => (
               <li key={alert.Identifier}>
-                <a href={alert.ExternalLink} target="_blank" rel="noopener">
+                <a href={alert.ExternalLink} target="_blank" rel="noreferrer">
                   {alert.Identifier}
                 </a>
               </li>
