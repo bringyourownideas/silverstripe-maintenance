@@ -83,6 +83,25 @@ newer releases don't show up as expected. We recommend to have looser constraint
 (e.g. `silverstripe/framework:^4.3`). When the "Latest" version shows `dev-master`,
 it likely means that you have `"minimum-stability": "dev"` in your `composer.json`.
 
+## Private repositories
+
+While this module itself doesn't fetch information about repositories, other modules (such as the [update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker)) do. If you have private repositories for which you are unable to provide authentication details to the respective module, you should mark those repositories as inaccessible.
+
+This can be done either per repository:
+```yml
+BringYourOwnIdeas\Maintenance\Tasks:
+  inaccessible_packages:
+    - some-org/some-package-name
+```
+
+or for situations where you are hosting repositories yourself, per host:
+```yml
+BringYourOwnIdeas\Maintenance\Tasks:
+  inaccessible_repository_hosts:
+    - gitea.mycompany.com
+```
+This catches packages whether they're referenced by https or ssh URLs - for example, for `https://gitea.mycompany.com/some-org/some-package-name.git` and for `git@gitea.mycompany.com:some-org/some-package-name.git`, the value should be `gitea.mycompany.com`.
+
 ## Documentation
 
 Please see the [user guide](docs/en/userguide/index.md) section.
