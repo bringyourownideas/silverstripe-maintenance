@@ -7,7 +7,7 @@
 
 ## Overview
 
-The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the 
+The [SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the
 maintenance of your SilverStripe application") reduces your maintenance related work.
 
 ![UI Preview](docs/en/_img/ui-with-sec-alert.png)
@@ -28,19 +28,17 @@ By default, the module will read your installed modules,
 and present them as a report in the CMS under `admin/reports`.
 
 In order to get information about potential updates to these modules,
-we recommend the installation of the following additional module:
+we recommend the installation of the following additional modules:
 
 - [bringyourownideas/silverstripe-composer-update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker) checks for available updates of dependencies
+- [bringyourownideas/silverstripe-composer-security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker) checks for known security vulnerabilities
 
-The previously recommended silverstripe-composer-security-checker module [can't work anymore](https://github.com/bringyourownideas/silverstripe-composer-security-checker/issues/57) and isn't recommended to be used anymore.
+### Installation
 
-
-### Installation 
- 
-Option 1 (recommended): Install the maintenance package and suggested dependency
+Option 1 (recommended): Install the maintenance package and suggested dependencies
 
 ```
-composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-update-checker
+composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-security-checker bringyourownideas/silverstripe-composer-update-checker
 ```
 
 Option 2 (minimal): Install only the maintenance package without any update checks
@@ -73,6 +71,12 @@ Run the update task (includes the [update-checker](https://github.com/bringyouro
 sake dev/tasks/UpdatePackageInfoTask
 ```
 
+Run the security update check task (requires the [security-checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker))
+
+```
+sake dev/tasks/SecurityAlertCheckTask
+```
+
 
 ## How your composer.json influences the report
 
@@ -89,7 +93,7 @@ Please see the [user guide](docs/en/userguide/index.md) section.
 
 ## Contributing
 
-Contributions are welcome! Create an issue, explaining a bug or propose development ideas. Find more information on 
+Contributions are welcome! Create an issue, explaining a bug or propose development ideas. Find more information on
 [contributing](https://docs.silverstripe.org/en/contributing/) in the SilverStripe developer documentation.
 
 ## Reporting Issues
