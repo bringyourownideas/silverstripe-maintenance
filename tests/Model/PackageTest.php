@@ -74,8 +74,8 @@ class PackageTest extends SapphireTest
         // and that all our input is output
         reset($badgeControlSample);
         foreach ($badgeViewData as $badgeData) {
-            $title = key($badgeControlSample);
-            $type = current($badgeControlSample);
+            $title = key($badgeControlSample ?? []);
+            $type = current($badgeControlSample ?? []);
             $this->assertSame(
                 [
                     'Title' => $title,

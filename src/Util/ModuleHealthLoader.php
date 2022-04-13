@@ -46,6 +46,6 @@ class ModuleHealthLoader extends ApiLoader
 
     protected function getCacheKey()
     {
-        return sha1(json_encode($this->getModuleNames()));
+        return sha1(json_encode($this->getModuleNames()) ?? '');
     }
 }

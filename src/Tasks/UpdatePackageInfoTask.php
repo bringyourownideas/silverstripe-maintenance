@@ -163,7 +163,7 @@ class UpdatePackageInfoTask extends BuildTask
         $packages = $this->getPackageInfo($rawPackages);
 
         // Get "name" from $packages and put into an array
-        $moduleNames = array_column($packages, 'Name');
+        $moduleNames = array_column($packages ?? [], 'Name');
 
         $supportedPackages = $this->getSupportedPackages();
         $moduleHealthInfo = $this->getHealthIndicator($moduleNames);
@@ -179,7 +179,7 @@ class UpdatePackageInfoTask extends BuildTask
             foreach ($packages as $package) {
                 $packageName = $package['Name'];
                 if (is_array($supportedPackages)) {
-                    $package['Supported'] = in_array($packageName, $supportedPackages);
+                    $package['Supported'] = in_array($packageName, $supportedPackages ?? []);
                 }
                 if (is_array($moduleHealthInfo) && isset($moduleHealthInfo[$packageName])) {
                     $package['Rating'] = $moduleHealthInfo[$packageName];
@@ -202,12 +202,12 @@ class UpdatePackageInfoTask extends BuildTask
             // Convert object to array, with Capitalised keys
             $package = get_object_vars($package);
             return array_combine(
-                array_map('ucfirst', array_keys($package)),
-                $package
+                array_map('ucfirst', array_keys($package ?? [])),
+                $package ?? []
             );
         };
 
-        $packageList = array_map($formatInfo, $packageList);
+        $packageList = array_map($formatInfo, $packageList ?? []);
         $this->extend('updatePackageInfo', $packageList);
         return $packageList;
     }

@@ -209,7 +209,7 @@ class SiteSummary extends Report
         ];
         $this->extend('updateVersionModules', $versionModules);
 
-        $records = $this->sourceRecords()->filter('Name', array_keys($versionModules));
+        $records = $this->sourceRecords()->filter('Name', array_keys($versionModules ?? []));
         $versionParts = [];
 
         foreach ($versionModules as $name => $label) {
