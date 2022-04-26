@@ -59,8 +59,8 @@ class ComposerLoader
             throw new Exception('composer.json or composer.lock could not be found!');
         }
 
-        $this->setJson(json_decode($composerJson));
-        $this->setLock(json_decode($composerLock));
+        $this->setJson(json_decode($composerJson ?? ''));
+        $this->setLock(json_decode($composerLock ?? ''));
 
         $this->extend('onAfterBuild');
     }

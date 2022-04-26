@@ -44,7 +44,7 @@ class Package extends DataObject
      */
     public function getTitle()
     {
-        return preg_replace('#^[^/]+/(silverstripe-)?#', '', $this->Name);
+        return preg_replace('#^[^/]+/(silverstripe-)?#', '', $this->Name ?? '');
     }
 
     /**

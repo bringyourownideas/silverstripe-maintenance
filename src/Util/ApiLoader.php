@@ -71,7 +71,7 @@ abstract class ApiLoader
             throw new RuntimeException($failureMessage . 'Error code ' . $response->getStatusCode());
         }
 
-        if (!in_array('application/json', $response->getHeader('Content-Type'))) {
+        if (!in_array('application/json', $response->getHeader('Content-Type') ?? [])) {
             throw new RuntimeException($failureMessage . 'Response is not JSON');
         }
 
@@ -176,8 +176,8 @@ abstract class ApiLoader
             // Combine separate header rows
             $cacheControl = implode(', ', $cacheControl);
 
-            if (strpos($cacheControl, 'no-store') === false
-                && preg_match('/(?:max-age=)(\d+)/i', $cacheControl, $matches)
+            if (strpos($cacheControl ?? '', 'no-store') === false
+                && preg_match('/(?:max-age=)(\d+)/i', $cacheControl ?? '', $matches)
             ) {
                 $duration = (int) $matches[1];
 
