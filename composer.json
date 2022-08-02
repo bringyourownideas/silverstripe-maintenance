@@ -22,7 +22,7 @@
         "php": "^7.4 || ^8.0",
         "silverstripe/framework": "^4.10",
         "silverstripe/reports": "^4.4",
-        "symbiote/silverstripe-queuedjobs": "^4",
+        "symbiote/silverstripe-queuedjobs": "^4.1",
         "guzzlehttp/guzzle": "^6.3 || ^7.0"
     },
     "require-dev": {
@@ -49,6 +49,11 @@
     },
     "replace": {
         "friendsofsilverstripe/silverstripe-maintenance": "self.version"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/thanks": true
+        }
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
