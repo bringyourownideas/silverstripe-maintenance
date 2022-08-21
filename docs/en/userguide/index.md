@@ -1,30 +1,32 @@
+---
 title: Installed Modules Report
 summary: Assists with the maintenance of your SilverStripe application
+---
 
 # Installed Modules Report
 
-This user guide provides information on the 
-[SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance). It also covers the two 
+This user guide provides information on the
+[SilverStripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance). It also covers the two
 optional modules [Silverstripe Security Checker](https://github.com/bringyourownideas/silverstripe-composer-security-checker)
-and [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker), 
+and [SilverStripe Composer Update Checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker),
 which provide the main functionality for the _Installed Modules_ report.
 
 ![UI Preview](../_img/ui-with-sec-alert.png)
 
-## Usage 
+## Usage
 
-SilverStripe websites and the CMS can be highly customised using SilverStripe modules. The 'Installed modules' report 
-provides an overview of the modules installed for your SilverStripe website. 
+SilverStripe websites and the CMS can be highly customised using SilverStripe modules. The 'Installed modules' report
+provides an overview of the modules installed for your SilverStripe website.
 
-In the admin section of your SilverStripe website navigate to the Reports section. Open up the 'Installed modules' 
+In the admin section of your SilverStripe website navigate to the Reports section. Open up the 'Installed modules'
 report to view the available information.
 
 Please note that you are required to have admin access to view this information.
 
 ## Check for updates
 
-Click on the 'Check for Updates' button to refresh the list with the latest available information. Updating this list 
-may take some time, since it's waiting for the system to run a scheduled job in the background. You can continue to use 
+Click on the 'Check for Updates' button to refresh the list with the latest available information. Updating this list
+may take some time, since it's waiting for the system to run a scheduled job in the background. You can continue to use
 the CMS while the update is run.
 
 ## Check for additional modules
@@ -35,7 +37,7 @@ themes to add to your SilverStripe website.
 ## What do "Version, Available, Latest" mean?
 
 The [SilverStripe Composer Update Checker module](https://github.com/bringyourownideas/silverstripe-composer-update-checker)
-checks if any of your Composer dependencies needs to be updated, and tracks the available and latest versions that can 
+checks if any of your Composer dependencies needs to be updated, and tracks the available and latest versions that can
 be updated to.
 
 SilverStripe follows Semantic Versioning. If you would like to learn more see [https://semver.org/](https://semver.org/).
@@ -46,27 +48,27 @@ The information in this column shows the current version of each of the modules 
 
 ### Available
 
-The information in this column shows the latest installable version of the modules within the version constraints of your 
-installation. If no version is displayed, you are either already on the latest version available for your constraint, 
+The information in this column shows the latest installable version of the modules within the version constraints of your
+installation. If no version is displayed, you are either already on the latest version available for your constraint,
 or your constraint might be very restrictive.
 
 ### Latest
 
-The information in this column shows the latest version of the module available. If this varies from the available 
+The information in this column shows the latest version of the module available. If this varies from the available
 version, it means that this latest version is outside of your version constraint of your installation.
 
 ## What do the security alerts mean?
 
-The [SilverStripe Composer Security Checker module](https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-composer-security-checker) 
+The [SilverStripe Composer Security Checker module](https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-composer-security-checker)
 adds a task which runs a check if any of the dependencies has known security vulnerabilities.
 
-Provided this optional module is installed, you may see security alerts, if security updates are present for installed 
-modules. In that case, clicking on the security badge next to the module name will reveal additional information. 
+Provided this optional module is installed, you may see security alerts, if security updates are present for installed
+modules. In that case, clicking on the security badge next to the module name will reveal additional information.
 
-The [SensioLabs Security Check Web service](http://security.sensiolabs.org/) and the 
+The [SensioLabs Security Check Web service](http://security.sensiolabs.org/) and the
 [Security Advisories Database](https://github.com/FriendsOfPHP/security-advisories) are used to generate this information.
 
-Learn more about SilverStripe's [security releases](https://www.silverstripe.org/download/security-releases/) and our 
+Learn more about SilverStripe's [security releases](https://www.silverstripe.org/download/security-releases/) and our
 [security release process](https://docs.silverstripe.org/en/4/contributing/release_process/#security-releases).
 
 ## Why do I see "dev" versions?
