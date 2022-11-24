@@ -140,7 +140,7 @@ class GridFieldRefreshButton implements GridField_HTMLProvider, GridField_Action
     public function handleCheck()
     {
         $isRunning = $this->hasPendingJob();
-        return Convert::raw2json($isRunning);
+        return json_encode($isRunning);
     }
 
     /**
