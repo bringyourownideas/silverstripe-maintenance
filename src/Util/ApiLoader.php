@@ -75,7 +75,7 @@ abstract class ApiLoader
             throw new RuntimeException($failureMessage . 'Response is not JSON');
         }
 
-        $responseBody = Convert::json2array($response->getBody()->getContents());
+        $responseBody = json_decode($response->getBody()->getContents(), true);
 
         if (empty($responseBody)) {
             throw new RuntimeException($failureMessage . 'Response could not be parsed');
@@ -141,7 +141,7 @@ abstract class ApiLoader
         }
 
         // Deserialize JSON object and return as an array
-        return Convert::json2array($result);
+        return json_decode($result, true);
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class ApiLoader
     protected function setToCache($cacheKey, $value, $ttl = null)
     {
         // Seralize as JSON to ensure array etc can be stored
-        $value = Convert::raw2json($value);
+        $value = json_encode($value);
 
         return $this->getCache()->set($cacheKey, $value, $ttl);
     }
