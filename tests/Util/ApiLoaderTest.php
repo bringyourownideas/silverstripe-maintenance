@@ -9,7 +9,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Dev\SapphireTest;
-use Symfony\Component\Cache\Simple\NullCache;
+use Psr\SimpleCache\CacheInterface;
 
 class ApiLoaderTest extends SapphireTest
 {
@@ -88,9 +88,7 @@ class ApiLoaderTest extends SapphireTest
     {
         $fakeAddons = ['foo/bar', 'bin/baz'];
 
-        $cacheMock = $this->getMockBuilder(NullCache::class)
-            ->setMethods(['get', 'set'])
-            ->getMock();
+        $cacheMock = $this->getMockCacheInterface();
 
         $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
         $cacheMock->expects($this->once())
@@ -114,9 +112,7 @@ class ApiLoaderTest extends SapphireTest
     {
         $fakeAddons = ['foo/bar', 'bin/baz'];
 
-        $cacheMock = $this->getMockBuilder(NullCache::class)
-            ->setMethods(['get', 'set'])
-            ->getMock();
+        $cacheMock = $this->getMockCacheInterface();
 
         $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($fakeAddons)));
         $loader = $this->getLoader($cacheMock);
@@ -153,9 +149,7 @@ class ApiLoaderTest extends SapphireTest
     protected function getLoader($cacheMock = false)
     {
         if (!$cacheMock) {
-            $cacheMock = $this->getMockBuilder(NullCache::class)
-                ->setMethods(['get', 'set'])
-                ->getMock();
+            $cacheMock = $this->getMockCacheInterface();
 
             $cacheMock->expects($this->any())->method('get')->will($this->returnValue(false));
             $cacheMock->expects($this->any())->method('set')->will($this->returnValue(true));
@@ -165,7 +159,18 @@ class ApiLoaderTest extends SapphireTest
             ->getMockForAbstractClass();
 
         $loader->setCache($cacheMock);
+        $loader->expects($this->any())->method('getCacheKey')->will($this->returnValue('cachKey'));
 
         return $loader;
+    }
+
+    protected function getMockCacheInterface()
+    {
+        $methods = ['get', 'set', 'has', 'delete', 'getMultiple', 'setMultiple', 'clear', 'deleteMultiple'];
+        $mock = $this->getMockBuilder(CacheInterface::class)
+            ->onlyMethods($methods)
+            ->getMock();
+
+        return $mock;
     }
 }
