@@ -1,24 +1,34 @@
 /* global window */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ModuleDetails from 'components/ModuleDetails/ModuleDetails';
 
 window.jQuery.entwine('ss', ($) => {
   $('.js-injector-boot .package-summary__details-container').entwine({
+    ReactRoot: null,
+
     onmatch() {
       const dataSchema = this.data('schema');
 
-      ReactDOM.render(
+      let root = this.getReactRoot();
+      if (!root) {
+        root = createRoot(this[0]);
+        this.setReactRoot(root);
+      }
+      root.render(
         <ModuleDetails
           detailsId={this.attr('id')}
           dataSchema={dataSchema}
-        />,
-        this[0]
+        />
       );
     },
 
     onunmatch() {
-      ReactDOM.unmountComponentAtNode(this[0]);
+      const root = this.getReactRoot();
+      if (root) {
+        root.unmount();
+        this.setReactRoot(null);
+      }
     }
   });
 

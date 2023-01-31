@@ -1,6 +1,5 @@
 {
   "name": "silverstripe-maintenance",
-  "version": "0.0.0",
   "description": "Provides information about the packages you have installed in your SilverStripe site",
   "license": "BSD-3-Clause",
   "repository": {
@@ -13,10 +12,10 @@
   },
   "author": "Bring Your Own Ideas",
   "engines": {
-    "node": ">=10.x"
+    "node": ">=18.x"
   },
   "scripts": {
-    "build": "yarn && yarn lint && NODE_ENV=production webpack -p --bail --progress",
+    "build": "yarn && yarn lint && rm -rf client/dist/* && NODE_ENV=production webpack --mode production --bail --progress",
     "dev": "NODE_ENV=development webpack --progress",
     "watch": "NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
@@ -26,19 +25,24 @@
     "lint-js-fix": "eslint client/src --fix",
     "lint-sass": "sass-lint client/src"
   },
-  "devDependencies": {
-    "@silverstripe/eslint-config": "^0.0.6",
-    "@silverstripe/webpack-config": "^1.0.0",
-    "expose-loader": "^0.7.4",
-    "sass-loader": "^6.0.7"
-  },
   "dependencies": {
-    "babel-polyfill": "6.7.4",
-    "classnames": "^2.2.5",
-    "jquery": "^3.5.0",
-    "prop-types": "^15.6.2",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
-    "reactstrap": "^8.0.0"
-  }
+    "classnames": "^2.3.2",
+    "core-js": "^3.26.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "reactstrap": "^8.9.0"
+  },
+  "devDependencies": {
+    "@silverstripe/eslint-config": "^1.0.0-alpha6",
+    "@silverstripe/webpack-config": "^2.0.0-alpha5",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.0.0"
+  },
+  "resolutions": {
+    "colors": "1.4.0"
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
