@@ -20,9 +20,9 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "silverstripe/framework": "^4.10",
-        "silverstripe/reports": "^4.4",
-        "symbiote/silverstripe-queuedjobs": "^4.1",
+        "silverstripe/framework": "4.13.x-dev",
+        "silverstripe/reports": "4.13.x-dev",
+        "symbiote/silverstripe-queuedjobs": "4.12.x-dev",
         "guzzlehttp/guzzle": "^6.3 || ^7.0"
     },
     "require-dev": {
