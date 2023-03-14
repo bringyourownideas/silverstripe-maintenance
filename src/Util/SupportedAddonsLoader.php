@@ -8,15 +8,15 @@ namespace BringYourOwnIdeas\Maintenance\Util;
 class SupportedAddonsLoader extends ApiLoader
 {
     /**
-     * Return the list of supported addons as provided by addons.silverstripe.org
+     * Return the list of supported modules
      *
      * @return array
      */
     public function getAddonNames()
     {
-        $endpoint = 'addons.silverstripe.org/api/supported-addons';
-        return $this->doRequest($endpoint, function ($responseBody) {
-            return isset($responseBody['addons']) ? $responseBody['addons'] : [];
+        $endpoint = 'https://raw.githubusercontent.com/silverstripe/supported-modules/5/modules.json';
+        return $this->doRequest($endpoint, function ($responseJson) {
+            return array_map(fn(array $item) => $item['composer'], $responseJson);
         });
     }
 
