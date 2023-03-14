@@ -14,7 +14,7 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
 
 /**
- * Handles fetching supported addon details from addons.silverstripe.org
+ * Handles fetching supported module details
  */
 abstract class ApiLoader
 {
@@ -71,27 +71,37 @@ abstract class ApiLoader
             throw new RuntimeException($failureMessage . 'Error code ' . $response->getStatusCode());
         }
 
-        if (!in_array('application/json', $response->getHeader('Content-Type') ?? [])) {
-            throw new RuntimeException($failureMessage . 'Response is not JSON');
-        }
+        $responseJson = $this->parseResponseContents($response->getBody()->getContents(), $failureMessage);
 
-        $responseBody = json_decode($response->getBody()->getContents(), true);
-
-        if (empty($responseBody)) {
-            throw new RuntimeException($failureMessage . 'Response could not be parsed');
-        }
-
-        if (!isset($responseBody['success']) || !$responseBody['success']) {
-            throw new RuntimeException($failureMessage . 'Response returned unsuccessfully');
+        if (str_contains($endpoint, 'addons.silverstripe.org')) {
+            if (!isset($responseJson['success']) || !$responseJson['success']) {
+                throw new RuntimeException($failureMessage . 'Response returned unsuccessfully');
+            }
         }
 
         // Allow callback to handle processing of the response body
-        $result = $callback($responseBody);
+        $result = $callback($responseJson);
 
         // Setting the value to the cache for subsequent requests
         $this->handleCacheFromResponse($response, $result);
 
         return $result;
+    }
+
+    private function parseResponseContents(string $contents, string $failureMessage): array
+    {
+        $emtpyMessage = 'Response was empty';
+        if (empty($contents)) {
+            throw new RuntimeException($failureMessage . $emtpyMessage);
+        }
+        $responseJson = json_decode($contents, true);
+        if (empty($responseJson)) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new RuntimeException($failureMessage . json_last_error_msg());
+            }
+            throw new RuntimeException($failureMessage . $emtpyMessage);
+        }
+        return $responseJson;
     }
 
     /**
@@ -157,7 +167,6 @@ abstract class ApiLoader
     {
         // Seralize as JSON to ensure array etc can be stored
         $value = json_encode($value);
-
         return $this->getCache()->set($cacheKey, $value, $ttl);
     }
 

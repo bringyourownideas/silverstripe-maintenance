@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use SilverStripe\Dev\SapphireTest;
 use Psr\SimpleCache\CacheInterface;
+use ReflectionMethod;
 
 class ApiLoaderTest extends SapphireTest
 {
@@ -25,35 +26,16 @@ class ApiLoaderTest extends SapphireTest
         });
     }
 
-    public function testNonJsonResponsesAreHandled()
+    private function getFakeJson(): array
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Could not obtain information about module. Response is not JSON');
-        $loader = $this->getLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'text/html; charset=utf-8']
-        )));
-
-        $loader->doRequest('foo', function () {
-            // noop
-        });
-    }
-
-    public function testUnsuccessfulResponsesAreHandled()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Could not obtain information about module. Response returned unsuccessfully');
-        $loader = $this->getLoader();
-        $loader->setGuzzleClient($this->getMockClient(new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['success' => false])
-        )));
-
-        $loader->doRequest('foo', function () {
-            // noop
-        });
+        return [
+            [
+                'composer' => 'foo/bar',
+            ],
+            [
+                'composer' => 'bin/baz',
+            ],
+        ];
     }
 
     /**
@@ -63,20 +45,18 @@ class ApiLoaderTest extends SapphireTest
      */
     public function testAddonsAreParsedAndReturnedCorrectly()
     {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
-
         $loader = $this->getLoader();
         $loader->setGuzzleClient($this->getMockClient(new Response(
             200,
             ['Content-Type' => 'application/json'],
-            json_encode(['success' => true, 'addons' => $fakeAddons])
+            json_encode($this->getFakeJson())
         )));
 
-        $addons = $loader->doRequest('foo', function ($responseBody) {
-            return $responseBody['addons'];
+        $addons = $loader->doRequest('foo', function ($responseJson) {
+            return array_map(fn(array $item) => $item['composer'], $responseJson);
         });
 
-        $this->assertSame($fakeAddons, $addons);
+        $this->assertSame(['foo/bar', 'bin/baz'], $addons);
     }
 
     /**
@@ -86,35 +66,31 @@ class ApiLoaderTest extends SapphireTest
      */
     public function testCacheControlSettingsAreRespected()
     {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
-
         $cacheMock = $this->getMockCacheInterface();
 
         $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with($this->anything(), json_encode($fakeAddons), 5000)
+            ->with($this->anything(), '["foo\/bar","bin\/baz"]', 5000)
             ->will($this->returnValue(true));
 
         $loader = $this->getLoader($cacheMock);
         $loader->setGuzzleClient($this->getMockClient(new Response(
             200,
             ['Content-Type' => 'application/json', 'Cache-Control' => 'max-age=5000'],
-            json_encode(['success' => true, 'addons' => $fakeAddons])
+            json_encode($this->getFakeJson())
         )));
 
-        $loader->doRequest('foo', function ($responseBody) {
-            return $responseBody['addons'];
+        $loader->doRequest('foo', function ($responseJson) {
+            return array_map(fn(array $item) => $item['composer'], $responseJson);
         });
     }
 
     public function testCachedAddonsAreUsedWhenAvailable()
     {
-        $fakeAddons = ['foo/bar', 'bin/baz'];
-
         $cacheMock = $this->getMockCacheInterface();
 
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($fakeAddons)));
+        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($this->getFakeJson())));
         $loader = $this->getLoader($cacheMock);
 
         $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();
@@ -125,7 +101,59 @@ class ApiLoaderTest extends SapphireTest
             // noop
         });
 
-        $this->assertSame($fakeAddons, $addons);
+        $this->assertSame($this->getFakeJson(), $addons);
+    }
+
+    /**
+     * @dataProvider provideParseResponseContentsEmpty
+     */
+    public function testParseResponseContentsEmpty(string $contents)
+    {
+        // ApiLoader is an abstract class
+        $inst = new class extends ApiLoader {
+            protected function getCacheKey()
+            {
+                return 'abc';
+            }
+        };
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('FAILURE_MESSAGE. Response was empty');
+        $refMethod = new ReflectionMethod(ApiLoader::class, 'parseResponseContents');
+        $refMethod->setAccessible(true);
+        $failureMessage = 'FAILURE_MESSAGE. ';
+        $refMethod->invoke($inst, $contents, $failureMessage);
+        $inst->parseResponseContents($contents, $failureMessage);
+    }
+
+    public function provideParseResponseContentsEmpty(): array
+    {
+        return [
+            [
+                '[]'
+            ],
+            [
+                ''
+            ]
+        ];
+    }
+
+    public function testParseResponseContentsInvalid()
+    {
+        // ApiLoader is an abstract class
+        $inst = new class extends ApiLoader {
+            protected function getCacheKey()
+            {
+                return 'abc';
+            }
+        };
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('FAILURE_MESSAGE. Syntax error');
+        $refMethod = new ReflectionMethod(ApiLoader::class, 'parseResponseContents');
+        $refMethod->setAccessible(true);
+        $contents = '[ malformed }';
+        $failureMessage = 'FAILURE_MESSAGE. ';
+        $refMethod->invoke($inst, $contents, $failureMessage);
+        $inst->parseResponseContents($contents, $failureMessage);
     }
 
     /**
@@ -159,7 +187,7 @@ class ApiLoaderTest extends SapphireTest
             ->getMockForAbstractClass();
 
         $loader->setCache($cacheMock);
-        $loader->expects($this->any())->method('getCacheKey')->will($this->returnValue('cachKey'));
+        $loader->expects($this->any())->method('getCacheKey')->will($this->returnValue('cacheKey'));
 
         return $loader;
     }
