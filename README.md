@@ -5,20 +5,10 @@
 
 ## Overview
 
-The [Silverstripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the 
+The [Silverstripe Maintenance module](https://github.com/bringyourownideas/silverstripe-maintenance "Assists with the
 maintenance of your Silverstripe application") reduces your maintenance related work.
 
 ![UI Preview](docs/en/_img/ui-with-sec-alert.png)
-
-## Requirements
-
-* Requires the `composer.json` and `composer.lock` files to be available and readable in the environment you plan to use this module. All information is based on these files.
-* The [queuedjobs module](https://github.com/symbiote/silverstripe-queuedjobs) updates metadata on your installed modules in the background. You need to [configure](https://github.com/symbiote/silverstripe-queuedjobs) it to run those jobs.
-* For the optional update checkers, the webserver environment needs to be able to contact external information sources through network requests
-* SilverStripe:
-  * Maintenance ^2.2: Silverstripe ^4.4
-  * Maintenance ~2.1.0: Silverstripe 4.0-4.3
-  * Maintenance: ^1.0: Silverstripe 3.x
 
 ### Suggested Modules
 
@@ -32,23 +22,25 @@ we recommend the installation of the following additional module:
 
 The previously recommended silverstripe-composer-security-checker module [can't work anymore](https://github.com/bringyourownideas/silverstripe-composer-security-checker/issues/57) and isn't recommended to be used anymore.
 
-### Installation 
- 
+## Installation
+
 Option 1 (recommended): Install the maintenance package and suggested dependency
 
-```
+```sh
 composer require bringyourownideas/silverstripe-maintenance bringyourownideas/silverstripe-composer-update-checker
 ```
 
 Option 2 (minimal): Install only the maintenance package without any update checks
 
-```
+```sh
 composer require bringyourownideas/silverstripe-maintenance
 ```
 
+## Setup
+
 Build schema and queue an initial job to populate the database:
 
-```
+```sh
 sake dev/build
 ```
 
@@ -85,7 +77,7 @@ Please see the [user guide](docs/en/userguide/index.md) section.
 
 ## Contributing
 
-Contributions are welcome! Create an issue, explaining a bug or propose development ideas. Find more information on 
+Contributions are welcome! Create an issue, explaining a bug or propose development ideas. Find more information on
 [contributing](https://docs.silverstripe.org/en/contributing/) in the Silverstripe developer documentation.
 
 ## Reporting Issues

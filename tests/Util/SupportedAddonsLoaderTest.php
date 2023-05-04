@@ -23,9 +23,10 @@ class SupportedAddonsLoaderTest extends SapphireTest
 
     public function testCallsSupportedAddonsEndpoint()
     {
+        $endpoint = 'https://raw.githubusercontent.com/silverstripe/supported-modules/5/modules.json';
         $this->loader->expects($this->once())
             ->method('doRequest')
-            ->with('addons.silverstripe.org/api/supported-addons', function () {
+            ->with($endpoint, function () {
                 // no-op
             });
 
@@ -41,11 +42,15 @@ class SupportedAddonsLoaderTest extends SapphireTest
 
         $result = $this->loader->getAddonNames();
         $mockResponse = [
-            'foo' => 'bar',
-            'addons' => 'baz',
+            [
+                'composer' => 'foo/bar'
+            ],
+            [
+                'composer' => 'bin/baz'
+            ],
         ];
 
-        $this->assertSame('baz', $result($mockResponse));
+        $this->assertSame(['foo/bar', 'bin/baz'], $result($mockResponse));
     }
 
     public function testValueOfDoRequestIsReturned()
