@@ -22,9 +22,9 @@ class ModuleDetails extends Component {
    * Toggle the popover with module details being open or not
    */
   toggle(event) {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen,
-    });
+    this.setState((prevState) => ({
+      popoverOpen: !prevState.popoverOpen,
+    }));
 
     event.preventDefault();
     return false;
