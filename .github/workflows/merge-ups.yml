@@ -1,0 +1,17 @@
+name: Merge-up
+
+on:
+  # At 6:15 AM UTC, only on Friday
+  schedule:
+    - cron: '15 6 * * 5'
+  workflow_dispatch:
+
+jobs:
+  merge-up:
+    name: Merge-up
+    # Only run cron on the bringyourownideas account
+    if: (github.event_name == 'schedule' && github.repository_owner == 'bringyourownideas') || (github.event_name != 'schedule')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge-up
+        uses: silverstripe/gha-merge-up@v1
