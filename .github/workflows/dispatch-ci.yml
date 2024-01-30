@@ -1,17 +1,16 @@
-name: Merge-up
+name: Dispatch CI
 
 on:
-  # At 8:40 PM UTC, only on Thursday
+  # At 8:40 PM UTC, only on Sunday and Monday
   schedule:
-    - cron: '40 20 * * 4'
-  workflow_dispatch:
+    - cron: '40 20 * * 0,1'
 
 jobs:
-  merge-up:
-    name: Merge-up
+  dispatch-ci:
+    name: Dispatch CI
     # Only run cron on the bringyourownideas account
     if: (github.event_name == 'schedule' && github.repository_owner == 'bringyourownideas') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
     steps:
-      - name: Merge-up
-        uses: silverstripe/gha-merge-up@v1
+      - name: Dispatch CI
+        uses: silverstripe/gha-dispatch-ci@v1
