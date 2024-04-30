@@ -20,10 +20,10 @@
     "watch": "NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
     "lock": "npm-shrinkwrap --dev",
-    "lint": "eslint client/src && sass-lint client/src",
+    "lint": "eslint client/src && yarn lint-sass",
     "lint-js": "eslint client/src",
     "lint-js-fix": "eslint client/src --fix",
-    "lint-sass": "sass-lint client/src"
+    "lint-sass": "stylelint **/client/src/**/*.scss"
   },
   "dependencies": {
     "classnames": "^2.3.2",
@@ -34,8 +34,8 @@
     "reactstrap": "^8.9.0"
   },
   "devDependencies": {
-    "@silverstripe/eslint-config": "^1.1.0",
-    "@silverstripe/webpack-config": "^2.0.0",
+    "@silverstripe/eslint-config": "^1.2.1",
+    "@silverstripe/webpack-config": "^2.1.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.0"
   },
