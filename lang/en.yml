@@ -26,11 +26,13 @@ en:
     db_Version: Version
     db_VersionConstraint: 'Version constraint'
     db_VersionHash: 'Version hash'
+    VIEW_ON_PACKAGIST: 'View {package} on packagist.org'
   BringYourOwnIdeas\Maintenance\Reports\SiteSummary:
     FilterSupported: 'Supported modules'
     FilterUnsupported: 'Unsupported modules'
     LAST_UPDATED: 'Last updated {updated}'
     LINK_TO_ADDONS: 'Explore Addons'
+    LINK_TO_PACKAGIST: 'Browse Modules'
     MORE_INFORMATION: 'More information'
     ShowAllModules: 'Show all modules'
     TITLE: 'Installed modules'

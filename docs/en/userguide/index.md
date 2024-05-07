@@ -31,8 +31,7 @@ the CMS while the update is run.
 
 ## Check for additional modules
 
-Click on the 'Explore Addons' button to access [SilverStripe's Add-ons](https://www.silverstripe.org/software/addons/) repository. Use this site to find modules and
-themes to add to your SilverStripe website.
+Click on the 'Browse Modules' button to browse [Silverstripe CMS modules on packagist](https://packagist.org/search/?type=silverstripe-vendormodule).
 
 ## What do "Version, Available, Latest" mean?
 
@@ -59,7 +58,7 @@ version, it means that this latest version is outside of your version constraint
 
 ## What do the security alerts mean?
 
-The [SilverStripe Composer Security Checker module](https://addons.silverstripe.org/add-ons/bringyourownideas/silverstripe-composer-security-checker)
+The [SilverStripe Composer Security Checker module](https://packagist.org/packages/bringyourownideas/silverstripe-composer-security-checker)
 adds a task which runs a check if any of the dependencies has known security vulnerabilities.
 
 Provided this optional module is installed, you may see security alerts, if security updates are present for installed

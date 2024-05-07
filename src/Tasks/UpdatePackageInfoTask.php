@@ -13,6 +13,7 @@ use SilverStripe\ORM\Queries\SQLDelete;
 use SilverStripe\ORM\DataObjectSchema;
 use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Dev\BuildTask;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
@@ -66,6 +67,7 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @var ModuleHealthLoader
+     * @deprecated 3.2.0 Will be removed without equivalent functionality
      */
     protected $moduleHealthLoader;
 
@@ -112,18 +114,24 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @return ModuleHealthLoader
+     * @deprecated 3.2.0 Will be removed without equivalent functionality
      */
     public function getModuleHealthLoader()
     {
+        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
         return $this->moduleHealthLoader;
     }
 
     /**
      * @param ModuleHealthLoader $moduleHealthLoader
      * @return $this
+     * @deprecated 3.2.0 Will be removed without equivalent functionality
      */
     public function setModuleHealthLoader(ModuleHealthLoader $moduleHealthLoader)
     {
+        Deprecation::withNoReplacement(
+            fn() => Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality')
+        );
         $this->moduleHealthLoader = $moduleHealthLoader;
         return $this;
     }
@@ -166,7 +174,6 @@ class UpdatePackageInfoTask extends BuildTask
         $moduleNames = array_column($packages ?? [], 'Name');
 
         $supportedPackages = $this->getSupportedPackages();
-        $moduleHealthInfo = $this->getHealthIndicator($moduleNames);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -180,9 +187,6 @@ class UpdatePackageInfoTask extends BuildTask
                 $packageName = $package['Name'];
                 if (is_array($supportedPackages)) {
                     $package['Supported'] = in_array($packageName, $supportedPackages ?? []);
-                }
-                if (is_array($moduleHealthInfo) && isset($moduleHealthInfo[$packageName])) {
-                    $package['Rating'] = $moduleHealthInfo[$packageName];
                 }
                 Package::create()->update($package)->write();
             }
@@ -213,7 +217,7 @@ class UpdatePackageInfoTask extends BuildTask
     }
 
     /**
-     * Return an array of supported modules as fetched from addons.silverstripe.org. Outputs a message and returns null
+     * Return an array of supported modules as fetched from silverstripe/supported-modules. Outputs a message and returns null
      * if an error occurs
      *
      * @return null|array
@@ -235,9 +239,11 @@ class UpdatePackageInfoTask extends BuildTask
      *
      * @param string[] $moduleNames
      * @return null|array
+     * @deprecated 3.2.0 Will be removed without equivalent functionality
      */
     public function getHealthIndicator(array $moduleNames)
     {
+        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
         try {
             return $this->getModuleHealthLoader()->setModuleNames($moduleNames)->getModuleHealthInfo() ?: [];
         } catch (RuntimeException $exception) {

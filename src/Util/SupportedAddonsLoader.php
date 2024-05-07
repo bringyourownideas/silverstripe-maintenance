@@ -3,7 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Util;
 
 /**
- * Handles fetching supported addon details from addons.silverstripe.org
+ * Handles fetching supported addon details from silverstripe/supported-modules
  */
 class SupportedAddonsLoader extends ApiLoader
 {

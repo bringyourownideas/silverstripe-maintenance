@@ -2,8 +2,11 @@
 
 namespace BringYourOwnIdeas\Maintenance\Util;
 
+use SilverStripe\Dev\Deprecation;
+
 /**
  * Handles fetching module health information from addons.silverstripe.org
+ * @deprecated 3.2.0 Will be removed without equivalent functionality
  */
 class ModuleHealthLoader extends ApiLoader
 {
@@ -11,6 +14,17 @@ class ModuleHealthLoader extends ApiLoader
      * @var string[]
      */
     protected $moduleNames = [];
+
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(
+            fn() => Deprecation::notice(
+                '3.2.0',
+                'Will be removed without equivalent functionality',
+                Deprecation::SCOPE_CLASS
+            )
+        );
+    }
 
     /**
      * Return the list of supported addons as provided by addons.silverstripe.org
