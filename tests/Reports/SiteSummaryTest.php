@@ -8,6 +8,7 @@ use BringYourOwnIdeas\Maintenance\Tests\Reports\Stubs\SiteSummaryExtensionStub;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\SupportedModules\MetaData;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 class SiteSummaryTest extends SapphireTest
@@ -19,6 +20,12 @@ class SiteSummaryTest extends SapphireTest
             SiteSummaryExtensionStub::class,
         ],
     ];
+
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        MetaData::$isRunningUnitTests = true;
+    }
 
     protected function setUp(): void
     {

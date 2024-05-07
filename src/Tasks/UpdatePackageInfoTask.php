@@ -12,8 +12,11 @@ use SilverStripe\Core\Environment;
 use SilverStripe\ORM\Queries\SQLDelete;
 use SilverStripe\ORM\DataObjectSchema;
 use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\Dev\Deprecation;
+use SilverStripe\SupportedModules\BranchLogic;
+use SilverStripe\SupportedModules\MetaData;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
@@ -169,10 +172,6 @@ class UpdatePackageInfoTask extends BuildTask
         $composerLock = $this->getComposerLoader()->getLock();
         $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
         $packages = $this->getPackageInfo($rawPackages);
-
-        // Get "name" from $packages and put into an array
-        $moduleNames = array_column($packages ?? [], 'Name');
-
         $supportedPackages = $this->getSupportedPackages();
 
         // Extensions to the process that add data may rely on external services.
@@ -217,15 +216,25 @@ class UpdatePackageInfoTask extends BuildTask
     }
 
     /**
-     * Return an array of supported modules as fetched from silverstripe/supported-modules. Outputs a message and returns null
-     * if an error occurs
+     * Return an array of supported modules as fetched from silverstripe/supported-modules.
+     * Outputs a message and returns null if an error occurs
      *
      * @return null|array
      */
     public function getSupportedPackages()
     {
         try {
-            return $this->getSupportedAddonsLoader()->getAddonNames() ?: [];
+            $repos = MetaData::getAllRepositoryMetaData()[MetaData::CATEGORY_SUPPORTED];
+            $version = VersionProvider::singleton()->getModuleVersion('silverstripe/framework');
+            preg_match('/^([0-9]+)/', $version, $matches);
+            $cmsMajor = BranchLogic::getCmsMajor(
+                MetaData::getMetaDataForRepository('silverstripe/silverstripe-framework'),
+                $matches[1] ?? ''
+            );
+            return array_filter(array_map(
+                fn(array $item) => isset($item['majorVersionMapping'][$cmsMajor]) ? $item['packagist'] : null,
+                $repos
+            ));
         } catch (RuntimeException $exception) {
             echo $exception->getMessage() . PHP_EOL;
         }
@@ -234,8 +243,8 @@ class UpdatePackageInfoTask extends BuildTask
     }
 
     /**
-     * Return an array of module health information as fetched from addons.silverstripe.org. Outputs a message and
-     * returns null if an error occurs
+     * Return an array of module health information as fetched from addons.silverstripe.org.
+     * Outputs a message and returns null if an error occurs
      *
      * @param string[] $moduleNames
      * @return null|array

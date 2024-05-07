@@ -3,13 +3,13 @@
 namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
-use BringYourOwnIdeas\Maintenance\Util\ModuleHealthLoader;
-use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
 use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
 use BringYourOwnIdeas\Maintenance\Model\Package;
+use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\SupportedModules\MetaData;
 
 /**
  * @mixin PHPUnit_Framework_TestCase
@@ -18,23 +18,11 @@ class UpdatePackageInfoTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
-    protected function mockSupportedAddonsLoader()
+    public static function setUpBeforeClass(): void
     {
-        $supportedAddonsLoader = $this->getMockBuilder(SupportedAddonsLoader::class)
-            ->setMethods(['getAddonNames'])
-            ->getMock();
-        return $supportedAddonsLoader;
+        parent::setUpBeforeClass();
+        MetaData::$isRunningUnitTests = true;
     }
-    protected function mockModuleHealthLoader()
-    {
-
-        $moduleHealthLoader = $this->getMockBuilder(ModuleHealthLoader::class)
-            ->setMethods(['getModuleHealthInfo'])
-            ->getMock();
-
-        return $moduleHealthLoader;
-    }
-
 
     public function testGetPackageInfo()
     {
@@ -56,41 +44,20 @@ class UpdatePackageInfoTest extends SapphireTest
         ], $output);
     }
 
-    public function testGetSupportedPackagesEchosErrors()
-    {
-        $supportedAddonsLoader = $this->mockSupportedAddonsLoader();
-        $moduleHealthLoader = $this->mockModuleHealthLoader();
-
-        $supportedAddonsLoader->expects($this->once())
-            ->method('getAddonNames')
-            ->will($this->throwException(new RuntimeException('A test message')));
-
-        /** @var UpdatePackageInfoTask $task */
-        $task = UpdatePackageInfoTask::create();
-        $task->setSupportedAddonsLoader($supportedAddonsLoader);
-        $task->setModuleHealthLoader($moduleHealthLoader);
-
-        ob_start();
-        $task->getSupportedPackages();
-        $output = ob_get_clean();
-
-        $this->assertStringContainsString('A test message', $output);
-    }
-
     public function testPackagesAreAddedCorrectly()
     {
-
         $task = UpdatePackageInfoTask::create();
 
+        $frameworkVersion = VersionProvider::singleton()->getModuleVersion('silverstripe/framework');
         $composerLoader = $this->getMockBuilder(ComposerLoader::class)
             ->setMethods(['getLock'])->getMock();
         $composerLoader->expects($this->any())->method('getLock')->will($this->returnValue(json_decode(<<<LOCK
 {
     "packages": [
         {
-            "name": "fake/supported-package",
+            "name": "silverstripe/framework",
             "description": "A faux package from a mocked composer.lock for testing purposes",
-            "version": "1.0.0"
+            "version": "$frameworkVersion"
         },
         {
             "name": "fake/unsupported-package",
@@ -104,20 +71,12 @@ LOCK
         )));
         $task->setComposerLoader($composerLoader);
 
-        $supportedAddonsLoader = $this->mockSupportedAddonsLoader();
-        $moduleHealthLoader = $this->mockModuleHealthLoader();
-
-        $supportedAddonsLoader->expects($this->once())
-            ->method('getAddonNames')
-            ->will($this->returnValue(['fake/supported-package']));
-        $task->setSupportedAddonsLoader($supportedAddonsLoader);
-
         $task->run(null);
 
         $packages = Package::get();
         $this->assertCount(2, $packages);
 
-        $package = $packages->find('Name', 'fake/supported-package');
+        $package = $packages->find('Name', 'silverstripe/framework');
         $this->assertInstanceOf(Package::class, $package);
         $this->assertEquals(1, $package->Supported);
 
