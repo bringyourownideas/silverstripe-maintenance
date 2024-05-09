@@ -120,10 +120,10 @@ class Package extends DataObject
     {
         $schema = [
             'description' => $this->Description,
-            'link' => 'https://addons.silverstripe.org/add-ons/' . $this->Name,
+            'link' => 'https://packagist.org/packages/' . $this->Name,
             'linkTitle' => _t(
-                __CLASS__ . '.ADDONS_LINK_TITLE',
-                'View {package} on addons.silverstripe.org',
+                __CLASS__ . '.VIEW_ON_PACKAGIST',
+                'View {package} on packagist.org',
                 ['package' => $this->Title]
             ),
             'rating'=> (int) $this->Rating

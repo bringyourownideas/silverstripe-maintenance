@@ -12,9 +12,9 @@ class GridFieldLinkButtonTest extends SapphireTest
      */
     public function testCorrectLinkIsContained()
     {
-        $button = new GridFieldLinkButton('https://addons.silverstripe.org', 'Explore Addons', 'test');
+        $button = new GridFieldLinkButton('https://packagist.org', 'Browse Modules', 'test');
         $output = $button->getHTMLFragments(null);
 
-        $this->assertStringContainsString('https://addons.silverstripe.org', $output['test']);
+        $this->assertStringContainsString('https://packagist.org', $output['test']);
     }
 }

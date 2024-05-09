@@ -102,8 +102,8 @@ class SiteSummary extends Report
             Injector::inst()->create(GridFieldRefreshButton::class, 'buttons-before-left'),
             Injector::inst()->create(
                 GridFieldLinkButton::class,
-                'https://addons.silverstripe.org',
-                _t(__CLASS__ . '.LINK_TO_ADDONS', 'Explore Addons'),
+                'https://packagist.org/search/?type=silverstripe-vendormodule',
+                _t(__CLASS__ . '.LINK_TO_PACKAGIST', 'Browse Modules'),
                 'buttons-before-left'
             ),
             $this->getDropdownFilter(),

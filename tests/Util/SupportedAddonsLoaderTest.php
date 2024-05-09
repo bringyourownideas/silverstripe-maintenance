@@ -23,7 +23,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
 
     public function testCallsSupportedAddonsEndpoint()
     {
-        $endpoint = 'https://raw.githubusercontent.com/silverstripe/supported-modules/5/modules.json';
+        $endpoint = 'https://raw.githubusercontent.com/silverstripe/supported-modules/main/repositories.json';
         $this->loader->expects($this->once())
             ->method('doRequest')
             ->with($endpoint, function () {
@@ -42,11 +42,57 @@ class SupportedAddonsLoaderTest extends SapphireTest
 
         $result = $this->loader->getAddonNames();
         $mockResponse = [
-            [
-                'composer' => 'foo/bar'
+            'supportedModules' => [
+                [
+                    'github' => 'some/repo1',
+                    'packagist' => 'foo/bar',
+                    'majorVersionMapping' => [
+                        4 => [4],
+                        5 => [5],
+                    ],
+                ],
+                [
+                    'github' => 'some/repo2',
+                    'packagist' => 'bin/baz',
+                    'majorVersionMapping' => [
+                        5 => [5, 6],
+                    ],
+                ],
+                [
+                    'github' => 'some/repo3',
+                    'packagist' => 'bin/baz2',
+                    'majorVersionMapping' => [
+                        4 => [4],
+                    ],
+                ],
             ],
-            [
-                'composer' => 'bin/baz'
+            'workflow' => [
+                [
+                    'github' => 'some/repo4',
+                    'packagist' => 'bin/baz1',
+                    'majorVersionMapping' => [
+                        4 => [4],
+                        5 => [5],
+                    ],
+                ],
+            ],
+            'tooling' => [
+                [
+                    'github' => 'some/repo5',
+                    'packagist' => 'bin/baz2',
+                    'majorVersionMapping' => [
+                        5 => [5, 6],
+                    ],
+                ],
+            ],
+            'misc' => [
+                [
+                    'github' => 'some/repo6',
+                    'packagist' => 'bin/baz3',
+                    'majorVersionMapping' => [
+                        4 => [4],
+                    ],
+                ],
             ],
         ];
 

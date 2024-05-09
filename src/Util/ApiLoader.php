@@ -12,9 +12,11 @@ use RuntimeException;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Handles fetching supported module details
+ * @deprecated 3.2.0 Will be removed without equivalent functionality
  */
 abstract class ApiLoader
 {
@@ -74,6 +76,11 @@ abstract class ApiLoader
         $responseJson = $this->parseResponseContents($response->getBody()->getContents(), $failureMessage);
 
         if (str_contains($endpoint, 'addons.silverstripe.org')) {
+            Deprecation::notice(
+                '3.2.0',
+                'addons.silverstripe.org is no longer operational. Use packagist instead.',
+                Deprecation::SCOPE_GLOBAL
+            );
             if (!isset($responseJson['success']) || !$responseJson['success']) {
                 throw new RuntimeException($failureMessage . 'Response returned unsuccessfully');
             }
