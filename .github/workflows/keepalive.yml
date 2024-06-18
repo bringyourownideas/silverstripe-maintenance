@@ -1,10 +1,12 @@
 name: Keepalive
 
 on:
-  # At 8:40 PM UTC, on day 1 of the month
+  # At 6:30 PM UTC, on day 3 of the month
   schedule:
-    - cron: '40 20 1 * *'
+    - cron: '30 18 3 * *'
   workflow_dispatch:
+
+permissions: {}
 
 jobs:
   keepalive:
@@ -12,6 +14,8 @@ jobs:
     # Only run cron on the bringyourownideas account
     if: (github.event_name == 'schedule' && github.repository_owner == 'bringyourownideas') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Keepalive
         uses: silverstripe/gha-keepalive@v1
