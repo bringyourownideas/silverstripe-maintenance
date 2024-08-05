@@ -14,6 +14,7 @@ en:
       one: 'A Package'
       other: '{count} Packages'
     SINGULARNAME: Package
+    VIEW_ON_PACKAGIST: 'View {package} on packagist.org'
     db_AvailableHash: 'Available hash'
     db_AvailableVersion: 'Available version'
     db_Description: Description
@@ -26,7 +27,6 @@ en:
     db_Version: Version
     db_VersionConstraint: 'Version constraint'
     db_VersionHash: 'Version hash'
-    VIEW_ON_PACKAGIST: 'View {package} on packagist.org'
   BringYourOwnIdeas\Maintenance\Reports\SiteSummary:
     FilterSupported: 'Supported modules'
     FilterUnsupported: 'Unsupported modules'
