@@ -10,6 +10,7 @@ use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\SupportedModules\MetaData;
+use SilverStripe\Core\Injector\Injector;
 
 /**
  * @mixin PHPUnit_Framework_TestCase
@@ -46,9 +47,18 @@ class UpdatePackageInfoTest extends SapphireTest
 
     public function testPackagesAreAddedCorrectly()
     {
-        $task = UpdatePackageInfoTask::create();
-
-        $frameworkVersion = VersionProvider::singleton()->getModuleVersion('silverstripe/framework');
+        // Mock the version provider to return a known version because VersionProvider
+        // will normally read the projects composer.lock file to get the version of framework
+        // which is often a forked version of silverstripe/framework
+        // This does need to match a supported major version in silverstripe/supported-modules
+        // repositories.json
+        $mockVersionProvider = new class extends VersionProvider {
+            public function getModuleVersion(string $module): string
+            {
+                return '6.0.0';
+            }
+        };
+        Injector::inst()->registerService(new $mockVersionProvider(), VersionProvider::class);
         $composerLoader = $this->getMockBuilder(ComposerLoader::class)
             ->setMethods(['getLock'])->getMock();
         $composerLoader->expects($this->any())->method('getLock')->will($this->returnValue(json_decode(<<<LOCK
@@ -57,7 +67,7 @@ class UpdatePackageInfoTest extends SapphireTest
         {
             "name": "silverstripe/framework",
             "description": "A faux package from a mocked composer.lock for testing purposes",
-            "version": "$frameworkVersion"
+            "version": "6.0.0"
         },
         {
             "name": "fake/unsupported-package",
@@ -69,8 +79,9 @@ class UpdatePackageInfoTest extends SapphireTest
 }
 LOCK
         )));
-        $task->setComposerLoader($composerLoader);
 
+        $task = UpdatePackageInfoTask::create();
+        $task->setComposerLoader($composerLoader);
         $task->run(null);
 
         $packages = Package::get();
