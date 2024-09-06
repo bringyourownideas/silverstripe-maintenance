@@ -3,10 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
-use BringYourOwnIdeas\Maintenance\Util\ModuleHealthLoader;
-use BringYourOwnIdeas\Maintenance\Util\SupportedAddonsLoader;
 use RuntimeException;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Environment;
 use SilverStripe\ORM\Queries\SQLDelete;
@@ -14,20 +11,18 @@ use SilverStripe\ORM\DataObjectSchema;
 use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Dev\Deprecation;
+use SilverStripe\PolyExecution\PolyOutput;
 use SilverStripe\SupportedModules\BranchLogic;
 use SilverStripe\SupportedModules\MetaData;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Parses a composer lock file in order to cache information about the installation.
  */
 class UpdatePackageInfoTask extends BuildTask
 {
-    /**
-     * {@inheritDoc}
-     * @var string
-     */
-    private static $segment = 'UpdatePackageInfoTask';
+    protected static string $commandName = 'UpdatePackageInfoTask';
 
     /**
      * A custom memory limit to set for this to increase to (or do nothing if the memory is already set high enough)
@@ -43,8 +38,6 @@ class UpdatePackageInfoTask extends BuildTask
      */
     private static $dependencies = [
         'ComposerLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ComposerLoader',
-        'SupportedAddonsLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\SupportedAddonsLoader',
-        'ModuleHealthLoader' => '%$BringYourOwnIdeas\\Maintenance\\Util\\ModuleHealthLoader',
     ];
 
     /**
@@ -62,18 +55,6 @@ class UpdatePackageInfoTask extends BuildTask
      * @var ComposerLoader
      */
     protected $composerLoader;
-
-    /**
-     * @var SupportedAddonsLoader
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
-     */
-    protected $supportedAddonsLoader;
-
-    /**
-     * @var ModuleHealthLoader
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
-     */
-    protected $moduleHealthLoader;
 
     /**
      * Fetch the composer loader
@@ -98,60 +79,12 @@ class UpdatePackageInfoTask extends BuildTask
         return $this;
     }
 
-    /**
-     * @return SupportedAddonsLoader
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
-     */
-    public function getSupportedAddonsLoader()
-    {
-        Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality');
-        return $this->supportedAddonsLoader;
-    }
-
-    /**
-     * @param SupportedAddonsLoader $supportedAddonsLoader
-     * @return $this
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
-     */
-    public function setSupportedAddonsLoader(SupportedAddonsLoader $supportedAddonsLoader)
-    {
-        Deprecation::withSuppressedNotice(
-            fn() => Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality')
-        );
-        $this->supportedAddonsLoader = $supportedAddonsLoader;
-        return $this;
-    }
-
-    /**
-     * @return ModuleHealthLoader
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
-     */
-    public function getModuleHealthLoader()
-    {
-        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
-        return $this->moduleHealthLoader;
-    }
-
-    /**
-     * @param ModuleHealthLoader $moduleHealthLoader
-     * @return $this
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
-     */
-    public function setModuleHealthLoader(ModuleHealthLoader $moduleHealthLoader)
-    {
-        Deprecation::withSuppressedNotice(
-            fn() => Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality')
-        );
-        $this->moduleHealthLoader = $moduleHealthLoader;
-        return $this;
-    }
-
-    public function getTitle()
+    public function getTitle(): string
     {
         return _t(__CLASS__ . '.TITLE', 'Refresh installed package info');
     }
 
-    public function getDescription()
+    public static function getDescription(): string
     {
         return _t(
             __CLASS__ . '.DESCRIPTION',
@@ -162,10 +95,8 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * Update database cached information about this site.
-     *
-     * @param HTTPRequest $request unused, can be null (must match signature of parent function).
      */
-    public function run($request)
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
         // Loading packages and all their updates can be quite memory intensive.
         $memoryLimit = $this->config()->get('memory_limit');
@@ -179,7 +110,7 @@ class UpdatePackageInfoTask extends BuildTask
         $composerLock = $this->getComposerLoader()->getLock();
         $rawPackages = array_merge($composerLock->packages, (array) $composerLock->{'packages-dev'});
         $packages = $this->getPackageInfo($rawPackages);
-        $supportedPackages = $this->getSupportedPackages();
+        $supportedPackages = $this->getSupportedPackages($output);
 
         // Extensions to the process that add data may rely on external services.
         // There may be a communication issue between the site and the external service,
@@ -197,6 +128,8 @@ class UpdatePackageInfoTask extends BuildTask
                 Package::create()->update($package)->write();
             }
         }
+
+        return Command::SUCCESS;
     }
 
     /**
@@ -225,10 +158,8 @@ class UpdatePackageInfoTask extends BuildTask
     /**
      * Return an array of supported modules as fetched from silverstripe/supported-modules.
      * Outputs a message and returns null if an error occurs
-     *
-     * @return null|array
      */
-    public function getSupportedPackages()
+    public function getSupportedPackages(PolyOutput $output): ?array
     {
         try {
             $repos = MetaData::getAllRepositoryMetaData()[MetaData::CATEGORY_SUPPORTED];
@@ -243,27 +174,7 @@ class UpdatePackageInfoTask extends BuildTask
                 $repos
             ));
         } catch (RuntimeException $exception) {
-            echo $exception->getMessage() . PHP_EOL;
-        }
-
-        return null;
-    }
-
-    /**
-     * Return an array of module health information as fetched from addons.silverstripe.org.
-     * Outputs a message and returns null if an error occurs
-     *
-     * @param string[] $moduleNames
-     * @return null|array
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
-     */
-    public function getHealthIndicator(array $moduleNames)
-    {
-        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
-        try {
-            return $this->getModuleHealthLoader()->setModuleNames($moduleNames)->getModuleHealthInfo() ?: [];
-        } catch (RuntimeException $exception) {
-            echo $exception->getMessage() . PHP_EOL;
+            $output->writeln('<error>'.$exception->getMessage().'</>');
         }
 
         return null;

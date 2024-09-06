@@ -41,7 +41,7 @@ composer require bringyourownideas/silverstripe-maintenance
 Build schema and queue an initial job to populate the database:
 
 ```sh
-sake dev/build
+sake db:build --flush
 ```
 
 If you haven't already, you need to [configure the job queue](https://github.com/symbiote/silverstripe-queuedjobs)
@@ -58,8 +58,9 @@ BringYourOwnIdeas\Maintenance\Jobs\CheckForUpdatesJob:
 By default, tasks are run through a job queue. You can also choose to manually refresh via the command line.
 
 Run the update task (includes the [update-checker](https://github.com/bringyourownideas/silverstripe-composer-update-checker))
-```
-sake dev/tasks/UpdatePackageInfoTask
+
+```sh
+sake tasks:UpdatePackageInfoTask
 ```
 
 ## How your composer.json influences the report

@@ -8,8 +8,10 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\PolyExecution\PolyOutput;
 use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
+use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * Refresh report job. Runs as a queued job.
@@ -59,7 +61,10 @@ class CheckForUpdatesJob extends AbstractQueuedJob implements QueuedJob
     {
         // Run the UpdatePackageInfo task
         $updateTask = Injector::inst()->create(UpdatePackageInfoTask::class);
-        $updateTask->run(null);
+        $output = PolyOutput::create(PolyOutput::FORMAT_ANSI);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $updateTask->run($input, $output);
 
         // mark job as completed
         $this->isComplete = true;

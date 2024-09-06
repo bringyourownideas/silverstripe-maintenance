@@ -11,6 +11,9 @@ use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\SupportedModules\MetaData;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\PolyExecution\PolyOutput;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * @mixin PHPUnit_Framework_TestCase
@@ -82,7 +85,11 @@ LOCK
 
         $task = UpdatePackageInfoTask::create();
         $task->setComposerLoader($composerLoader);
-        $task->run(null);
+        $output = PolyOutput::create(PolyOutput::FORMAT_ANSI);
+        $output->setWrappedOutput(new BufferedOutput());
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
 
         $packages = Package::get();
         $this->assertCount(2, $packages);
