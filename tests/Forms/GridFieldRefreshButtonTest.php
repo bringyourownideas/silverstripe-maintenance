@@ -118,13 +118,13 @@ class GridFieldRefreshButtonTest extends SapphireTest
         $gridFieldMock = $this
             ->getMockBuilder(GridField::class)
             ->setConstructorArgs(['TestGridField'])
-            ->setMethods(['Link'])
+            ->onlyMethods(['Link'])
             ->getMock();
 
         $gridFieldMock
             ->expects($this->any())
             ->method('Link')
-            ->will($this->returnValue('http://example.com'));
+            ->willReturn('http://example.com');
 
         return $gridFieldMock;
     }

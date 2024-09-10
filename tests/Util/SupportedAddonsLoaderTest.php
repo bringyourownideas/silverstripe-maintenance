@@ -17,7 +17,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
         parent::setUp();
 
         $this->loader = $this->getMockBuilder(SupportedAddonsLoader::class)
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
     }
 

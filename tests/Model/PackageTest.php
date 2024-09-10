@@ -6,10 +6,11 @@ use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PackageTest extends SapphireTest
 {
-    public function providePackageNamesAndTitles()
+    public static function providePackageNamesAndTitles()
     {
         return [
             ['pretendvendor/silverstripe-prefixedpackage', 'prefixedpackage'],
@@ -26,10 +27,10 @@ class PackageTest extends SapphireTest
     }
 
     /**
-     * @dataProvider providePackageNamesAndTitles
      *
      * Ensure the vendor and 'silverstripe-' is stripped from module names.
      */
+    #[DataProvider('providePackageNamesAndTitles')]
     public function testTitleFormatsNameCorrectly($name, $title)
     {
         $testPackage = new Package([

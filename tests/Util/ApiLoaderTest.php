@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\Response;
 use SilverStripe\Dev\SapphireTest;
 use Psr\SimpleCache\CacheInterface;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ApiLoaderTest extends SapphireTest
 {
@@ -40,8 +41,6 @@ class ApiLoaderTest extends SapphireTest
 
     /**
      * Note: contains some logic from SupportedAddonsLoader for context
-     *
-     * @group integration
      */
     public function testAddonsAreParsedAndReturnedCorrectly()
     {
@@ -61,18 +60,16 @@ class ApiLoaderTest extends SapphireTest
 
     /**
      * Note: contains some logic from SupportedAddonsLoader for context
-     *
-     * @group integration
      */
     public function testCacheControlSettingsAreRespected()
     {
         $cacheMock = $this->getMockCacheInterface();
 
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(false));
+        $cacheMock->expects($this->once())->method('get')->willReturn(false);
         $cacheMock->expects($this->once())
             ->method('set')
             ->with($this->anything(), '["foo\/bar","bin\/baz"]', 5000)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $loader = $this->getLoader($cacheMock);
         $loader->setGuzzleClient($this->getMockClient(new Response(
@@ -90,10 +87,10 @@ class ApiLoaderTest extends SapphireTest
     {
         $cacheMock = $this->getMockCacheInterface();
 
-        $cacheMock->expects($this->once())->method('get')->will($this->returnValue(json_encode($this->getFakeJson())));
+        $cacheMock->expects($this->once())->method('get')->willReturn(json_encode($this->getFakeJson()));
         $loader = $this->getLoader($cacheMock);
 
-        $mockClient = $this->getMockBuilder(Client::class)->setMethods(['send'])->getMock();
+        $mockClient = $this->getMockBuilder(Client::class)->onlyMethods(['send'])->getMock();
         $mockClient->expects($this->never())->method('send');
         $loader->setGuzzleClient($mockClient);
 
@@ -104,9 +101,7 @@ class ApiLoaderTest extends SapphireTest
         $this->assertSame($this->getFakeJson(), $addons);
     }
 
-    /**
-     * @dataProvider provideParseResponseContentsEmpty
-     */
+    #[DataProvider('provideParseResponseContentsEmpty')]
     public function testParseResponseContentsEmpty(string $contents)
     {
         // ApiLoader is an abstract class
@@ -125,7 +120,7 @@ class ApiLoaderTest extends SapphireTest
         $inst->parseResponseContents($contents, $failureMessage);
     }
 
-    public function provideParseResponseContentsEmpty(): array
+    public static function provideParseResponseContentsEmpty(): array
     {
         return [
             [
@@ -179,15 +174,15 @@ class ApiLoaderTest extends SapphireTest
         if (!$cacheMock) {
             $cacheMock = $this->getMockCacheInterface();
 
-            $cacheMock->expects($this->any())->method('get')->will($this->returnValue(false));
-            $cacheMock->expects($this->any())->method('set')->will($this->returnValue(true));
+            $cacheMock->expects($this->any())->method('get')->willReturn(false);
+            $cacheMock->expects($this->any())->method('set')->willReturn(true);
         }
 
         $loader = $this->getMockBuilder(ApiLoader::class)
             ->getMockForAbstractClass();
 
         $loader->setCache($cacheMock);
-        $loader->expects($this->any())->method('getCacheKey')->will($this->returnValue('cacheKey'));
+        $loader->expects($this->any())->method('getCacheKey')->willReturn('cacheKey');
 
         return $loader;
     }
