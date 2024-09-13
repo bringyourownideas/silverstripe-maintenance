@@ -65,6 +65,7 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @var SupportedAddonsLoader
+     * @deprecated 3.3.0 Will be removed without equivalent functionality
      */
     protected $supportedAddonsLoader;
 
@@ -99,18 +100,24 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @return SupportedAddonsLoader
+     * @deprecated 3.3.0 Will be removed without equivalent functionality
      */
     public function getSupportedAddonsLoader()
     {
+        Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality');
         return $this->supportedAddonsLoader;
     }
 
     /**
      * @param SupportedAddonsLoader $supportedAddonsLoader
      * @return $this
+     * @deprecated 3.3.0 Will be removed without equivalent functionality
      */
     public function setSupportedAddonsLoader(SupportedAddonsLoader $supportedAddonsLoader)
     {
+        Deprecation::withNoReplacement(
+            fn() => Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality')
+        );
         $this->supportedAddonsLoader = $supportedAddonsLoader;
         return $this;
     }
