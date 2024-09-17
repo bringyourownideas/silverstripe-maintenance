@@ -13,7 +13,7 @@ class SupportedAddonsLoader extends ApiLoader
 {
     public function __construct()
     {
-        Deprecation::withNoReplacement(
+        Deprecation::withSuppressedNotice(
             fn() => Deprecation::notice(
                 '3.2.0',
                 'Use ' . UpdatePackageInfoTask::class . '::getSupportedPackages() instead.',

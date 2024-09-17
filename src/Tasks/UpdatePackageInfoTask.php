@@ -115,7 +115,7 @@ class UpdatePackageInfoTask extends BuildTask
      */
     public function setSupportedAddonsLoader(SupportedAddonsLoader $supportedAddonsLoader)
     {
-        Deprecation::withNoReplacement(
+        Deprecation::withSuppressedNotice(
             fn() => Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality')
         );
         $this->supportedAddonsLoader = $supportedAddonsLoader;
@@ -139,7 +139,7 @@ class UpdatePackageInfoTask extends BuildTask
      */
     public function setModuleHealthLoader(ModuleHealthLoader $moduleHealthLoader)
     {
-        Deprecation::withNoReplacement(
+        Deprecation::withSuppressedNotice(
             fn() => Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality')
         );
         $this->moduleHealthLoader = $moduleHealthLoader;
