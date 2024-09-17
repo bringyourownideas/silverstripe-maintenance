@@ -3,7 +3,7 @@
 namespace BringYourOwnIdeas\Maintenance\Forms;
 
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 
 /**

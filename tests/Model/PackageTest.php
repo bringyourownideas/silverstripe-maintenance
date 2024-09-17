@@ -4,8 +4,8 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Model;
 
 use BringYourOwnIdeas\Maintenance\Model\Package;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class PackageTest extends SapphireTest
