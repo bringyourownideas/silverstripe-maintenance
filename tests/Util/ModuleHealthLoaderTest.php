@@ -15,7 +15,7 @@ class ModuleHealthLoaderTest extends SapphireTest
         parent::setUp();
 
         $this->loader = $this->getMockBuilder(ModuleHealthLoader::class)
-            ->setMethods(['doRequest'])
+            ->onlyMethods(['doRequest'])
             ->getMock();
     }
 

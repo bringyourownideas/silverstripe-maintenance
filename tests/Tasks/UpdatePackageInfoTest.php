@@ -60,8 +60,8 @@ class UpdatePackageInfoTest extends SapphireTest
         };
         Injector::inst()->registerService(new $mockVersionProvider(), VersionProvider::class);
         $composerLoader = $this->getMockBuilder(ComposerLoader::class)
-            ->setMethods(['getLock'])->getMock();
-        $composerLoader->expects($this->any())->method('getLock')->will($this->returnValue(json_decode(<<<LOCK
+            ->onlyMethods(['getLock'])->getMock();
+        $composerLoader->expects($this->any())->method('getLock')->willReturn(json_decode(<<<LOCK
 {
     "packages": [
         {
@@ -78,7 +78,7 @@ class UpdatePackageInfoTest extends SapphireTest
     "packages-dev": null
 }
 LOCK
-        )));
+        ));
 
         $task = UpdatePackageInfoTask::create();
         $task->setComposerLoader($composerLoader);
