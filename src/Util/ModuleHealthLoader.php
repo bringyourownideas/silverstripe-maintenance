@@ -17,7 +17,7 @@ class ModuleHealthLoader extends ApiLoader
 
     public function __construct()
     {
-        Deprecation::withNoReplacement(
+        Deprecation::withSuppressedNotice(
             fn() => Deprecation::notice(
                 '3.2.0',
                 'Will be removed without equivalent functionality',
