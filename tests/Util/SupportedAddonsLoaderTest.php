@@ -38,7 +38,7 @@ class SupportedAddonsLoaderTest extends SapphireTest
         $this->loader->expects($this->once())
             ->method('doRequest')
             ->with($this->isType('string'), $this->isType('callable'))
-            ->will($this->returnArgument(1));
+            ->willReturnArgument(1);
 
         $result = $this->loader->getAddonNames();
         $mockResponse = [

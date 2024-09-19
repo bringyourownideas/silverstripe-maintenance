@@ -178,11 +178,14 @@ class ApiLoaderTest extends SapphireTest
             $cacheMock->expects($this->any())->method('set')->willReturn(true);
         }
 
-        $loader = $this->getMockBuilder(ApiLoader::class)
-            ->getMockForAbstractClass();
+        $loader = new class extends ApiLoader {
+            protected function getCacheKey()
+            {
+                return 'cacheKey';
+            }
+        };
 
         $loader->setCache($cacheMock);
-        $loader->expects($this->any())->method('getCacheKey')->willReturn('cacheKey');
 
         return $loader;
     }
