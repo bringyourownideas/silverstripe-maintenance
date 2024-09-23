@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "silverstripe/framework": "^5",
+        "silverstripe/framework": "^5.4",
         "silverstripe/reports": "^5",
         "silverstripe/supported-modules": "dev-main",
         "symbiote/silverstripe-queuedjobs": "^5",
