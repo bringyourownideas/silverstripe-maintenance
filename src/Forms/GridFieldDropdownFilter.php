@@ -9,10 +9,10 @@ use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_DataManipulator;
 use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\Filterable;
-use SilverStripe\ORM\SS_List;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\List\Filterable;
+use SilverStripe\Model\List\SS_List;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Requirements;
 
 /**
