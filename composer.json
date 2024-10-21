@@ -22,7 +22,7 @@
         "php": "^8.1",
         "silverstripe/framework": "^5.4",
         "silverstripe/reports": "^5",
-        "silverstripe/supported-modules": "dev-main",
+        "silverstripe/supported-modules": "^1",
         "symbiote/silverstripe-queuedjobs": "^5",
         "guzzlehttp/guzzle": "^7.5"
     },
