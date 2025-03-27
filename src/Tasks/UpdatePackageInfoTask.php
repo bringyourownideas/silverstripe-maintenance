@@ -55,6 +55,29 @@ class UpdatePackageInfoTask extends BuildTask
     ];
 
     /**
+     * A list of package names which composer will not be able to access
+     * e.g. private packages for which you aren't allowed to provide credentials.
+     *
+     * @config
+     * @var array
+     */
+    private static $inaccessible_packages = [];
+
+    /**
+     * A list of repository hosts which composer will not be able to access
+     * e.g. private repository hosts for which you aren't allowed to provide credentials.
+     *
+     * This works for https AND ssh URLs - for example, for
+     * `https://gitea.mycompany.com/some-org/some-repository.git` and for
+     * `git@gitea.mycompany.com:some-org/some-repository.git`, the value should be
+     * `gitea.mycompany.com`
+     *
+     * @config
+     * @var array
+     */
+    private static $inaccessible_repository_hosts = [];
+
+    /**
      * @var ComposerLoader
      */
     protected $composerLoader;
