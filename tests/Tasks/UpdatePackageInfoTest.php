@@ -4,16 +4,13 @@ namespace BringYourOwnIdeas\Maintenance\Tests\Tasks;
 
 use BringYourOwnIdeas\Maintenance\Util\ComposerLoader;
 use PHPUnit_Framework_TestCase;
-use RuntimeException;
 use BringYourOwnIdeas\Maintenance\Tasks\UpdatePackageInfoTask;
 use BringYourOwnIdeas\Maintenance\Model\Package;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\SupportedModules\MetaData;
-use SilverStripe\PolyExecution\PolyOutput;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use BringYourOwnIdeas\UpdateChecker\Extensions\CheckComposerUpdatesExtension;
+use SilverStripe\Core\Injector\Injector;
 
 /**
  * @mixin PHPUnit_Framework_TestCase
@@ -26,6 +23,16 @@ class UpdatePackageInfoTest extends SapphireTest
     {
         parent::setUpBeforeClass();
         MetaData::$isRunningUnitTests = true;
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Remove extension that will connect to github
+        // Extension is from bringyourownideas/silverstripe-composer-update-checker
+        if (UpdatePackageInfoTask::has_extension(CheckComposerUpdatesExtension::class)) {
+            UpdatePackageInfoTask::remove_extension(CheckComposerUpdatesExtension::class);
+        }
     }
 
     public function testGetPackageInfo()
@@ -50,61 +57,71 @@ class UpdatePackageInfoTest extends SapphireTest
 
     public function testPackagesAreAddedCorrectly()
     {
-        $oldVersionProvider = Injector::inst()->get(VersionProvider::class);
-        try {
-            // Mock the version provider to return a known version because VersionProvider
-            // will normally read the projects composer.lock file to get the version of framework
-            // which is often a forked version of silverstripe/framework
-            // This does need to match a supported major version in silverstripe/supported-modules
-            // repositories.json
-            $mockVersionProvider = new class extends VersionProvider {
-                public function getModuleVersion(string $module): string
-                {
-                    return '6.0.0';
-                }
-            };
-            Injector::inst()->registerService(new $mockVersionProvider(), VersionProvider::class);
-            $composerLoader = $this->getMockBuilder(ComposerLoader::class)
-                ->onlyMethods(['getLock'])->getMock();
-            $composerLoader->expects($this->any())->method('getLock')->willReturn(json_decode(<<<LOCK
-    {
-        "packages": [
+        // Get the latest supported framework version from the MetaData service
+        $data = MetaData::getMetaDataForRepository('silverstripe/silverstripe-framework')['majorVersionMapping'];
+        $keys = array_keys($data);
+        $key = $keys[count($keys) - 1];
+        $latestFrameworkMajor = $data[$key][0];
+
+        // Mock the VersionProvider service to return the latest framework version
+        Injector::inst()->registerService(new class($latestFrameworkMajor) extends VersionProvider {
+            private $latestFrameworkMajor;
+            public function __construct($latestFrameworkMajor)
             {
-                "name": "silverstripe/framework",
-                "description": "A faux package from a mocked composer.lock for testing purposes",
-                "version": "6.0.0"
-            },
-            {
-                "name": "fake/unsupported-package",
-                "description": "A faux package from a mocked composer.lock for testing purposes",
-                "version": "1.0.0"
+                $this->latestFrameworkMajor = $latestFrameworkMajor;
             }
-        ],
-        "packages-dev": null
-    }
-    LOCK
-            ));
+            public function getModuleVersion(string $module): string
+            {
+                if ($module === 'silverstripe/framework') {
+                    return $this->latestFrameworkMajor . '.0.0';
+                }
+                return parent::getVersion($module);
+            }
+        }, VersionProvider::class);
 
-            $task = UpdatePackageInfoTask::create();
-            $task->setComposerLoader($composerLoader);
-            $output = PolyOutput::create(PolyOutput::FORMAT_ANSI);
-            $output->setWrappedOutput(new BufferedOutput());
-            $input = new ArrayInput([]);
-            $input->setInteractive(false);
-            $task->run($input, $output);
+        // Create a task and mock the ComposerLoader to return a specific composer.lock
+        $task = UpdatePackageInfoTask::create();
+        $task->setComposerLoader(new class($latestFrameworkMajor) extends ComposerLoader {
+            private $latestFrameworkMajor;
+            public function __construct($latestFrameworkMajor)
+            {
+                $this->latestFrameworkMajor = $latestFrameworkMajor;
+            }
+            public function getLock()
+            {
+                return json_decode(
+                    <<<LOCK
+                    {
+                        "packages": [
+                        {
+                            "name": "silverstripe/framework",
+                            "description": "A faux package from a mocked composer.lock for testing purposes",
+                            "version": "{$this->latestFrameworkMajor}.0.0"
+                        },
+                        {
+                            "name": "fake/unsupported-package",
+                            "description": "A faux package from a mocked composer.lock for testing purposes",
+                            "version": "1.0.0"
+                        }
+                        ],
+                        "packages-dev": null
+                    }
+                    LOCK
+                );
+            }
+        });
 
-            $packages = Package::get();
-            $this->assertCount(2, $packages);
+        $task->run(null);
 
-            $package = $packages->find('Name', 'silverstripe/framework');
-            $this->assertInstanceOf(Package::class, $package);
-            $this->assertEquals(1, $package->Supported);
+        $packages = Package::get();
+        $this->assertCount(2, $packages);
 
-            $package = $packages->find('Name', 'fake/unsupported-package');
-            $this->assertInstanceOf(Package::class, $package);
-            $this->assertEquals(0, $package->Supported);
-        } finally {
-            Injector::inst()->registerService($oldVersionProvider, VersionProvider::class);
-        }
+        $package = $packages->find('Name', 'silverstripe/framework');
+        $this->assertInstanceOf(Package::class, $package);
+        $this->assertEquals(1, $package->Supported);
+
+        $package = $packages->find('Name', 'fake/unsupported-package');
+        $this->assertInstanceOf(Package::class, $package);
+        $this->assertEquals(0, $package->Supported);
     }
 }
