@@ -6,7 +6,7 @@ use SilverStripe\Dev\Deprecation;
 
 /**
  * Handles fetching module health information from addons.silverstripe.org
- * @deprecated 3.2.0 Will be removed without equivalent functionality
+ * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
  */
 class ModuleHealthLoader extends ApiLoader
 {
@@ -20,7 +20,7 @@ class ModuleHealthLoader extends ApiLoader
         Deprecation::withSuppressedNotice(
             fn() => Deprecation::notice(
                 '3.2.0',
-                'Will be removed without equivalent functionality',
+                'Will be removed without equivalent functionality in a future major release',
                 Deprecation::SCOPE_CLASS
             )
         );
