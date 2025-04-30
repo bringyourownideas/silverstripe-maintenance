@@ -65,13 +65,13 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @var SupportedAddonsLoader
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
+     * @deprecated 3.3.0 Will be removed without equivalent functionality in a future major release
      */
     protected $supportedAddonsLoader;
 
     /**
      * @var ModuleHealthLoader
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
+     * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
      */
     protected $moduleHealthLoader;
 
@@ -100,23 +100,26 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @return SupportedAddonsLoader
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
+     * @deprecated 3.3.0 Will be removed without equivalent functionality in a future major release
      */
     public function getSupportedAddonsLoader()
     {
-        Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality');
+        Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality in a future major release');
         return $this->supportedAddonsLoader;
     }
 
     /**
      * @param SupportedAddonsLoader $supportedAddonsLoader
      * @return $this
-     * @deprecated 3.3.0 Will be removed without equivalent functionality
+     * @deprecated 3.3.0 Will be removed without equivalent functionality in a future major release
      */
     public function setSupportedAddonsLoader(SupportedAddonsLoader $supportedAddonsLoader)
     {
         Deprecation::withSuppressedNotice(
-            fn() => Deprecation::notice('3.3.0', 'Will be removed without equivalent functionality')
+            fn() => Deprecation::notice(
+                '3.3.0',
+                'Will be removed without equivalent functionality in a future major release'
+            )
         );
         $this->supportedAddonsLoader = $supportedAddonsLoader;
         return $this;
@@ -124,23 +127,26 @@ class UpdatePackageInfoTask extends BuildTask
 
     /**
      * @return ModuleHealthLoader
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
+     * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
      */
     public function getModuleHealthLoader()
     {
-        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
+        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality in a future major release');
         return $this->moduleHealthLoader;
     }
 
     /**
      * @param ModuleHealthLoader $moduleHealthLoader
      * @return $this
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
+     * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
      */
     public function setModuleHealthLoader(ModuleHealthLoader $moduleHealthLoader)
     {
         Deprecation::withSuppressedNotice(
-            fn() => Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality')
+            fn() => Deprecation::notice(
+                '3.2.0',
+                'Will be removed without equivalent functionality in a future major release'
+            )
         );
         $this->moduleHealthLoader = $moduleHealthLoader;
         return $this;
@@ -255,11 +261,11 @@ class UpdatePackageInfoTask extends BuildTask
      *
      * @param string[] $moduleNames
      * @return null|array
-     * @deprecated 3.2.0 Will be removed without equivalent functionality
+     * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
      */
     public function getHealthIndicator(array $moduleNames)
     {
-        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality');
+        Deprecation::notice('3.2.0', 'Will be removed without equivalent functionality in a future major release');
         try {
             return $this->getModuleHealthLoader()->setModuleNames($moduleNames)->getModuleHealthInfo() ?: [];
         } catch (RuntimeException $exception) {
