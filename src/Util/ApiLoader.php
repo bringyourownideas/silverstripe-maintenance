@@ -16,7 +16,7 @@ use SilverStripe\Dev\Deprecation;
 
 /**
  * Handles fetching supported module details
- * @deprecated 3.2.0 Will be removed without equivalent functionality
+ * @deprecated 3.2.0 Will be removed without equivalent functionality in a future major release
  */
 abstract class ApiLoader
 {
