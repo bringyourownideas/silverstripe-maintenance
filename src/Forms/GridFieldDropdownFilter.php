@@ -10,7 +10,6 @@ use SilverStripe\Forms\GridField\GridField_DataManipulator;
 use SilverStripe\Forms\GridField\GridField_FormAction;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Model\List\ArrayList;
-use SilverStripe\Model\List\Filterable;
 use SilverStripe\Model\List\SS_List;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Requirements;
@@ -117,10 +116,6 @@ class GridFieldDropdownFilter implements GridField_HTMLProvider, GridField_Actio
      */
     public function getManipulatedData(GridField $gridField, SS_List $dataList)
     {
-        if (!$dataList instanceof Filterable) {
-            throw new LogicException(__CLASS__ . ' is only compatible with SS_Filterable lists');
-        }
-
         $filter = $gridField->State->{__CLASS__ . '_' . $this->name};
 
         if (!$filter || !($option = $this->filterOptions->find('name', $filter))) {
